@@ -222,12 +222,15 @@
 
       <div class="woman-mega-menu__fabric-list" data-fabric-list>
         {% liquid
-          assign fabric_handles = 'soft-marina,khaddar,corduroy,chikankari,pashmina-wool,zari-marina,silk-marina,velvet' | split: ','
-          assign fabric_titles = 'Soft Marina,Khaddar,Corduroy,Chikankari,Pashmina Wool,Zari Marina,Silk Marina,Velvet' | split: ','
+          assign fabric_handles = 'soft-marina,khaddar,corduroy,china-patti,pashmina-wool,zari-marina,silk-marina,velvet' | split: ','
+          assign fabric_titles = 'Soft Marina,Khaddar,Corduroy,China Patti,Pashmina Wool,Zari Marina,Silk Marina,Velvet' | split: ','
         %}
         {% for handle in fabric_handles %}
           {% liquid
             assign fabric = collections[handle]
+            if handle == 'china-patti' and fabric == blank
+              assign fabric = collections['chikankari']
+            endif
             assign fabric_title = fabric_titles[forloop.index0]
             assign fabric_image = nil
             if fabric != blank

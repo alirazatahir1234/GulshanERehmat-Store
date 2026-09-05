@@ -1,0 +1,19 @@
+{%- doc -%}
+  Renders a Man mega menu link only when the Shopify collection exists.
+  Avoids 404s for missing collection handles.
+
+  @param {string} handle - Collection handle
+  @param {string} label - Link label text
+
+  @example
+  {% render 'man-mega-link', handle: 'men-winter-imported-suiting', label: 'Imported Suiting' %}
+{%- enddoc -%}
+
+{% liquid
+  assign col = collections[handle]
+%}
+{% if col != blank %}
+  <a href="{{ col.url }}">{{ label }}</a>
+{% else %}
+  <span class="man-mega-menu__link-disabled" title="Create collection “{{ handle }}” in Shopify Admin">{{ label }}</span>
+{% endif %}

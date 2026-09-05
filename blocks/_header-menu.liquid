@@ -65,9 +65,10 @@
     {% endif %}
   {% else %}
     {{ 'woman-mega-menu.css' | asset_url | stylesheet_tag }}
+    {{ 'man-mega-menu.css' | asset_url | stylesheet_tag }}
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Poppins:wght@400;500;600&display=swap"
     >
     {% liquid
       assign block_settings = block.settings
@@ -99,13 +100,23 @@
 
     {% capture children %}
       {% for link in block_settings.menu.links %}
+        {% liquid
+          assign has_custom_mega = false
+          if link.handle == 'woman' or link.title == 'Woman' or link.handle == 'man' or link.title == 'Man' or link.handle == 'men' or link.title == 'Men'
+            assign has_custom_mega = true
+          endif
+          assign show_submenu = false
+          if link.links != blank or has_custom_mega
+            assign show_submenu = true
+          endif
+        %}
         <li
           class="menu-list__list-item"
           on:blur="/deactivate"
           on:pointerenter="/activate"
           on:pointerleave="/deactivate"
         >
-          {%- if link.links != blank -%}
+          {%- if show_submenu -%}
             <span class="menu-list__trigger">
           {%- endif -%}
           <a
@@ -119,7 +130,7 @@
           >
             <span class="menu-list__link-title">
               {{- link.title -}}
-              {%- if link.links != blank -%}
+              {%- if show_submenu -%}
                 <svg
                   class="menu-list__link-chevron"
                   aria-hidden="true"
@@ -133,7 +144,7 @@
               {%- endif -%}
             </span>
           </a>
-          {%- if link.links != blank -%}
+          {%- if show_submenu -%}
             <button
               type="button"
               class="menu-list__disclosure button-unstyled"
@@ -149,6 +160,7 @@
             {%- comment -%}
               Collapsed by default via `inert`: keeps the submenu out of the tab order
               and the accessibility tree until it is opened. Toggled in header-menu.js.
+              Woman/Man custom megas open even when Navigation has no child links.
             {%- endcomment -%}
             <div class="menu-list__submenu{{ background_color_classes }}" ref="submenu[]" data-skip-node-update inert>
               <div
@@ -165,6 +177,13 @@
                       card_image_wedding: block_settings.woman_card_wedding,
                       card_image_abaya: block_settings.woman_card_abaya,
                       featured_image_setting: block_settings.woman_featured_fabric
+                    %}
+                  {% elsif link.handle == 'man' or link.title == 'Man' or link.handle == 'men' or link.title == 'Men' %}
+                    {% render 'man-mega-menu',
+                      card_image_summer: block_settings.man_card_summer,
+                      card_image_winter: block_settings.man_card_winter,
+                      card_image_waistcoat: block_settings.man_card_waistcoat,
+                      featured_image_setting: block_settings.man_featured_essentials
                     %}
                   {% else %}
                     <div
@@ -243,6 +262,11 @@
       ></script>
       <script
         src="{{ 'woman-mega-menu.js' | asset_url }}"
+        type="module"
+        fetchpriority="low"
+      ></script>
+      <script
+        src="{{ 'man-mega-menu.js' | asset_url }}"
         type="module"
         fetchpriority="low"
       ></script>
@@ -340,12 +364,12 @@
   }
 
   .menu-list__link {
-    font-family: 'Cormorant Garamond', 'Palatino Linotype', Palatino, Georgia, serif;
+    font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 500;
     font-size: var(--menu-top-level-font-size);
     line-height: var(--menu-top-level-font-line-height);
-    letter-spacing: 0.04em;
+    letter-spacing: 0.01em;
     text-transform: none;
     color: var(--menu-top-level-font-color);
     text-decoration: none;
@@ -1083,6 +1107,34 @@
       "type": "image_picker",
       "id": "woman_featured_fabric",
       "label": "Woman mega: Featured fabric image"
+    },
+    {
+      "type": "header",
+      "content": "Man mega menu images"
+    },
+    {
+      "type": "paragraph",
+      "content": "Optional images for the Man mega menu cards and Men's Essentials panel."
+    },
+    {
+      "type": "image_picker",
+      "id": "man_card_summer",
+      "label": "Man mega: Summer card"
+    },
+    {
+      "type": "image_picker",
+      "id": "man_card_winter",
+      "label": "Man mega: Winter card"
+    },
+    {
+      "type": "image_picker",
+      "id": "man_card_waistcoat",
+      "label": "Man mega: Waist Coats card"
+    },
+    {
+      "type": "image_picker",
+      "id": "man_featured_essentials",
+      "label": "Man mega: Men's Essentials image"
     },
     {
       "type": "header",

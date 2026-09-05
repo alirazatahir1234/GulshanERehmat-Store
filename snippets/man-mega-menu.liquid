@@ -1,0 +1,211 @@
+{%- doc -%}
+  Custom Man mega menu: top collection cards, Summer/Winter/Waist Coats columns,
+  and Men's Essentials promo card.
+
+  @param {object} [card_image_summer] - Optional theme-editor image for Summer card
+  @param {object} [card_image_winter] - Optional theme-editor image for Winter card
+  @param {object} [card_image_waistcoat] - Optional theme-editor image for Waist Coats card
+  @param {object} [featured_image_setting] - Optional theme-editor image for Men's Essentials
+
+  @example
+  {% render 'man-mega-menu', card_image_summer: block.settings.man_card_summer %}
+{%- enddoc -%}
+
+{% liquid
+  assign collections_root = routes.collections_url
+
+  assign col_summer = collections['men-summer']
+  if col_summer == blank
+    assign col_summer = collections['men-summer-collection']
+  endif
+
+  assign col_winter = collections['men-winter']
+  if col_winter == blank
+    assign col_winter = collections['men-winter-collection']
+  endif
+
+  assign col_waistcoat = collections['men-waist-coats']
+
+  assign col_essentials = collections['mens-essentials']
+  if col_essentials == blank
+    assign col_essentials = collections['men-essentials']
+  endif
+
+  if col_summer != blank
+    assign url_summer = col_summer.url
+  else
+    assign url_summer = collections_root | append: '/men-summer'
+  endif
+
+  if col_winter != blank
+    assign url_winter = col_winter.url
+  else
+    assign url_winter = collections_root | append: '/men-winter'
+  endif
+
+  if col_waistcoat != blank
+    assign url_waistcoat = col_waistcoat.url
+  else
+    assign url_waistcoat = collections_root | append: '/men-waist-coats'
+  endif
+
+  if col_essentials != blank
+    assign url_essentials = col_essentials.url
+  else
+    assign url_essentials = collections_root | append: '/mens-essentials'
+  endif
+
+  assign img_summer = nil
+  assign use_summer_asset = true
+  if card_image_summer != blank
+    assign img_summer = card_image_summer
+    assign use_summer_asset = false
+  endif
+
+  assign img_winter = nil
+  assign use_winter_asset = true
+  if card_image_winter != blank
+    assign img_winter = card_image_winter
+    assign use_winter_asset = false
+  endif
+
+  assign img_waistcoat = nil
+  assign use_waistcoat_asset = true
+  if card_image_waistcoat != blank
+    assign img_waistcoat = card_image_waistcoat
+    assign use_waistcoat_asset = false
+  endif
+
+  assign img_essentials = nil
+  assign use_essentials_asset = true
+  if featured_image_setting != blank
+    assign img_essentials = featured_image_setting
+    assign use_essentials_asset = false
+  endif
+%}
+
+<div class="man-mega-menu" data-man-mega-menu>
+  <div class="man-mega-menu__cards">
+    <a href="{{ url_summer }}" class="man-mega-menu__card man-mega-menu__card--summer">
+      <div class="man-mega-menu__card-content">
+        <h2 class="man-mega-menu__card-title">Summer<br>Collection</h2>
+        <p class="man-mega-menu__card-text">Light Fabrics<br>For Every Occasion</p>
+        <span class="man-mega-menu__card-cta">Explore →</span>
+      </div>
+      {% if use_summer_asset %}
+        <img
+          src="{{ 'man-mega-card-summer.jpg' | asset_url }}"
+          alt="Summer Collection"
+          class="man-mega-menu__card-image"
+          loading="lazy"
+          width="600"
+          height="300"
+        >
+      {% elsif img_summer != blank %}
+        {{ img_summer | image_url: width: 600 | image_tag: class: 'man-mega-menu__card-image', loading: 'lazy', alt: 'Summer Collection' }}
+      {% endif %}
+    </a>
+
+    <a href="{{ url_winter }}" class="man-mega-menu__card man-mega-menu__card--winter">
+      <div class="man-mega-menu__card-content">
+        <h2 class="man-mega-menu__card-title">Winter<br>Collection</h2>
+        <p class="man-mega-menu__card-text">Stay Warm<br>In Timeless Style</p>
+        <span class="man-mega-menu__card-cta">Explore →</span>
+      </div>
+      {% if use_winter_asset %}
+        <img
+          src="{{ 'man-mega-card-winter.jpg' | asset_url }}"
+          alt="Winter Collection"
+          class="man-mega-menu__card-image"
+          loading="lazy"
+          width="600"
+          height="300"
+        >
+      {% elsif img_winter != blank %}
+        {{ img_winter | image_url: width: 600 | image_tag: class: 'man-mega-menu__card-image', loading: 'lazy', alt: 'Winter Collection' }}
+      {% endif %}
+    </a>
+
+    <a href="{{ url_waistcoat }}" class="man-mega-menu__card man-mega-menu__card--waistcoat">
+      <div class="man-mega-menu__card-content">
+        <h2 class="man-mega-menu__card-title">Waist Coats</h2>
+        <p class="man-mega-menu__card-text">Elevate Your Look<br>With Elegance</p>
+        <span class="man-mega-menu__card-cta">Explore →</span>
+      </div>
+      {% if use_waistcoat_asset %}
+        <img
+          src="{{ 'man-mega-card-waistcoat.jpg' | asset_url }}"
+          alt="Waist Coats"
+          class="man-mega-menu__card-image"
+          loading="lazy"
+          width="600"
+          height="300"
+        >
+      {% elsif img_waistcoat != blank %}
+        {{ img_waistcoat | image_url: width: 600 | image_tag: class: 'man-mega-menu__card-image', loading: 'lazy', alt: 'Waist Coats' }}
+      {% endif %}
+    </a>
+  </div>
+
+  <div class="man-mega-menu__content">
+    <div class="man-mega-menu__column">
+      <h3 class="man-mega-menu__heading">SUMMER COLLECTION</h3>
+      <div class="man-mega-menu__separator" aria-hidden="true"></div>
+      <div class="man-mega-menu__links" data-man-links>
+        {% render 'man-mega-link', handle: 'men-summer-cotton', label: 'Cotton' %}
+        {% render 'man-mega-link', handle: 'men-summer-wash-n-wear', label: 'Wash n Wear' %}
+        {% render 'man-mega-link', handle: 'men-summer-lawn', label: 'Lawn' %}
+        {% render 'man-mega-link', handle: 'men-summer-imported', label: 'Imported' %}
+        {% render 'man-mega-link', handle: 'men-summer-embroidered', label: 'Embroidered Collection' %}
+      </div>
+    </div>
+
+    <div class="man-mega-menu__column">
+      <h3 class="man-mega-menu__heading">WINTER COLLECTION</h3>
+      <div class="man-mega-menu__separator" aria-hidden="true"></div>
+      <div class="man-mega-menu__links" data-man-links>
+        {% render 'man-mega-link', handle: 'men-winter-imported-suiting', label: 'Imported Suiting' %}
+        {% render 'man-mega-link', handle: 'men-winter-wool', label: 'Wool' %}
+        {% render 'man-mega-link', handle: 'men-winter-khaddar', label: 'Khaddar' %}
+        {% render 'man-mega-link', handle: 'men-winter-wash-n-wear', label: 'Wash n Wear' %}
+        {% render 'man-mega-link', handle: 'men-winter-embroidered', label: 'Embroidered Collection' %}
+      </div>
+    </div>
+
+    <div class="man-mega-menu__column">
+      <h3 class="man-mega-menu__heading">WAIST COATS</h3>
+      <div class="man-mega-menu__separator" aria-hidden="true"></div>
+      <div class="man-mega-menu__links" data-man-links>
+        {% render 'man-mega-link', handle: 'men-waist-coats-formal', label: 'Formal Waist Coats' %}
+        {% render 'man-mega-link', handle: 'men-waist-coats-casual', label: 'Casual Waist Coats' %}
+        {% render 'man-mega-link', handle: 'men-waist-coats-embroidered', label: 'Embroidered Waist Coats' %}
+        {% render 'man-mega-link', handle: 'men-waist-coats-wedding', label: 'Wedding Waist Coats' %}
+        {% render 'man-mega-link', handle: 'men-waist-coats-premium', label: 'Premium Collection' %}
+      </div>
+    </div>
+
+    <div class="man-mega-menu__essentials man-mega-menu__essentials--last" data-essentials-panel>
+      <a href="{{ url_essentials }}" class="man-mega-menu__essentials-link">
+        {% if use_essentials_asset %}
+          <img
+            src="{{ 'man-mega-essentials.jpg' | asset_url }}"
+            alt="Men's Essentials"
+            class="man-mega-menu__essentials-image"
+            loading="lazy"
+            width="600"
+            height="400"
+          >
+        {% elsif img_essentials != blank %}
+          {{ img_essentials | image_url: width: 600 | image_tag: class: 'man-mega-menu__essentials-image', loading: 'lazy', alt: "Men's Essentials" }}
+        {% else %}
+          <div class="man-mega-menu__essentials-placeholder" aria-hidden="true"></div>
+        {% endif %}
+        <div class="man-mega-menu__essentials-text">
+          <h3 class="man-mega-menu__essentials-title">Men's Essentials</h3>
+          <div class="man-mega-menu__essentials-rule" aria-hidden="true"></div>
+          <p class="man-mega-menu__essentials-subtitle">Classic Fabric. Modern Style.</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
