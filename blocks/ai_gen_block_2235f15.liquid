@@ -1,0 +1,470 @@
+{% doc %}
+  @prompt
+    I want to use Existing Menu in this section
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-menu-navigation-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    padding: {{ block.settings.padding_top }}px {{ block.settings.padding_horizontal }}px {{ block.settings.padding_bottom }}px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-menu-nav-list-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: {{ block.settings.layout }};
+    justify-content: {{ block.settings.alignment }};
+    align-items: {{ block.settings.vertical_alignment }};
+    gap: {{ block.settings.item_spacing }}px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+  }
+
+  .ai-menu-nav-item-{{ ai_gen_id }} {
+    margin: 0;
+  }
+
+  .ai-menu-nav-link-{{ ai_gen_id }} {
+    display: inline-block;
+    color: {{ block.settings.text_color }};
+    text-decoration: none;
+    font-size: {{ block.settings.font_size }}px;
+    font-family: {% if block.settings.font_family == 'body' %}var(--font-body){% elsif block.settings.font_family == 'heading' %}var(--font-heading){% elsif block.settings.font_family == 'accent' %}var(--font-accent){% else %}var(--font-subheading){% endif %};
+    font-weight: {{ block.settings.font_weight }};
+    text-transform: {% if block.settings.text_transform == 'uppercase' %}uppercase{% else %}none{% endif %};
+    transition: color 0.2s ease;
+    padding: {{ block.settings.link_padding_vertical }}px {{ block.settings.link_padding_horizontal }}px;
+    border-radius: {{ block.settings.link_border_radius }}px;
+  }
+
+  .ai-menu-nav-link-{{ ai_gen_id }}:hover {
+    color: {{ block.settings.text_hover_color }};
+    background-color: {{ block.settings.link_hover_background }};
+  }
+
+  .ai-menu-nav-link-{{ ai_gen_id }}.active {
+    color: {{ block.settings.active_text_color }};
+    background-color: {{ block.settings.active_background_color }};
+  }
+
+  .ai-menu-empty-state-{{ ai_gen_id }} {
+    padding: 40px 20px;
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+  }
+
+  .ai-menu-empty-state-{{ ai_gen_id }} p {
+    margin: 0 0 12px;
+  }
+
+  .ai-menu-empty-state-{{ ai_gen_id }} a {
+    color: {{ block.settings.text_color }};
+    text-decoration: underline;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-menu-navigation-{{ ai_gen_id }} {
+      padding: {{ block.settings.mobile_padding_top }}px {{ block.settings.mobile_padding_horizontal }}px {{ block.settings.mobile_padding_bottom }}px;
+    }
+
+    .ai-menu-nav-list-{{ ai_gen_id }} {
+      {% if block.settings.mobile_layout == 'column' %}
+        flex-direction: column;
+      {% endif %}
+      gap: {{ block.settings.mobile_item_spacing }}px;
+    }
+
+    .ai-menu-nav-link-{{ ai_gen_id }} {
+      font-size: {{ block.settings.mobile_font_size }}px;
+    }
+  }
+{% endstyle %}
+
+<nav class="ai-menu-navigation-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.menu != blank and block.settings.menu.links.size > 0 %}
+    <ul class="ai-menu-nav-list-{{ ai_gen_id }}">
+      {% for link in block.settings.menu.links %}
+        <li class="ai-menu-nav-item-{{ ai_gen_id }}">
+          <a
+            href="{{ link.url }}"
+            class="ai-menu-nav-link-{{ ai_gen_id }} {% if link.active %}active{% endif %}"
+            {% if link.current %}aria-current="page"{% endif %}
+          >
+            {{ link.title }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="ai-menu-empty-state-{{ ai_gen_id }}">
+      <p>Select a menu to display navigation links</p>
+      <p><a href="/admin/menus" target="_blank">Create or manage menus</a></p>
+    </div>
+  {% endif %}
+</nav>
+
+{% schema %}
+{
+  "name": "Navigation menu",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Menu"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Desktop layout",
+      "options": [
+        {
+          "value": "row",
+          "label": "Horizontal"
+        },
+        {
+          "value": "column",
+          "label": "Vertical"
+        }
+      ],
+      "default": "row"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Right"
+        },
+        {
+          "value": "space-between",
+          "label": "Space between"
+        }
+      ],
+      "default": "flex-start"
+    },
+    {
+      "type": "select",
+      "id": "vertical_alignment",
+      "label": "Vertical alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Top"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "item_spacing",
+      "label": "Item spacing",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "Mobile layout",
+      "options": [
+        {
+          "value": "row",
+          "label": "Horizontal"
+        },
+        {
+          "value": "column",
+          "label": "Vertical"
+        }
+      ],
+      "default": "row"
+    },
+    {
+      "type": "range",
+      "id": "mobile_item_spacing",
+      "label": "Mobile item spacing",
+      "min": 0,
+      "max": 30,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_hover_color",
+      "label": "Text hover",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "link_hover_background",
+      "label": "Link hover background",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "active_text_color",
+      "label": "Active text",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "active_background_color",
+      "label": "Active background",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "select",
+      "id": "font_family",
+      "label": "Font",
+      "options": [
+        {
+          "value": "body",
+          "label": "Body"
+        },
+        {
+          "value": "subheading",
+          "label": "Subheading"
+        },
+        {
+          "value": "heading",
+          "label": "Heading"
+        },
+        {
+          "value": "accent",
+          "label": "Accent"
+        }
+      ],
+      "default": "body"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Desktop font size",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "mobile_font_size",
+      "label": "Mobile font size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semibold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "select",
+      "id": "text_transform",
+      "label": "Text case",
+      "options": [
+        {
+          "value": "none",
+          "label": "Default"
+        },
+        {
+          "value": "uppercase",
+          "label": "Uppercase"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "Link style"
+    },
+    {
+      "type": "range",
+      "id": "link_padding_vertical",
+      "label": "Vertical padding",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "link_padding_horizontal",
+      "label": "Horizontal padding",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "link_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Desktop top padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Desktop bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "label": "Desktop horizontal padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "label": "Mobile top padding",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "label": "Mobile bottom padding",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_horizontal",
+      "label": "Mobile horizontal padding",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    }
+  ],
+  "presets": [
+    {
+      "name": "Navigation menu"
+    }
+  ]
+}
+{% endschema %}

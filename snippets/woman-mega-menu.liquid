@@ -1,0 +1,309 @@
+{%- doc -%}
+  Custom Woman mega menu: top collection cards, Unstitched Summer/Winter links,
+  Printed Three Piece fabric list, featured fabric panel, and right-side category links.
+
+  @param {object} [card_image_unstitched] - Optional theme-editor fallback image for Unstitched card
+  @param {object} [card_image_ready] - Optional theme-editor fallback image for Ready to Wear card
+  @param {object} [card_image_wedding] - Optional theme-editor fallback image for Wedding card
+  @param {object} [card_image_abaya] - Optional theme-editor fallback image for Abaya card
+  @param {object} [featured_image_setting] - Optional theme-editor fallback for featured fabric panel
+
+  @example
+  {% render 'woman-mega-menu', card_image_unstitched: block.settings.woman_card_unstitched %}
+{%- enddoc -%}
+
+{% liquid
+  assign collections_root = routes.collections_url
+  assign card_unstitched = collections['unstitched-summer-two-piece']
+  assign card_ready = collections['ready-to-wear']
+  assign card_wedding = collections['wedding-collection']
+  assign card_abaya = collections['abaya-collection']
+  assign featured_collection = collections['soft-marina']
+
+  if card_unstitched != blank
+    assign card_unstitched_url = card_unstitched.url
+  else
+    assign card_unstitched_url = collections_root | append: '/unstitched-summer-two-piece'
+  endif
+
+  if card_ready != blank
+    assign card_ready_url = card_ready.url
+  else
+    assign card_ready_url = collections_root | append: '/ready-to-wear'
+  endif
+
+  if card_wedding != blank
+    assign card_wedding_url = card_wedding.url
+  else
+    assign card_wedding_url = collections_root | append: '/wedding-collection'
+  endif
+
+  if card_abaya != blank
+    assign card_abaya_url = card_abaya.url
+  else
+    assign card_abaya_url = collections_root | append: '/abaya-collection'
+  endif
+
+  if featured_collection != blank
+    assign featured_url = featured_collection.url
+    assign featured_alt = featured_collection.title
+  else
+    assign featured_url = collections_root | append: '/soft-marina'
+    assign featured_alt = 'Premium Winter Fabrics'
+  endif
+
+  comment
+    Top cards use theme assets unless a theme-editor image is set.
+  endcomment
+  assign img_unstitched = nil
+  assign use_unstitched_asset = true
+  if card_image_unstitched != blank
+    assign img_unstitched = card_image_unstitched
+    assign use_unstitched_asset = false
+  endif
+
+  assign img_ready = nil
+  assign use_ready_asset = true
+  if card_image_ready != blank
+    assign img_ready = card_image_ready
+    assign use_ready_asset = false
+  endif
+
+  assign img_wedding = nil
+  assign use_wedding_asset = true
+  if card_image_wedding != blank
+    assign img_wedding = card_image_wedding
+    assign use_wedding_asset = false
+  endif
+
+  assign img_abaya = nil
+  assign use_abaya_asset = true
+  if card_image_abaya != blank
+    assign img_abaya = card_image_abaya
+    assign use_abaya_asset = false
+  endif
+
+  assign featured_image = nil
+  if featured_collection != blank
+    if featured_collection.image != blank
+      assign featured_image = featured_collection.image
+    elsif featured_collection.products.first.featured_image != blank
+      assign featured_image = featured_collection.products.first.featured_image
+    endif
+  endif
+  if featured_image == blank and featured_image_setting != blank
+    assign featured_image = featured_image_setting
+  endif
+%}
+
+<div class="woman-mega-menu" data-woman-mega-menu>
+  <div class="woman-mega-menu__cards">
+    <a href="{{ card_unstitched_url }}" class="woman-mega-menu__card">
+      <div class="woman-mega-menu__card-content">
+        <h2 class="woman-mega-menu__card-title">Unstitched</h2>
+        <p class="woman-mega-menu__card-text">Premium Fabrics<br>Endless Possibilities</p>
+        <span class="woman-mega-menu__card-cta">Explore →</span>
+      </div>
+      {% if use_unstitched_asset %}
+        <img
+          src="{{ 'woman-mega-card-unstitched.jpg' | asset_url }}"
+          alt="Unstitched Collection"
+          class="woman-mega-menu__card-image"
+          loading="lazy"
+          width="600"
+          height="301"
+        >
+      {% elsif img_unstitched != blank %}
+        {{ img_unstitched | image_url: width: 600 | image_tag: class: 'woman-mega-menu__card-image', loading: 'lazy', alt: 'Unstitched Collection' }}
+      {% endif %}
+    </a>
+
+    <a href="{{ card_ready_url }}" class="woman-mega-menu__card woman-mega-menu__card--ready">
+      <div class="woman-mega-menu__card-content">
+        <h2 class="woman-mega-menu__card-title">Ready to<br>Wear</h2>
+        <p class="woman-mega-menu__card-text">Elegant Styles<br>For Every Occasion</p>
+        <span class="woman-mega-menu__card-cta">Explore →</span>
+      </div>
+      {% if use_ready_asset %}
+        <img
+          src="{{ 'woman-mega-card-ready.jpg' | asset_url }}"
+          alt="Ready to Wear"
+          class="woman-mega-menu__card-image"
+          loading="lazy"
+          width="600"
+          height="302"
+        >
+      {% elsif img_ready != blank %}
+        {{ img_ready | image_url: width: 600 | image_tag: class: 'woman-mega-menu__card-image', loading: 'lazy', alt: 'Ready to Wear' }}
+      {% endif %}
+    </a>
+
+    <a href="{{ card_wedding_url }}" class="woman-mega-menu__card woman-mega-menu__card--wedding">
+      <div class="woman-mega-menu__card-content">
+        <h2 class="woman-mega-menu__card-title">Wedding<br>Collection</h2>
+        <p class="woman-mega-menu__card-text">Make Your Special<br>Moments Memorable</p>
+        <span class="woman-mega-menu__card-cta">Explore →</span>
+      </div>
+      {% if use_wedding_asset %}
+        <img
+          src="{{ 'woman-mega-card-wedding.jpg' | asset_url }}"
+          alt="Wedding Collection"
+          class="woman-mega-menu__card-image"
+          loading="lazy"
+          width="600"
+          height="304"
+        >
+      {% elsif img_wedding != blank %}
+        {{ img_wedding | image_url: width: 600 | image_tag: class: 'woman-mega-menu__card-image', loading: 'lazy', alt: 'Wedding Collection' }}
+      {% endif %}
+    </a>
+
+    <a href="{{ card_abaya_url }}" class="woman-mega-menu__card woman-mega-menu__card--abaya">
+      <div class="woman-mega-menu__card-content">
+        <h2 class="woman-mega-menu__card-title">Abaya<br>Collection</h2>
+        <p class="woman-mega-menu__card-text">Grace in Every Detail</p>
+        <span class="woman-mega-menu__card-cta">Explore →</span>
+      </div>
+      {% if use_abaya_asset %}
+        <img
+          src="{{ 'woman-mega-card-abaya.jpg' | asset_url }}"
+          alt="Abaya Collection"
+          class="woman-mega-menu__card-image"
+          loading="lazy"
+          width="600"
+          height="300"
+        >
+      {% elsif img_abaya != blank %}
+        {{ img_abaya | image_url: width: 600 | image_tag: class: 'woman-mega-menu__card-image', loading: 'lazy', alt: 'Abaya Collection' }}
+      {% endif %}
+    </a>
+  </div>
+
+  <div class="woman-mega-menu__content">
+    <div class="woman-mega-menu__column woman-mega-menu__column--unstitched">
+      <h3 class="woman-mega-menu__heading">UNSTITCHED</h3>
+      <div class="woman-mega-menu__separator" aria-hidden="true"></div>
+
+      <div class="woman-mega-menu__collection-columns">
+        <div class="woman-mega-menu__group">
+          <h4 class="woman-mega-menu__subheading">SUMMER COLLECTION</h4>
+          <a href="{{ collections_root }}/unstitched-summer-two-piece">Two Piece</a>
+          <a href="{{ collections_root }}/unstitched-summer-printed-three-piece">Printed Three Piece</a>
+          <a href="{{ collections_root }}/unstitched-summer-embroidered-three-piece">Embroidered Three Piece</a>
+          <a href="{{ collections_root }}/unstitched-summer-formal-embroidered">Formal Embroidered Collection</a>
+        </div>
+
+        <div class="woman-mega-menu__group">
+          <h4 class="woman-mega-menu__subheading">WINTER COLLECTION</h4>
+          <a href="{{ collections_root }}/unstitched-winter-two-piece">Two Piece</a>
+          <button
+            type="button"
+            class="woman-mega-menu__fabric-trigger is-active"
+            data-fabric-menu
+            aria-expanded="true"
+            aria-controls="woman-mega-menu-fabrics"
+          >
+            Printed Three Piece
+            <span aria-hidden="true">›</span>
+          </button>
+          <a href="{{ collections_root }}/unstitched-winter-embroidered-three-piece">Embroidered Three Piece</a>
+          <a href="{{ collections_root }}/unstitched-winter-formal-embroidered">Formal Embroidered Collection</a>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="woman-mega-menu-fabrics"
+      class="woman-mega-menu__column woman-mega-menu__column--fabrics is-active"
+      data-fabric-column
+    >
+      <h3 class="woman-mega-menu__heading">PRINTED THREE PIECE</h3>
+      <div class="woman-mega-menu__separator" aria-hidden="true"></div>
+
+      <div class="woman-mega-menu__fabric-list" data-fabric-list>
+        {% liquid
+          assign fabric_handles = 'soft-marina,khaddar,corduroy,chikankari,pashmina-wool,zari-marina,silk-marina,velvet' | split: ','
+          assign fabric_titles = 'Soft Marina,Khaddar,Corduroy,Chikankari,Pashmina Wool,Zari Marina,Silk Marina,Velvet' | split: ','
+        %}
+        {% for handle in fabric_handles %}
+          {% liquid
+            assign fabric = collections[handle]
+            assign fabric_title = fabric_titles[forloop.index0]
+            assign fabric_image = nil
+            if fabric != blank
+              if fabric.image != blank
+                assign fabric_image = fabric.image
+              elsif fabric.products.first.featured_image != blank
+                assign fabric_image = fabric.products.first.featured_image
+              endif
+              assign fabric_url = fabric.url
+            else
+              assign fabric_url = collections_root | append: '/' | append: handle
+            endif
+          %}
+          <a
+            href="{{ fabric_url }}"
+            class="woman-mega-menu__fabric-link{% if forloop.first %} is-active{% endif %}"
+            data-fabric-link
+            {% if fabric_image != blank %}
+              data-image="{{ fabric_image | image_url: width: 800 }}"
+              data-image-alt="{{ fabric_title | escape }}"
+            {% endif %}
+            data-feature-title="Premium Winter Fabrics"
+            data-feature-subtitle="Warmth Meets Elegance"
+          >
+            {{ fabric_title }}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="woman-mega-menu__feature" data-feature-panel>
+      {% if featured_image != blank %}
+        <a
+          href="{{ featured_url }}"
+          class="woman-mega-menu__feature-link"
+          data-feature-link
+        >
+          {{ featured_image | image_url: width: 800 | image_tag: class: 'woman-mega-menu__feature-image', loading: 'lazy', alt: featured_alt }}
+        </a>
+      {% else %}
+        <a
+          href="{{ featured_url }}"
+          class="woman-mega-menu__feature-link"
+          data-feature-link
+          hidden
+        ></a>
+      {% endif %}
+      <div class="woman-mega-menu__feature-text">
+        <h3 class="woman-mega-menu__feature-title" data-feature-heading>Premium Winter Fabrics</h3>
+        <p class="woman-mega-menu__feature-subtitle" data-feature-subheading>Warmth Meets Elegance</p>
+      </div>
+    </div>
+
+    <div class="woman-mega-menu__column woman-mega-menu__column--right">
+      <div class="woman-mega-menu__right-section">
+        <h3 class="woman-mega-menu__heading">READY TO WEAR</h3>
+        <div class="woman-mega-menu__separator" aria-hidden="true"></div>
+        <a href="{{ collections_root }}/ready-to-wear-printed-three-piece">Printed Three Piece</a>
+        <a href="{{ collections_root }}/ready-to-wear-embroidered-three-piece">Embroidered Three Piece</a>
+        <a href="{{ collections_root }}/ready-to-wear-formal-embroidered-three-piece">Formal Embroidered Three Piece</a>
+        <a href="{{ collections_root }}/ready-to-wear-two-piece">Two Piece</a>
+      </div>
+
+      <div class="woman-mega-menu__right-section">
+        <h3 class="woman-mega-menu__heading">WEDDING COLLECTION</h3>
+        <div class="woman-mega-menu__separator" aria-hidden="true"></div>
+        <a href="{{ collections_root }}/wedding-collection-unstitched">Unstitched Wedding Dress</a>
+        <a href="{{ collections_root }}/wedding-collection-ready-to-wear">Ready To Wear</a>
+      </div>
+
+      <div class="woman-mega-menu__right-section">
+        <h3 class="woman-mega-menu__heading">ABAYA COLLECTION</h3>
+        <div class="woman-mega-menu__separator" aria-hidden="true"></div>
+        <a href="{{ collections_root }}/printed-abaya">Printed Abaya</a>
+        <a href="{{ collections_root }}/fancy-abaya">Fancy Abaya</a>
+      </div>
+    </div>
+  </div>
+</div>

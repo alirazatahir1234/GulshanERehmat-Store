@@ -1,0 +1,434 @@
+.woman-mega-menu {
+  --woman-mega-text: #27352f;
+  --woman-mega-muted: #666666;
+  --woman-mega-accent: #c2185b;
+  --woman-mega-accent-hover: #a0144a;
+  --woman-mega-gold: var(--woman-mega-accent);
+  --woman-mega-gold-hover: var(--woman-mega-accent-hover);
+  --woman-mega-surface: #faf5f7;
+  --woman-mega-cream: #fce8f0;
+  --woman-mega-highlight: #f8e4ec;
+  --woman-mega-border: #e5e5e5;
+  --woman-mega-rule: #eeeeee;
+
+  box-sizing: border-box;
+  background: #ffffff;
+  width: min(1600px, calc(100vw - 80px));
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 24px;
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+  color: var(--woman-mega-text);
+}
+
+.woman-mega-menu *,
+.woman-mega-menu *::before,
+.woman-mega-menu *::after {
+  box-sizing: border-box;
+}
+
+/* ——— Top cards ——— */
+
+.woman-mega-menu__cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.woman-mega-menu__card {
+  position: relative;
+  display: block;
+  min-height: 220px;
+  overflow: hidden;
+  border-radius: 10px;
+  padding: 0;
+  background: var(--woman-mega-surface);
+  text-decoration: none;
+  color: #1d2924;
+  transition: box-shadow 0.25s ease;
+}
+
+.woman-mega-menu__card:hover {
+  box-shadow: 0 8px 24px rgba(39, 53, 47, 0.1);
+}
+
+.woman-mega-menu__card-content {
+  position: relative;
+  z-index: 2;
+  width: 62%;
+  max-width: 62%;
+  min-height: 220px;
+  padding: 24px 20px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    rgba(250, 245, 247, 0.97) 0%,
+    rgba(250, 245, 247, 0.92) 70%,
+    rgba(250, 245, 247, 0.55) 88%,
+    rgba(250, 245, 247, 0) 100%
+  );
+}
+
+.woman-mega-menu__card-title {
+  font-family: 'Times New Roman', Times, Georgia, serif;
+  font-size: clamp(20px, 1.35vw, 26px);
+  font-weight: 500;
+  line-height: 1.2;
+  margin: 0 0 8px;
+  max-width: 100%;
+  width: 100%;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: manual;
+}
+
+.woman-mega-menu__card-text {
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 0 0 20px;
+}
+
+.woman-mega-menu__card-cta {
+  display: inline-block;
+  font-weight: 600;
+  font-size: 16px;
+  transition: color 0.25s ease;
+}
+
+.woman-mega-menu__card:hover .woman-mega-menu__card-cta {
+  color: var(--woman-mega-accent-hover);
+}
+
+.woman-mega-menu__card-image {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  max-width: none;
+  height: 100% !important;
+  margin: 0 !important;
+  object-fit: cover;
+  object-position: center center;
+  pointer-events: none;
+  transition: transform 0.25s ease;
+}
+
+.woman-mega-menu__card:hover .woman-mega-menu__card-image {
+  transform: scale(1.04);
+}
+
+/* Model sits on the right in the Ready to Wear photo */
+.woman-mega-menu__card--ready .woman-mega-menu__card-image {
+  object-position: 85% center;
+}
+
+/* Bridal model sits on the right in the Wedding photo */
+.woman-mega-menu__card--wedding .woman-mega-menu__card-image {
+  object-position: 82% center;
+}
+
+/* Abaya model sits on the right */
+.woman-mega-menu__card--abaya .woman-mega-menu__card-image {
+  object-position: 88% center;
+}
+
+/* ——— Bottom content grid ——— */
+
+.woman-mega-menu__content {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.15fr 1.15fr;
+  gap: 30px;
+  align-items: start;
+  margin-top: 8px;
+}
+
+.woman-mega-menu__column {
+  display: block;
+  min-width: 0;
+  padding-right: 24px;
+  border-right: 1px solid var(--woman-mega-border);
+}
+
+.woman-mega-menu__column--right {
+  padding-right: 0;
+  border-right: none;
+}
+
+.woman-mega-menu__heading {
+  display: block;
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin: 0 0 10px;
+  font-weight: 700;
+  color: var(--woman-mega-text);
+}
+
+.woman-mega-menu__separator {
+  display: block;
+  height: 2px;
+  width: 120px;
+  max-width: 100%;
+  background: var(--woman-mega-accent);
+  margin: 0 0 18px;
+  border: none;
+}
+
+.woman-mega-menu__collection-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 4px;
+}
+
+.woman-mega-menu__group,
+.woman-mega-menu__fabric-list,
+.woman-mega-menu__right-section {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+.woman-mega-menu__subheading {
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin: 0 0 14px;
+  font-weight: 600;
+}
+
+.woman-mega-menu__group a,
+.woman-mega-menu__fabric-list a,
+.woman-mega-menu__right-section a {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  color: var(--woman-mega-text);
+  padding: 11px 12px;
+  font-size: 15px;
+  line-height: 1.35;
+  border: none;
+  border-left: 2px solid transparent;
+  border-radius: 6px;
+  white-space: normal;
+  transition:
+    color 0.25s ease,
+    transform 0.25s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.woman-mega-menu__right-section a {
+  padding: 10px 12px;
+}
+
+.woman-mega-menu__group a:hover,
+.woman-mega-menu__fabric-list a:hover,
+.woman-mega-menu__right-section a:hover,
+.woman-mega-menu__fabric-link.is-active {
+  color: var(--woman-mega-accent-hover);
+  background: var(--woman-mega-cream);
+  border-left-color: var(--woman-mega-accent);
+  transform: translateX(4px);
+  box-shadow: 0 4px 14px rgba(194, 24, 91, 0.08);
+}
+
+.woman-mega-menu__fabric-trigger {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+  border: none;
+  border-left: 2px solid transparent;
+  padding: 11px 12px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--woman-mega-text);
+  margin: 2px 0;
+  border-radius: 6px;
+  text-align: left;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.woman-mega-menu__fabric-trigger span {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+
+.woman-mega-menu__fabric-trigger:hover,
+.woman-mega-menu__fabric-trigger.is-active {
+  background: var(--woman-mega-cream);
+  border-left-color: var(--woman-mega-accent);
+  color: var(--woman-mega-accent-hover);
+  box-shadow: 0 4px 14px rgba(194, 24, 91, 0.08);
+}
+
+.woman-mega-menu__fabric-trigger:hover span,
+.woman-mega-menu__fabric-trigger.is-active span {
+  transform: translateX(4px);
+}
+
+.woman-mega-menu__fabric-list a {
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+/* Feature panel — hide empty beige “bar” when no image */
+
+.woman-mega-menu__feature {
+  min-width: 0;
+  background: var(--woman-mega-surface);
+  border-radius: 8px;
+  overflow: hidden;
+  align-self: start;
+}
+
+.woman-mega-menu__feature:has(.woman-mega-menu__feature-placeholder):not(:has(img)) {
+  background: transparent;
+}
+
+.woman-mega-menu__feature:has(.woman-mega-menu__feature-placeholder):not(:has(img)) .woman-mega-menu__feature-link {
+  display: none;
+}
+
+.woman-mega-menu__feature-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+}
+
+.woman-mega-menu__feature-image {
+  width: 100%;
+  height: 260px;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.25s ease;
+}
+
+.woman-mega-menu__feature-placeholder {
+  display: none;
+}
+
+.woman-mega-menu__feature-link:hover .woman-mega-menu__feature-image {
+  transform: scale(1.03);
+}
+
+.woman-mega-menu__feature-text {
+  padding: 16px;
+  text-align: center;
+}
+
+.woman-mega-menu__feature-title {
+  font-family: 'Times New Roman', Times, Georgia, serif;
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0 0 6px;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.woman-mega-menu__feature-subtitle {
+  margin: 0;
+  color: var(--woman-mega-muted);
+  font-size: 15px;
+}
+
+.woman-mega-menu__right-section {
+  margin-bottom: 28px;
+}
+
+.woman-mega-menu__right-section:last-child {
+  margin-bottom: 0;
+}
+
+.menu-list__submenu .woman-mega-menu,
+.menu-list__submenu-inner .woman-mega-menu {
+  max-width: min(1600px, calc(100vw - 80px));
+  width: min(1600px, calc(100vw - 80px));
+}
+
+/* Kill Horizon flex quirks that can force horizontal link rows */
+.menu-list__submenu .woman-mega-menu__right-section a,
+.menu-list__submenu .woman-mega-menu__group a,
+.menu-list__submenu .woman-mega-menu__fabric-list a {
+  display: block !important;
+  float: none !important;
+}
+
+@media screen and (max-width: 1200px) {
+  .woman-mega-menu__content {
+    grid-template-columns: 1.4fr 1fr 1.1fr;
+  }
+
+  .woman-mega-menu__feature {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .woman-mega-menu {
+    width: calc(100vw - 32px);
+    max-width: none;
+  }
+
+  .woman-mega-menu__cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .woman-mega-menu__content {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .woman-mega-menu__column {
+    border-right: none;
+    border-bottom: 1px solid var(--woman-mega-border);
+    padding-right: 0;
+    padding-bottom: 20px;
+  }
+
+  .woman-mega-menu__column--right {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .woman-mega-menu {
+    width: 100%;
+    border-radius: 0;
+    padding: 16px;
+  }
+
+  .woman-mega-menu__cards {
+    grid-template-columns: 1fr;
+  }
+
+  .woman-mega-menu__collection-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .woman-mega-menu__card {
+    min-height: 180px;
+  }
+
+  .woman-mega-menu__card-content {
+    width: 70%;
+    max-width: 70%;
+    min-height: 180px;
+  }
+}
