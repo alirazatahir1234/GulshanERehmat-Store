@@ -1,0 +1,245 @@
+{{ 'ger-homepage.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'ger-homepage.js' | asset_url }}" defer></script>
+
+<section
+  class="ger-section ger-hero"
+  data-ger-hero
+  data-autoplay="{{ section.settings.autoplay_speed | times: 1000 }}"
+  {{ section.shopify_attributes }}
+>
+  {% for block in section.blocks %}
+    {% liquid
+      assign slide_alt = block.settings.heading | default: shop.name
+      assign fallback_asset = 'ger-hero-slide-1.jpg'
+      if forloop.index == 2
+        assign fallback_asset = 'ger-hero-slide-2.jpg'
+      elsif forloop.index == 3
+        assign fallback_asset = 'ger-hero-slide-3.jpg'
+      elsif forloop.index > 3
+        assign fallback_asset = 'ger-hero-slide-1.jpg'
+      endif
+    %}
+    <div
+      class="ger-hero__slide{% if forloop.first %} is-active{% endif %}"
+      data-ger-hero-slide
+      {{ block.shopify_attributes }}
+    >
+      <div class="ger-hero__media">
+        {% if block.settings.image != blank %}
+          {% if forloop.first %}
+            {{
+              block.settings.image
+              | image_url: width: 2400
+              | image_tag: loading: 'eager', sizes: '100vw', widths: '750, 1100, 1500, 2000, 2400', alt: slide_alt, class: 'ger-hero__img'
+            }}
+          {% else %}
+            {{
+              block.settings.image
+              | image_url: width: 2400
+              | image_tag: loading: 'lazy', sizes: '100vw', widths: '750, 1100, 1500, 2000, 2400', alt: slide_alt, class: 'ger-hero__img'
+            }}
+          {% endif %}
+        {% else %}
+          <img
+            class="ger-hero__img"
+            src="{{ fallback_asset | asset_url }}"
+            alt="{{ slide_alt | escape }}"
+            width="2400"
+            height="940"
+            {% if forloop.first %}
+              loading="eager"
+              fetchpriority="high"
+            {% else %}
+              loading="lazy"
+            {% endif %}
+          >
+        {% endif %}
+      </div>
+      <div class="ger-hero__overlay" aria-hidden="true"></div>
+
+      <div class="ger-container ger-hero__inner">
+        <div class="ger-hero__content">
+          {% if block.settings.eyebrow != blank %}
+            <p class="ger-hero__eyebrow">{{ block.settings.eyebrow }}</p>
+          {% endif %}
+          {% if block.settings.heading != blank %}
+            {% if forloop.first %}
+              <h1 class="ger-hero__heading ger-hero__heading--primary">{{ block.settings.heading }}</h1>
+            {% else %}
+              <h2 class="ger-hero__heading">{{ block.settings.heading }}</h2>
+            {% endif %}
+          {% endif %}
+          {% if block.settings.text != blank %}
+            <p class="ger-hero__text">{{ block.settings.text }}</p>
+          {% endif %}
+          {% if block.settings.button_label != blank %}
+            <a
+              href="{{ block.settings.button_link | default: routes.all_products_collection_url }}"
+              class="ger-btn ger-btn--primary ger-hero__cta"
+            >
+              <span>{{ block.settings.button_label }}</span>
+              <span class="ger-hero__cta-arrow" aria-hidden="true">→</span>
+            </a>
+          {% endif %}
+          {% if block.settings.detail_top != blank or block.settings.detail_bottom != blank %}
+            <div class="ger-hero__detail">
+              {% if block.settings.detail_top != blank %}
+                <span class="ger-hero__detail-top">{{ block.settings.detail_top }}</span>
+              {% endif %}
+              <span class="ger-hero__detail-rule" aria-hidden="true"></span>
+              {% if block.settings.detail_bottom != blank %}
+                <span class="ger-hero__detail-bottom">{{ block.settings.detail_bottom }}</span>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+
+        {% if block.settings.script_text != blank %}
+          <p class="ger-hero__script">{{ block.settings.script_text }}</p>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+
+  {% if section.blocks.size > 1 %}
+    <div class="ger-hero__dots" role="tablist" aria-label="Hero slides">
+      {% for block in section.blocks %}
+        <button
+          type="button"
+          class="ger-hero__dot{% if forloop.first %} is-active{% endif %}"
+          data-ger-hero-dot
+          aria-label="Go to slide {{ forloop.index }}"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+        ></button>
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "GER Hero slider",
+  "tag": "section",
+  "class": "ger-hero-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 0,
+      "max": 12,
+      "step": 1,
+      "unit": "s",
+      "label": "Autoplay speed",
+      "info": "Set to 0 to disable autoplay",
+      "default": 6
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Leave blank to use the built-in fallback photo"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow",
+          "default": "UNSTITCHED COLLECTION"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Elegance in Every Thread"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "Premium Fabrics, Timeless Designs. For Every You."
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "SHOP UNSTITCHED"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "text",
+          "id": "detail_top",
+          "label": "Detail top",
+          "default": "New Designs"
+        },
+        {
+          "type": "text",
+          "id": "detail_bottom",
+          "label": "Detail bottom",
+          "default": "This Season"
+        },
+        {
+          "type": "text",
+          "id": "script_text",
+          "label": "Script accent (right)",
+          "default": "Fabric That Inspires Your Story."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GER Hero slider",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "UNSTITCHED COLLECTION",
+            "heading": "Elegance in Every Thread",
+            "text": "Premium Fabrics, Timeless Designs. For Every You.",
+            "button_label": "SHOP UNSTITCHED",
+            "detail_top": "New Designs",
+            "detail_bottom": "This Season",
+            "script_text": "Fabric That Inspires Your Story."
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "WINTER COLLECTION",
+            "heading": "Warmth with Elegance",
+            "text": "Luxurious Fabrics. Sophisticated Designs. Made for Your Winter Story.",
+            "button_label": "EXPLORE WINTER COLLECTION",
+            "detail_top": "New Arrivals",
+            "detail_bottom": "This Season",
+            "script_text": "Fabric That Inspires Your Story."
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "NEW SEASON",
+            "heading": "Crafted for Timeless Beauty",
+            "text": "Discover premium fabrics designed to elevate every occasion.",
+            "button_label": "SHOP NOW",
+            "detail_top": "New Designs",
+            "detail_bottom": "This Season",
+            "script_text": "Elegance in Every Thread."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

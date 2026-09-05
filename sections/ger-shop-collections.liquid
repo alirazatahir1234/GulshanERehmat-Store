@@ -1,0 +1,273 @@
+{{ 'ger-homepage.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'ger-homepage.js' | asset_url }}" defer></script>
+
+{% liquid
+  assign autoplay = section.settings.autoplay
+  assign autoplay_ms = section.settings.autoplay_speed | times: 1000
+  if autoplay == false
+    assign autoplay_ms = 0
+  endif
+%}
+
+<section
+  class="ger-section ger-collections"
+  style="
+    --ger-col-desktop: {{ section.settings.cards_desktop }};
+    --ger-col-tablet: {{ section.settings.cards_tablet }};
+    --ger-col-mobile: {{ section.settings.cards_mobile }};
+  "
+  {{ section.shopify_attributes }}
+>
+  <div class="ger-container ger-collections__wrap">
+    <div class="ger-collections__header ger-fade-in">
+      {% if section.settings.heading != blank %}
+        <h2 class="ger-collections__heading">{{ section.settings.heading }}</h2>
+        <span class="ger-collections__rule" aria-hidden="true"></span>
+      {% endif %}
+      {% if section.settings.subtitle != blank %}
+        <p class="ger-collections__subtitle">{{ section.settings.subtitle }}</p>
+      {% endif %}
+    </div>
+
+    <div
+      class="ger-collections__slider"
+      data-ger-collections
+      data-autoplay="{{ autoplay_ms }}"
+      data-loop="true"
+    >
+      {% if section.settings.show_arrows and section.blocks.size > 1 %}
+        <button
+          type="button"
+          class="ger-collections__nav ger-collections__nav--prev"
+          data-ger-col-prev
+          aria-label="Previous collections"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="ger-collections__nav ger-collections__nav--next"
+          data-ger-col-next
+          aria-label="Next collections"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      {% endif %}
+
+      <div class="ger-collections__viewport" data-ger-col-viewport>
+        <div class="ger-collections__track" data-ger-col-track>
+          {% for block in section.blocks %}
+            {% liquid
+              assign card_url = block.settings.link
+              if block.settings.collection != blank
+                assign card_url = block.settings.collection.url
+              endif
+              if card_url == blank
+                assign card_url = routes.all_products_collection_url
+              endif
+              assign card_image = block.settings.image
+              if card_image == blank and block.settings.collection != blank and block.settings.collection.featured_image != blank
+                assign card_image = block.settings.collection.featured_image
+              endif
+              assign card_title = block.settings.title
+              if card_title == blank and block.settings.collection != blank
+                assign card_title = block.settings.collection.title
+              endif
+            %}
+            <article
+              class="ger-collection-card"
+              data-ger-col-card
+              {{ block.shopify_attributes }}
+            >
+              <a href="{{ card_url }}" class="ger-collection-card__link">
+                <div class="ger-collection-card__media">
+                  {% if card_image != blank %}
+                    {{
+                      card_image
+                      | image_url: width: 900
+                      | image_tag:
+                        loading: 'lazy',
+                        widths: '360, 540, 720, 900',
+                        sizes: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 80vw',
+                        alt: card_title,
+                        class: 'ger-collection-card__img'
+                    }}
+                  {% else %}
+                    <img
+                      class="ger-collection-card__img"
+                      src="{{ 'ger-collection-fallback.jpg' | asset_url }}"
+                      alt="{{ card_title | default: 'Collection' | escape }}"
+                      width="720"
+                      height="900"
+                      loading="lazy"
+                    >
+                  {% endif %}
+                </div>
+                <div class="ger-collection-card__body">
+                  {% if card_title != blank %}
+                    <h3 class="ger-collection-card__title">{{ card_title }}</h3>
+                  {% endif %}
+                  {% if block.settings.text != blank %}
+                    <p class="ger-collection-card__text">{{ block.settings.text }}</p>
+                  {% endif %}
+                  <span class="ger-collection-card__cta">
+                    {{ section.settings.cta_label }}
+                    <span aria-hidden="true">→</span>
+                  </span>
+                </div>
+              </a>
+            </article>
+          {% endfor %}
+        </div>
+      </div>
+
+      {% if section.settings.show_dots and section.blocks.size > 1 %}
+        <div class="ger-collections__dots" data-ger-col-dots role="tablist" aria-label="Collection slides"></div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GER Shop collections",
+  "tag": "section",
+  "class": "ger-collections-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "SHOP BY COLLECTION"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Discover fabrics made for every occasion"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Card CTA label",
+      "default": "SHOP NOW"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Enable autoplay",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "unit": "s",
+      "label": "Autoplay speed",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "cards_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Cards on desktop",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "cards_tablet",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "label": "Cards on tablet",
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "cards_mobile",
+      "label": "Cards on mobile",
+      "options": [
+        { "value": "1", "label": "1 (with peek of next)" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show navigation arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show pagination dots",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_card",
+      "name": "Collection card",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom image",
+          "info": "Overrides the collection image when set"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "info": "Defaults to collection title"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description",
+          "default": "Discover the collection"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Custom link",
+          "info": "Optional. Defaults to the selected collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GER Shop collections",
+      "blocks": [
+        { "type": "collection_card", "settings": { "title": "Summer Collection", "text": "Light, Breezy & Beautiful" } },
+        { "type": "collection_card", "settings": { "title": "Winter Collection", "text": "Warmth with Elegance" } },
+        { "type": "collection_card", "settings": { "title": "Printed Collection", "text": "Everyday Style" } },
+        { "type": "collection_card", "settings": { "title": "Embroidered Collection", "text": "Crafted to Impress" } },
+        { "type": "collection_card", "settings": { "title": "Luxury Collection", "text": "Premium Fabrics for Special Moments" } },
+        { "type": "collection_card", "settings": { "title": "Unstitched Collection", "text": "Create Your Own Style" } },
+        { "type": "collection_card", "settings": { "title": "Festive Collection", "text": "Celebrate in Style" } },
+        { "type": "collection_card", "settings": { "title": "New Arrivals", "text": "Discover the Latest Designs" } },
+        { "type": "collection_card", "settings": { "title": "Best Sellers", "text": "Our Most Loved Fabrics" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

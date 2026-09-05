@@ -1,1 +1,483 @@
-{"sections":{"hero_jVaWmY":{"type":"hero","name":"t:names.hero","settings":{"media_type_1":"image","media_type_2":"image","image_2":"shopify:\/\/shop_images\/Codex_Image_Sep_5_2026_12_54_01_PM.png","stack_media_on_mobile":false,"custom_mobile_media":false,"media_type_1_mobile":"image","media_type_2_mobile":"image","link":"","open_in_new_tab":false,"content_direction":"column","vertical_on_mobile":true,"horizontal_alignment":"space-between","vertical_alignment":"flex-end","align_baseline":true,"horizontal_alignment_flex_direction_column":"center","vertical_alignment_flex_direction_column":"flex-end","gap":100,"section_width":"full-width","section_height":"full-screen","section_height_custom":50,"background_color":"rgba(0,0,0,0)","toggle_overlay":true,"overlay_color":"#12121266","overlay_style":"solid","gradient_direction":"to bottom","blurred_reflection":false,"reflection_opacity":75,"padding-block-start":100,"padding-block-end":72}},"product_list_fa6P9H":{"type":"product-list","blocks":{"static-header":{"type":"_product-list-content","name":"t:names.header","static":true,"settings":{"content_direction":"row","vertical_on_mobile":false,"horizontal_alignment":"space-between","vertical_alignment":"flex-end","align_baseline":true,"horizontal_alignment_flex_direction_column":"flex-start","vertical_alignment_flex_direction_column":"center","gap":12,"width":"fill","custom_width":100,"width_mobile":"fill","custom_width_mobile":100,"height":"fit","custom_height":100,"background_media":"none","background_color":"","video_position":"cover","background_image_position":"cover","border":"none","border_width":1,"border_opacity":100,"border_color":"","border_radius":0,"padding-block-start":0,"padding-block-end":0,"padding-inline-start":0,"padding-inline-end":0},"blocks":{"product_list_text_YFtzcL":{"type":"_product-list-text","name":"t:names.collection_title","settings":{"text":"<h3>{{ closest.collection.title }}<\/h3>","width":"fit-content","max_width":"normal","alignment":"left","type_preset":"h4","font":"var(--font-body--family)","font_size":"1rem","line_height":"normal","letter_spacing":"normal","case":"none","wrap":"pretty","text_color":"","background":false,"background_color":"#00000026","corner_radius":0,"padding-block-start":0,"padding-block-end":0,"padding-inline-start":0,"padding-inline-end":0},"blocks":{}},"product_list_button_MWeP9V":{"type":"_product-list-button","name":"t:names.product_list_button","settings":{"label":"View all","open_in_new_tab":false,"style_class":"link","custom_button_background":"{{ settings.color_palette.foreground }}","custom_button_text":"{{ settings.color_palette.background }}","custom_button_border":"{{ settings.color_palette.background }}","link_text_color":"","width":"fit-content","custom_width":100,"width_mobile":"fit-content","custom_width_mobile":100},"blocks":{}}},"block_order":["product_list_text_YFtzcL","product_list_button_MWeP9V"]},"static-product-card":{"type":"_product-card","name":"t:names.product_card","static":true,"settings":{"product_card_gap":4,"background_color":"","border":"none","border_width":1,"border_opacity":100,"border_color":"","border_radius":0,"padding-block-start":0,"padding-block-end":0,"padding-inline-start":0,"padding-inline-end":0},"blocks":{"product_card_gallery_677WP3":{"type":"_product-card-gallery","name":"t:names.product_card_media","settings":{"image_ratio":"adapt","border":"none","border_width":1,"border_opacity":100,"border_color":"","border_radius":0,"padding-block-start":0,"padding-block-end":0,"padding-inline-start":0,"padding-inline-end":0},"blocks":{}},"product_title_YXxMTj":{"type":"product-title","name":"t:names.product_title","settings":{"width":"100%","max_width":"normal","alignment":"left","type_preset":"rte","font":"var(--font-body--family)","font_size":"1rem","line_height":"normal","letter_spacing":"normal","case":"none","wrap":"pretty","text_color":"","background":false,"background_color":"#00000026","corner_radius":0,"padding-block-start":4,"padding-block-end":0,"padding-inline-start":0,"padding-inline-end":0},"blocks":{}},"price_JQzVV4":{"type":"price","name":"t:names.product_price","settings":{"show_sale_price_first":true,"show_installments":false,"show_tax_info":false,"type_preset":"h6","width":"100%","alignment":"left","font":"var(--font-body--family)","font_size":"1rem","line_height":"normal","letter_spacing":"normal","case":"none","text_color":"","padding-block-start":0,"padding-block-end":0,"padding-inline-start":0,"padding-inline-end":0},"blocks":{}}},"block_order":["product_card_gallery_677WP3","product_title_YXxMTj","price_JQzVV4"]}},"name":"t:names.product_list","settings":{"collection":"all","layout_type":"grid","carousel_on_mobile":false,"max_products":8,"columns":4,"mobile_columns":"2","mobile_card_size":"60cqw","columns_gap":8,"rows_gap":24,"icons_style":"arrow","icons_shape":"none","section_width":"page-width","horizontal_alignment":"flex-start","gap":28,"background_color":"{{ settings.color_palette.background }}","padding-block-start":48,"padding-block-end":48}}},"order":["hero_jVaWmY","product_list_fa6P9H"]}
+/*
+ * ------------------------------------------------------------
+ * Gulshan E Rehmat homepage — custom GER sections + Featured Fabrics
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "ger_hero": {
+      "type": "ger-hero-slider",
+      "blocks": {
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "UNSTITCHED COLLECTION",
+            "heading": "Elegance in Every Thread",
+            "text": "Premium Fabrics, Timeless Designs. For Every You.",
+            "button_label": "SHOP UNSTITCHED",
+            "button_link": "",
+            "detail_top": "New Designs",
+            "detail_bottom": "This Season",
+            "script_text": "Fabric That Inspires Your Story."
+          }
+        },
+        "slide_2": {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "WINTER COLLECTION",
+            "heading": "Warmth with Elegance",
+            "text": "Luxurious Fabrics. Sophisticated Designs. Made for Your Winter Story.",
+            "button_label": "EXPLORE WINTER COLLECTION",
+            "button_link": "",
+            "detail_top": "New Arrivals",
+            "detail_bottom": "This Season",
+            "script_text": "Fabric That Inspires Your Story."
+          }
+        },
+        "slide_3": {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "NEW SEASON",
+            "heading": "Crafted for Timeless Beauty",
+            "text": "Discover premium fabrics designed to elevate every occasion.",
+            "button_label": "SHOP NOW",
+            "button_link": "",
+            "detail_top": "New Designs",
+            "detail_bottom": "This Season",
+            "script_text": "Elegance in Every Thread."
+          }
+        }
+      },
+      "block_order": [
+        "slide_1",
+        "slide_2",
+        "slide_3"
+      ],
+      "settings": {
+        "autoplay_speed": 6
+      }
+    },
+    "ger_benefits": {
+      "type": "ger-benefits-bar",
+      "blocks": {
+        "b1": {
+          "type": "benefit",
+          "settings": {
+            "icon": "shipping",
+            "title": "Free shipping",
+            "text": "On orders over Rs. 5,000"
+          }
+        },
+        "b2": {
+          "type": "benefit",
+          "settings": {
+            "icon": "quality",
+            "title": "Premium quality",
+            "text": "Handpicked authentic fabrics"
+          }
+        },
+        "b3": {
+          "type": "benefit",
+          "settings": {
+            "icon": "returns",
+            "title": "Easy returns",
+            "text": "Hassle-free within 7 days"
+          }
+        },
+        "b4": {
+          "type": "benefit",
+          "settings": {
+            "icon": "support",
+            "title": "Expert support",
+            "text": "We're here to help you"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ],
+      "settings": {}
+    },
+    "ger_collections": {
+      "type": "ger-shop-collections",
+      "blocks": {
+        "c1": {
+          "type": "collection_card",
+          "settings": {
+            "title": "Summer Collection",
+            "text": "Light, Breezy & Beautiful"
+          }
+        },
+        "c2": {
+          "type": "collection_card",
+          "settings": {
+            "title": "Winter Collection",
+            "text": "Warmth with Elegance"
+          }
+        },
+        "c3": {
+          "type": "collection_card",
+          "settings": {
+            "title": "Printed Collection",
+            "text": "Everyday Style"
+          }
+        },
+        "c4": {
+          "type": "collection_card",
+          "settings": {
+            "title": "Embroidered Collection",
+            "text": "Crafted to Impress"
+          }
+        },
+        "c5": {
+          "type": "collection_card",
+          "settings": {
+            "title": "Luxury Collection",
+            "text": "Premium Fabrics for Special Moments"
+          }
+        },
+        "c6": {
+          "type": "collection_card",
+          "settings": {
+            "title": "Unstitched Collection",
+            "text": "Create Your Own Style"
+          }
+        },
+        "c7": {
+          "type": "collection_card",
+          "settings": {
+            "title": "Festive Collection",
+            "text": "Celebrate in Style"
+          }
+        },
+        "c8": {
+          "type": "collection_card",
+          "settings": {
+            "title": "New Arrivals",
+            "text": "Discover the Latest Designs"
+          }
+        },
+        "c9": {
+          "type": "collection_card",
+          "settings": {
+            "title": "Best Sellers",
+            "text": "Our Most Loved Fabrics"
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4",
+        "c5",
+        "c6",
+        "c7",
+        "c8",
+        "c9"
+      ],
+      "settings": {
+        "heading": "SHOP BY COLLECTION",
+        "subtitle": "Discover fabrics made for every occasion",
+        "cta_label": "SHOP NOW",
+        "autoplay": true,
+        "autoplay_speed": 4,
+        "cards_desktop": 4,
+        "cards_tablet": 3,
+        "cards_mobile": "1",
+        "show_arrows": true,
+        "show_dots": true
+      }
+    },
+    "featured_fabrics": {
+      "type": "ger-featured-fabrics",
+      "blocks": {
+        "p1": {
+          "type": "product_card",
+          "settings": {
+            "title": "Graceful Purple Prints",
+            "price": "Rs. 2,650",
+            "rating": 5,
+            "reviews": 24
+          }
+        },
+        "p2": {
+          "type": "product_card",
+          "settings": {
+            "title": "Modern Square Prints",
+            "price": "Rs. 2,650",
+            "rating": 5,
+            "reviews": 18
+          }
+        },
+        "p3": {
+          "type": "product_card",
+          "settings": {
+            "title": "Classic Blue Florals",
+            "price": "Rs. 2,750",
+            "rating": 5,
+            "reviews": 32
+          }
+        },
+        "p4": {
+          "type": "product_card",
+          "settings": {
+            "title": "Nature Inspired",
+            "price": "Rs. 2,650",
+            "rating": 5,
+            "reviews": 19
+          }
+        },
+        "p5": {
+          "type": "product_card",
+          "settings": {
+            "title": "Royal Red Roses",
+            "price": "Rs. 2,650",
+            "rating": 5,
+            "reviews": 15
+          }
+        },
+        "p6": {
+          "type": "product_card",
+          "settings": {
+            "title": "Vibrant Blooms",
+            "price": "Rs. 2,750",
+            "rating": 5,
+            "reviews": 26
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4",
+        "p5",
+        "p6"
+      ],
+      "settings": {
+        "heading": "FEATURED FABRICS",
+        "subtitle": "Handpicked designs from our latest collection",
+        "view_all_label": "VIEW ALL PRODUCTS",
+        "view_all_link": ""
+      }
+    },
+    "ger_promo": {
+      "type": "ger-promo-banner",
+      "settings": {
+        "eyebrow": "",
+        "heading": "Unstitched Suit Collection",
+        "text": "Endless Combinations Same Timeless Elegance",
+        "button_label": "EXPLORE NOW",
+        "button_link": ""
+      }
+    },
+    "ger_lookbook": {
+      "type": "ger-lookbook",
+      "blocks": {
+        "lb1": {
+          "type": "image",
+          "settings": {
+            "size": "tall"
+          }
+        },
+        "lb2": {
+          "type": "image",
+          "settings": {
+            "size": "standard"
+          }
+        },
+        "lb3": {
+          "type": "image",
+          "settings": {
+            "size": "standard"
+          }
+        },
+        "lb4": {
+          "type": "image",
+          "settings": {
+            "size": "wide"
+          }
+        },
+        "lb5": {
+          "type": "image",
+          "settings": {
+            "size": "standard"
+          }
+        },
+        "lb6": {
+          "type": "image",
+          "settings": {
+            "size": "standard"
+          }
+        }
+      },
+      "block_order": [
+        "lb1",
+        "lb2",
+        "lb3",
+        "lb4",
+        "lb5",
+        "lb6"
+      ],
+      "settings": {
+        "eyebrow": "Inspiration",
+        "heading": "The Lookbook",
+        "text": "Styled moments from our latest collections."
+      }
+    },
+    "ger_why": {
+      "type": "ger-why-choose",
+      "blocks": {
+        "w1": {
+          "type": "reason",
+          "settings": {
+            "number": "01",
+            "title": "Authentic fabrics",
+            "text": "Sourced and selected for lasting beauty and comfort."
+          }
+        },
+        "w2": {
+          "type": "reason",
+          "settings": {
+            "number": "02",
+            "title": "Timeless design",
+            "text": "Pieces that honour tradition while feeling contemporary."
+          }
+        },
+        "w3": {
+          "type": "reason",
+          "settings": {
+            "number": "03",
+            "title": "Trusted service",
+            "text": "Careful packing, clear communication, and easy returns."
+          }
+        }
+      },
+      "block_order": [
+        "w1",
+        "w2",
+        "w3"
+      ],
+      "settings": {
+        "eyebrow": "Our promise",
+        "heading": "Why Choose Us",
+        "text": "Crafted with care for those who value quality and tradition."
+      }
+    },
+    "ger_testimonials": {
+      "type": "ger-testimonials",
+      "blocks": {
+        "t1": {
+          "type": "quote",
+          "settings": {
+            "quote": "The fabric quality exceeded my expectations. Soft, elegant, and perfect for my wedding outfit.",
+            "author": "Ayesha K."
+          }
+        },
+        "t2": {
+          "type": "quote",
+          "settings": {
+            "quote": "Beautiful prints and excellent service. Gulshan E Rehmat is my go-to for unstitched fabrics.",
+            "author": "Sara M."
+          }
+        },
+        "t3": {
+          "type": "quote",
+          "settings": {
+            "quote": "Men's suiting was premium and the delivery was quick. Highly recommended.",
+            "author": "Imran R."
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "settings": {
+        "eyebrow": "Reviews",
+        "heading": "What Our Customers Say"
+      }
+    },
+    "ger_instagram": {
+      "type": "ger-instagram-grid",
+      "blocks": {
+        "ig1": {
+          "type": "image",
+          "settings": {}
+        },
+        "ig2": {
+          "type": "image",
+          "settings": {}
+        },
+        "ig3": {
+          "type": "image",
+          "settings": {}
+        },
+        "ig4": {
+          "type": "image",
+          "settings": {}
+        },
+        "ig5": {
+          "type": "image",
+          "settings": {}
+        },
+        "ig6": {
+          "type": "image",
+          "settings": {}
+        },
+        "ig7": {
+          "type": "image",
+          "settings": {}
+        },
+        "ig8": {
+          "type": "image",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "ig1",
+        "ig2",
+        "ig3",
+        "ig4",
+        "ig5",
+        "ig6",
+        "ig7",
+        "ig8"
+      ],
+      "settings": {
+        "eyebrow": "Follow along",
+        "heading": "On Instagram",
+        "profile_handle": "@gulshanerehmat",
+        "profile_url": "https://www.instagram.com/"
+      }
+    },
+    "ger_newsletter": {
+      "type": "ger-newsletter",
+      "settings": {
+        "eyebrow": "Stay in touch",
+        "heading": "Join Our Newsletter",
+        "text": "Be first to know about new arrivals, exclusive drops, and fabric stories.",
+        "placeholder": "Enter your email",
+        "button_label": "Subscribe",
+        "success_message": "Thanks for subscribing!"
+      }
+    }
+  },
+  "order": [
+    "ger_hero",
+    "ger_benefits",
+    "ger_collections",
+    "featured_fabrics",
+    "ger_promo",
+    "ger_lookbook",
+    "ger_why",
+    "ger_testimonials",
+    "ger_instagram",
+    "ger_newsletter"
+  ]
+}

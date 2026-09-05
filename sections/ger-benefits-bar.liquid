@@ -1,0 +1,124 @@
+{{ 'ger-homepage.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'ger-homepage.js' | asset_url }}" defer></script>
+
+<section class="ger-section ger-benefits" {{ section.shopify_attributes }}>
+  <div class="ger-container ger-benefits__grid ger-fade-in">
+    {% for block in section.blocks %}
+      <div class="ger-benefit" {{ block.shopify_attributes }}>
+        <div class="ger-benefit__icon" aria-hidden="true">
+          {% case block.settings.icon %}
+            {% when 'shipping' %}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M3 7h11v10H3zM14 10h4l3 3v4h-7V10z"/><circle cx="7" cy="18" r="1.5"/><circle cx="17" cy="18" r="1.5"/>
+              </svg>
+            {% when 'quality' %}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 3l2.2 4.5L19 8.2l-3.5 3.4.8 4.9L12 14.2 7.7 16.5l.8-4.9L5 8.2l4.8-.7L12 3z"/>
+              </svg>
+            {% when 'returns' %}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M4 12a8 8 0 0113.5-5.8M20 12a8 8 0 01-13.5 5.8"/><path d="M17 3v4h4M7 21v-4H3"/>
+              </svg>
+            {% when 'support' %}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 3a7 7 0 017 7v2a3 3 0 01-3 3h-1v-4h3M5 12h3v4H7a3 3 0 01-3-3v-2a7 7 0 017-7"/><path d="M10 19h4"/>
+              </svg>
+            {% else %}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 2.5"/>
+              </svg>
+          {% endcase %}
+        </div>
+        {% if block.settings.title != blank %}
+          <h3 class="ger-benefit__title">{{ block.settings.title }}</h3>
+        {% endif %}
+        {% if block.settings.text != blank %}
+          <p class="ger-benefit__text">{{ block.settings.text }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GER Benefits bar",
+  "tag": "section",
+  "class": "ger-benefits-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "shipping", "label": "Shipping" },
+            { "value": "quality", "label": "Quality" },
+            { "value": "returns", "label": "Returns" },
+            { "value": "support", "label": "Support" },
+            { "value": "clock", "label": "Clock" }
+          ],
+          "default": "shipping"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Free shipping"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "On orders over Rs. 5,000"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GER Benefits bar",
+      "blocks": [
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "shipping",
+            "title": "Free shipping",
+            "text": "On orders over Rs. 5,000"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "quality",
+            "title": "Premium quality",
+            "text": "Handpicked authentic fabrics"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "returns",
+            "title": "Easy returns",
+            "text": "Hassle-free within 7 days"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "support",
+            "title": "Expert support",
+            "text": "We're here to help you"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
