@@ -2,58 +2,83 @@
 <script src="{{ 'ger-homepage.js' | asset_url }}" defer></script>
 
 <section class="ger-section ger-lookbook" {{ section.shopify_attributes }}>
-  <div class="ger-container">
+  <div class="ger-container ger-lookbook__wrap">
     <div class="ger-lookbook__header ger-fade-in">
-      {% if section.settings.eyebrow != blank %}
-        <p class="ger-eyebrow">{{ section.settings.eyebrow }}</p>
-      {% endif %}
-      {% if section.settings.heading != blank %}
-        <h2 class="ger-heading ger-heading--md">{{ section.settings.heading }}</h2>
-      {% endif %}
-      {% if section.settings.text != blank %}
-        <p class="ger-text" style="margin-top: 0.75rem;">{{ section.settings.text }}</p>
+      <div class="ger-lookbook__intro">
+        {% if section.settings.heading != blank %}
+          <h2 class="ger-lookbook__heading">{{ section.settings.heading }}</h2>
+        {% endif %}
+        {% if section.settings.subtitle != blank %}
+          <p class="ger-lookbook__subtitle">{{ section.settings.subtitle }}</p>
+        {% endif %}
+      </div>
+      {% if section.settings.button_label != blank %}
+        <a
+          href="{{ section.settings.button_link | default: routes.all_products_collection_url }}"
+          class="ger-lookbook__cta"
+        >
+          <span>{{ section.settings.button_label }}</span>
+          <span aria-hidden="true">→</span>
+        </a>
       {% endif %}
     </div>
+  </div>
 
-    <div class="ger-lookbook__grid">
-      {% for block in section.blocks %}
-        {% liquid
-          assign item_class = 'ger-lookbook__item'
-          if block.settings.size == 'tall'
-            assign item_class = item_class | append: ' ger-lookbook__item--tall'
-          elsif block.settings.size == 'wide'
-            assign item_class = item_class | append: ' ger-lookbook__item--wide'
+  <div class="ger-lookbook__gallery">
+    {% for block in section.blocks %}
+      {% liquid
+        assign look_alt = block.settings.alt
+        if look_alt == blank
+          assign look_alt = section.settings.heading | append: ' look ' | append: forloop.index
+        endif
+        assign fallback_index = forloop.index
+        if fallback_index > 6
+          assign fallback_index = fallback_index | modulo: 6
+          if fallback_index == 0
+            assign fallback_index = 6
           endif
-        %}
-        {% if block.settings.link != blank %}
-          <a href="{{ block.settings.link }}" class="{{ item_class }} ger-fade-in" {{ block.shopify_attributes }}>
-        {% else %}
-          <div class="{{ item_class }} ger-fade-in" {{ block.shopify_attributes }}>
-        {% endif %}
-          <div class="ger-img-zoom">
-            {% if block.settings.image != blank %}
-              {% liquid
-                assign look_alt = block.settings.alt
-                if look_alt == blank
-                  assign look_alt = section.settings.heading
-                endif
-              %}
-              {{
-                block.settings.image
-                | image_url: width: 1200
-                | image_tag: loading: 'lazy', widths: '400, 700, 1000, 1200', sizes: '(min-width: 750px) 25vw, 50vw', alt: look_alt
-              }}
-            {% else %}
-              {{ 'lifestyle-1' | placeholder_svg_tag }}
-            {% endif %}
-          </div>
-        {% if block.settings.link != blank %}
-          </a>
-        {% else %}
-          </div>
-        {% endif %}
-      {% endfor %}
-    </div>
+        endif
+        assign fallback_asset = 'ger-lookbook-' | append: fallback_index | append: '.jpg'
+        assign item_url = block.settings.link
+      %}
+      {% if item_url != blank %}
+        <a
+          href="{{ item_url }}"
+          class="ger-lookbook__item ger-fade-in"
+          {{ block.shopify_attributes }}
+        >
+      {% else %}
+        <div class="ger-lookbook__item ger-fade-in" {{ block.shopify_attributes }}>
+      {% endif %}
+        <div class="ger-lookbook__media">
+          {% if block.settings.image != blank %}
+            {{
+              block.settings.image
+              | image_url: width: 900
+              | image_tag:
+                loading: 'lazy',
+                widths: '280, 400, 600, 900',
+                sizes: '(min-width: 990px) 16.6vw, (min-width: 750px) 33vw, 50vw',
+                alt: look_alt,
+                class: 'ger-lookbook__img'
+            }}
+          {% else %}
+            <img
+              class="ger-lookbook__img"
+              src="{{ fallback_asset | asset_url }}"
+              alt="{{ look_alt | escape }}"
+              width="600"
+              height="900"
+              loading="lazy"
+            >
+          {% endif %}
+        </div>
+      {% if item_url != blank %}
+        </a>
+      {% else %}
+        </div>
+      {% endif %}
+    {% endfor %}
   </div>
 </section>
 
@@ -68,27 +93,32 @@
   "settings": [
     {
       "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "Inspiration"
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our Lookbook"
     },
     {
       "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "The Lookbook"
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Real Fabrics. Real Style."
     },
     {
-      "type": "textarea",
-      "id": "text",
-      "label": "Text",
-      "default": "Styled moments from our latest collections."
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "EXPLORE LOOKBOOK"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
     }
   ],
   "blocks": [
     {
       "type": "image",
-      "name": "Image",
+      "name": "Look",
       "settings": [
         {
           "type": "image_picker",
@@ -104,17 +134,6 @@
           "type": "url",
           "id": "link",
           "label": "Link"
-        },
-        {
-          "type": "select",
-          "id": "size",
-          "label": "Size",
-          "options": [
-            { "value": "standard", "label": "Standard" },
-            { "value": "tall", "label": "Tall" },
-            { "value": "wide", "label": "Wide" }
-          ],
-          "default": "standard"
         }
       ]
     }
@@ -123,12 +142,12 @@
     {
       "name": "GER Lookbook",
       "blocks": [
-        { "type": "image", "settings": { "size": "tall" } },
-        { "type": "image", "settings": { "size": "standard" } },
-        { "type": "image", "settings": { "size": "standard" } },
-        { "type": "image", "settings": { "size": "wide" } },
-        { "type": "image", "settings": { "size": "standard" } },
-        { "type": "image", "settings": { "size": "standard" } }
+        { "type": "image", "settings": { "alt": "Navy floral suit" } },
+        { "type": "image", "settings": { "alt": "Red and cream floral suit" } },
+        { "type": "image", "settings": { "alt": "Navy gold embroidered suit" } },
+        { "type": "image", "settings": { "alt": "Sage green embroidered suit" } },
+        { "type": "image", "settings": { "alt": "Blue and white printed suit" } },
+        { "type": "image", "settings": { "alt": "Purple floral suit" } }
       ]
     }
   ]

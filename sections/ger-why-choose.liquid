@@ -2,31 +2,55 @@
 <script src="{{ 'ger-homepage.js' | asset_url }}" defer></script>
 
 <section class="ger-section ger-why" {{ section.shopify_attributes }}>
-  <div class="ger-container">
-    <div class="ger-why__header ger-fade-in">
-      {% if section.settings.eyebrow != blank %}
-        <p class="ger-eyebrow">{{ section.settings.eyebrow }}</p>
-      {% endif %}
-      {% if section.settings.heading != blank %}
-        <h2 class="ger-heading ger-heading--md">{{ section.settings.heading }}</h2>
-      {% endif %}
-      {% if section.settings.text != blank %}
-        <p class="ger-text" style="margin-top: 0.75rem;">{{ section.settings.text }}</p>
-      {% endif %}
-    </div>
+  <div class="ger-container ger-why__wrap">
+    {% if section.settings.heading != blank %}
+      <div class="ger-why__header ger-fade-in">
+        <h2 class="ger-why__heading">{{ section.settings.heading }}</h2>
+      </div>
+    {% endif %}
 
     <div class="ger-why__grid">
       {% for block in section.blocks %}
         <div class="ger-why-card ger-fade-in" {{ block.shopify_attributes }}>
-          {% if block.settings.number != blank %}
-            <p class="ger-why-card__num">{{ block.settings.number }}</p>
-          {% endif %}
-          {% if block.settings.title != blank %}
-            <h3 class="ger-why-card__title">{{ block.settings.title }}</h3>
-          {% endif %}
-          {% if block.settings.text != blank %}
-            <p class="ger-text">{{ block.settings.text }}</p>
-          {% endif %}
+          <div class="ger-why-card__icon" aria-hidden="true">
+            {% case block.settings.icon %}
+              {% when 'heart' %}
+                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M24 39.5S9.5 30.8 6.2 22.8C3.8 17.2 6.8 11.2 12.8 10.2c3.2-.5 6.4.8 8.4 3.2 2-2.4 5.2-3.7 8.4-3.2 6 1 9 7 6.6 12.6C33.9 30.8 24 39.5 24 39.5z"/>
+                  <path d="M27.5 16.5l1.2-2.8 1.2 2.8 2.8 1.2-2.8 1.2-1.2 2.8-1.2-2.8-2.8-1.2z"/>
+                  <path d="M32.2 21.2l.7-1.6.7 1.6 1.6.7-1.6.7-.7 1.6-.7-1.6-1.6-.7z"/>
+                </svg>
+              {% when 'leaf', 'feather' %}
+                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M15 35.5C15 24 24 13.5 36.5 11.5 34.5 24 25.5 34 15 35.5Z"/>
+                  <path d="M15 35.5C21 29.5 28 21.5 36.5 11.5"/>
+                </svg>
+              {% when 'gift' %}
+                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="10" y="20" width="28" height="18" rx="1.5"/>
+                  <path d="M10 27.5h28M24 20v18"/>
+                  <path d="M24 20c-3.8-5.5-9.5-5.8-9.5-2.2S18.8 22 24 20c5.2 2 9.5 1.4 9.5-2.2S27.8 14.5 24 20z"/>
+                  <path d="M24 12.5v7.5"/>
+                </svg>
+              {% else %}
+                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="24" cy="15.5" r="4.2"/>
+                  <circle cx="14.5" cy="17.5" r="3.2"/>
+                  <circle cx="33.5" cy="17.5" r="3.2"/>
+                  <path d="M12 34.5c.8-5.2 4.6-7.8 8.2-7.8 1.4 0 2.7.4 3.8 1.1"/>
+                  <path d="M36 34.5c-.8-5.2-4.6-7.8-8.2-7.8-1.4 0-2.7.4-3.8 1.1"/>
+                  <path d="M16.5 36c1.2-5.5 4.8-8.2 7.5-8.2s6.3 2.7 7.5 8.2"/>
+                </svg>
+            {% endcase %}
+          </div>
+          <div class="ger-why-card__body">
+            {% if block.settings.title != blank %}
+              <h3 class="ger-why-card__title">{{ block.settings.title }}</h3>
+            {% endif %}
+            {% if block.settings.text != blank %}
+              <p class="ger-why-card__text">{{ block.settings.text }}</p>
+            {% endif %}
+          </div>
         </div>
       {% endfor %}
     </div>
@@ -44,45 +68,39 @@
   "settings": [
     {
       "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "Our promise"
-    },
-    {
-      "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Why Choose Us"
-    },
-    {
-      "type": "textarea",
-      "id": "text",
-      "label": "Text",
-      "default": "Crafted with care for those who value quality and tradition."
+      "info": "Optional. Leave blank to hide."
     }
   ],
   "blocks": [
     {
       "type": "reason",
-      "name": "Reason",
+      "name": "Benefit",
       "settings": [
         {
-          "type": "text",
-          "id": "number",
-          "label": "Number",
-          "default": "01"
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "heart", "label": "Heart" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "gift", "label": "Gift" },
+            { "value": "people", "label": "People" }
+          ],
+          "default": "heart"
         },
         {
           "type": "text",
           "id": "title",
           "label": "Title",
-          "default": "Authentic fabrics"
+          "default": "Exclusive Designs"
         },
         {
-          "type": "textarea",
+          "type": "text",
           "id": "text",
-          "label": "Text",
-          "default": "Sourced and selected for lasting beauty and comfort."
+          "label": "Subtitle",
+          "default": "You Won't Find Anywhere Else"
         }
       ]
     }
@@ -91,30 +109,10 @@
     {
       "name": "GER Why choose us",
       "blocks": [
-        {
-          "type": "reason",
-          "settings": {
-            "number": "01",
-            "title": "Authentic fabrics",
-            "text": "Sourced and selected for lasting beauty and comfort."
-          }
-        },
-        {
-          "type": "reason",
-          "settings": {
-            "number": "02",
-            "title": "Timeless design",
-            "text": "Pieces that honour tradition while feeling contemporary."
-          }
-        },
-        {
-          "type": "reason",
-          "settings": {
-            "number": "03",
-            "title": "Trusted service",
-            "text": "Careful packing, clear communication, and easy returns."
-          }
-        }
+        { "type": "reason", "settings": { "icon": "heart", "title": "Exclusive Designs", "text": "You Won't Find Anywhere Else" } },
+        { "type": "reason", "settings": { "icon": "leaf", "title": "Premium Fabrics", "text": "Quality You Can Feel" } },
+        { "type": "reason", "settings": { "icon": "gift", "title": "Styles for Every Season", "text": "From Everyday to Festive" } },
+        { "type": "reason", "settings": { "icon": "people", "title": "Trusted by Thousands", "text": "Happy Customers" } }
       ]
     }
   ]

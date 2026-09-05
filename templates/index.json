@@ -281,37 +281,37 @@
         "lb1": {
           "type": "image",
           "settings": {
-            "size": "tall"
+            "alt": "Navy floral embroidered suit"
           }
         },
         "lb2": {
           "type": "image",
           "settings": {
-            "size": "standard"
+            "alt": "Red and cream floral suit"
           }
         },
         "lb3": {
           "type": "image",
           "settings": {
-            "size": "standard"
+            "alt": "Navy gold embroidered suit"
           }
         },
         "lb4": {
           "type": "image",
           "settings": {
-            "size": "wide"
+            "alt": "Sage green embroidered suit"
           }
         },
         "lb5": {
           "type": "image",
           "settings": {
-            "size": "standard"
+            "alt": "Blue and white printed suit"
           }
         },
         "lb6": {
           "type": "image",
           "settings": {
-            "size": "standard"
+            "alt": "Purple floral embroidered suit"
           }
         }
       },
@@ -324,9 +324,10 @@
         "lb6"
       ],
       "settings": {
-        "eyebrow": "Inspiration",
-        "heading": "The Lookbook",
-        "text": "Styled moments from our latest collections."
+        "heading": "Our Lookbook",
+        "subtitle": "Real Fabrics. Real Style.",
+        "button_label": "EXPLORE LOOKBOOK",
+        "button_link": ""
       }
     },
     "ger_why": {
@@ -335,37 +336,44 @@
         "w1": {
           "type": "reason",
           "settings": {
-            "number": "01",
-            "title": "Authentic fabrics",
-            "text": "Sourced and selected for lasting beauty and comfort."
+            "icon": "heart",
+            "title": "Exclusive Designs",
+            "text": "You Won't Find Anywhere Else"
           }
         },
         "w2": {
           "type": "reason",
           "settings": {
-            "number": "02",
-            "title": "Timeless design",
-            "text": "Pieces that honour tradition while feeling contemporary."
+            "icon": "leaf",
+            "title": "Premium Fabrics",
+            "text": "Quality You Can Feel"
           }
         },
         "w3": {
           "type": "reason",
           "settings": {
-            "number": "03",
-            "title": "Trusted service",
-            "text": "Careful packing, clear communication, and easy returns."
+            "icon": "gift",
+            "title": "Styles for Every Season",
+            "text": "From Everyday to Festive"
+          }
+        },
+        "w4": {
+          "type": "reason",
+          "settings": {
+            "icon": "people",
+            "title": "Trusted by Thousands",
+            "text": "Happy Customers"
           }
         }
       },
       "block_order": [
         "w1",
         "w2",
-        "w3"
+        "w3",
+        "w4"
       ],
       "settings": {
-        "eyebrow": "Our promise",
-        "heading": "Why Choose Us",
-        "text": "Crafted with care for those who value quality and tradition."
+        "heading": ""
       }
     },
     "ger_testimonials": {
@@ -374,22 +382,22 @@
         "t1": {
           "type": "quote",
           "settings": {
-            "quote": "The fabric quality exceeded my expectations. Soft, elegant, and perfect for my wedding outfit.",
+            "quote": "Beautiful fabric and amazing quality. Exactly as shown in the pictures.",
             "author": "Ayesha K."
           }
         },
         "t2": {
           "type": "quote",
           "settings": {
-            "quote": "Beautiful prints and excellent service. Gulshan E Rehmat is my go-to for unstitched fabrics.",
-            "author": "Sara M."
+            "quote": "Fast delivery and premium quality. Will definitely shop again!",
+            "author": "Saba M."
           }
         },
         "t3": {
           "type": "quote",
           "settings": {
-            "quote": "Men's suiting was premium and the delivery was quick. Highly recommended.",
-            "author": "Imran R."
+            "quote": "Gulshan-e-Rehmat never disappoints. Truly elegant fabrics.",
+            "author": "Mariam R."
           }
         }
       },
@@ -399,7 +407,6 @@
         "t3"
       ],
       "settings": {
-        "eyebrow": "Reviews",
         "heading": "What Our Customers Say"
       }
     },
@@ -450,19 +457,16 @@
         "ig8"
       ],
       "settings": {
-        "eyebrow": "Follow along",
-        "heading": "On Instagram",
-        "profile_handle": "@gulshanerehmat",
+        "heading": "Follow Us @GulshanERehmat",
         "profile_url": "https://www.instagram.com/"
       }
     },
     "ger_newsletter": {
       "type": "ger-newsletter",
       "settings": {
-        "eyebrow": "Stay in touch",
-        "heading": "Join Our Newsletter",
-        "text": "Be first to know about new arrivals, exclusive drops, and fabric stories.",
-        "placeholder": "Enter your email",
+        "heading": "Join the Gulshan-e-Rehmat Family",
+        "text": "Get early access to new collections and exclusive offers.",
+        "placeholder": "Enter your email address",
         "button_label": "Subscribe",
         "success_message": "Thanks for subscribing!"
       }

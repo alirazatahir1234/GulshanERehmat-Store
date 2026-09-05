@@ -14,29 +14,32 @@
     "ger_footer": {
       "type": "ger-footer",
       "blocks": {
-        "ww1": { "type": "women_link", "settings": { "label": "New arrivals" } },
-        "ww2": { "type": "women_link", "settings": { "label": "Unstitched" } },
-        "ww3": { "type": "women_link", "settings": { "label": "Sale" } },
-        "mm1": { "type": "men_link", "settings": { "label": "Summer" } },
-        "mm2": { "type": "men_link", "settings": { "label": "Winter" } },
+        "ww1": { "type": "women_link", "settings": { "label": "Unstitched" } },
+        "ww2": { "type": "women_link", "settings": { "label": "Ready to Wear" } },
+        "ww3": { "type": "women_link", "settings": { "label": "Wedding Collection" } },
+        "ww4": { "type": "women_link", "settings": { "label": "Abaya Collection" } },
+        "mm1": { "type": "men_link", "settings": { "label": "Summer Collection" } },
+        "mm2": { "type": "men_link", "settings": { "label": "Winter Collection" } },
         "mm3": { "type": "men_link", "settings": { "label": "Waist Coats" } },
-        "cc1": { "type": "care_link", "settings": { "label": "Contact" } },
-        "cc2": { "type": "care_link", "settings": { "label": "Shipping" } },
-        "cc3": { "type": "care_link", "settings": { "label": "Returns" } },
-        "cc4": { "type": "care_link", "settings": { "label": "Size guide" } }
+        "cc1": { "type": "care_link", "settings": { "label": "Contact Us" } },
+        "cc2": { "type": "care_link", "settings": { "label": "Shipping Policy" } },
+        "cc3": { "type": "care_link", "settings": { "label": "Returns & Exchange" } },
+        "cc4": { "type": "care_link", "settings": { "label": "Privacy Policy" } }
       },
-      "block_order": ["ww1", "ww2", "ww3", "mm1", "mm2", "mm3", "cc1", "cc2", "cc3", "cc4"],
+      "block_order": ["ww1", "ww2", "ww3", "ww4", "mm1", "mm2", "mm3", "cc1", "cc2", "cc3", "cc4"],
       "settings": {
-        "brand_name": "Gulshan E Rehmat",
-        "tagline": "Elegance in Every Thread — premium unstitched fabrics for women and men.",
-        "women_heading": "Shop Women",
-        "men_heading": "Shop Men",
-        "care_heading": "Customer Care",
-        "social_heading": "Follow Us",
+        "brand_name": "GULSHAN-E-REHMAT",
+        "tagline": "Elegance in Every Thread",
+        "women_heading": "SHOP WOMEN",
+        "men_heading": "SHOP MEN",
+        "care_heading": "CUSTOMER CARE",
+        "social_heading": "FOLLOW US",
         "instagram_url": "https://www.instagram.com/",
         "facebook_url": "https://www.facebook.com/",
-        "copyright_text": "All rights reserved.",
-        "payment_note": "Secure checkout"
+        "tiktok_url": "https://www.tiktok.com/",
+        "youtube_url": "https://www.youtube.com/",
+        "pinterest_url": "https://www.pinterest.com/",
+        "copyright_text": "All rights reserved."
       }
     }
   },

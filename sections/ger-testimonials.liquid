@@ -1,49 +1,30 @@
 {{ 'ger-homepage.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'ger-homepage.js' | asset_url }}" defer></script>
 
-<section
-  class="ger-section ger-testimonials"
-  data-ger-testimonials
-  {{ section.shopify_attributes }}
->
-  <div class="ger-container">
+<section class="ger-section ger-testimonials" {{ section.shopify_attributes }}>
+  <div class="ger-container ger-testimonials__wrap">
     <div class="ger-testimonials__header ger-fade-in">
-      {% if section.settings.eyebrow != blank %}
-        <p class="ger-eyebrow">{{ section.settings.eyebrow }}</p>
-      {% endif %}
       {% if section.settings.heading != blank %}
-        <h2 class="ger-heading ger-heading--md">{{ section.settings.heading }}</h2>
+        <h2 class="ger-testimonials__heading">{{ section.settings.heading }}</h2>
       {% endif %}
     </div>
 
-    <div class="ger-testimonials__track-wrap ger-fade-in">
+    <div class="ger-testimonials__grid">
       {% for block in section.blocks %}
-        <blockquote
-          class="ger-testimonials__slide{% if forloop.first %} is-active{% endif %}"
-          data-ger-testimonial
-          {{ block.shopify_attributes }}
-        >
+        <blockquote class="ger-testimonials__card ger-fade-in" {{ block.shopify_attributes }}>
           {% if block.settings.quote != blank %}
             <p class="ger-testimonials__quote">“{{ block.settings.quote }}”</p>
           {% endif %}
+          <div class="ger-testimonials__stars" aria-label="5 out of 5 stars">
+            {% for i in (1..5) %}
+              <span aria-hidden="true">★</span>
+            {% endfor %}
+          </div>
           {% if block.settings.author != blank %}
-            <cite class="ger-testimonials__author">{{ block.settings.author }}</cite>
+            <cite class="ger-testimonials__author">— {{ block.settings.author }}</cite>
           {% endif %}
         </blockquote>
       {% endfor %}
-
-      {% if section.blocks.size > 1 %}
-        <div class="ger-testimonials__nav">
-          {% for block in section.blocks %}
-            <button
-              type="button"
-              class="ger-testimonials__dot{% if forloop.first %} is-active{% endif %}"
-              data-ger-testimonial-dot
-              aria-label="Show testimonial {{ forloop.index }}"
-            ></button>
-          {% endfor %}
-        </div>
-      {% endif %}
     </div>
   </div>
 </section>
@@ -57,12 +38,6 @@
     "groups": ["header", "footer"]
   },
   "settings": [
-    {
-      "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "Reviews"
-    },
     {
       "type": "text",
       "id": "heading",
@@ -79,7 +54,7 @@
           "type": "textarea",
           "id": "quote",
           "label": "Quote",
-          "default": "The fabric quality exceeded my expectations. Soft, elegant, and perfect for my wedding outfit."
+          "default": "Beautiful fabric and amazing quality. Exactly as shown in the pictures."
         },
         {
           "type": "text",
@@ -97,22 +72,22 @@
         {
           "type": "quote",
           "settings": {
-            "quote": "The fabric quality exceeded my expectations. Soft, elegant, and perfect for my wedding outfit.",
+            "quote": "Beautiful fabric and amazing quality. Exactly as shown in the pictures.",
             "author": "Ayesha K."
           }
         },
         {
           "type": "quote",
           "settings": {
-            "quote": "Beautiful prints and excellent service. Gulshan E Rehmat is my go-to for unstitched fabrics.",
-            "author": "Sara M."
+            "quote": "Fast delivery and premium quality. Will definitely shop again!",
+            "author": "Saba M."
           }
         },
         {
           "type": "quote",
           "settings": {
-            "quote": "Men's suiting was premium and the delivery was quick. Highly recommended.",
-            "author": "Imran R."
+            "quote": "Gulshan-e-Rehmat never disappoints. Truly elegant fabrics.",
+            "author": "Mariam R."
           }
         }
       ]

@@ -2,43 +2,45 @@
 <script src="{{ 'ger-homepage.js' | asset_url }}" defer></script>
 
 <section class="ger-section ger-newsletter" {{ section.shopify_attributes }}>
-  <div class="ger-container">
-    <div class="ger-newsletter__header ger-fade-in">
-      {% if section.settings.eyebrow != blank %}
-        <p class="ger-eyebrow">{{ section.settings.eyebrow }}</p>
-      {% endif %}
+  <div class="ger-newsletter__decor ger-newsletter__decor--left" aria-hidden="true"></div>
+  <div class="ger-newsletter__decor ger-newsletter__decor--right" aria-hidden="true"></div>
+
+  <div class="ger-container ger-newsletter__inner">
+    <div class="ger-newsletter__copy ger-fade-in">
       {% if section.settings.heading != blank %}
-        <h2 class="ger-heading ger-heading--md">{{ section.settings.heading }}</h2>
+        <h2 class="ger-newsletter__heading">{{ section.settings.heading }}</h2>
       {% endif %}
       {% if section.settings.text != blank %}
-        <p class="ger-text" style="margin-top: 0.75rem;">{{ section.settings.text }}</p>
+        <p class="ger-newsletter__text">{{ section.settings.text }}</p>
       {% endif %}
     </div>
 
     {% form 'customer', class: 'ger-newsletter__form ger-fade-in' %}
       <input type="hidden" name="contact[tags]" value="newsletter">
       <label class="visually-hidden" for="GerNewsletterEmail-{{ section.id }}">Email</label>
-      <input
-        id="GerNewsletterEmail-{{ section.id }}"
-        class="ger-newsletter__input"
-        type="email"
-        name="contact[email]"
-        value="{% if form.email %}{{ form.email }}{% endif %}"
-        placeholder="{{ section.settings.placeholder }}"
-        required
-        autocomplete="email"
-      >
-      <button type="submit" class="ger-btn ger-btn--primary">
-        {{ section.settings.button_label }}
-      </button>
+      <div class="ger-newsletter__field">
+        <input
+          id="GerNewsletterEmail-{{ section.id }}"
+          class="ger-newsletter__input"
+          type="email"
+          name="contact[email]"
+          value="{% if form.email %}{{ form.email }}{% endif %}"
+          placeholder="{{ section.settings.placeholder }}"
+          required
+          autocomplete="email"
+        >
+        <button type="submit" class="ger-newsletter__submit" aria-label="{{ section.settings.button_label }}">
+          <span aria-hidden="true">→</span>
+        </button>
+      </div>
 
       {% if form.posted_successfully? %}
-        <p class="ger-newsletter__message ger-newsletter__message--success" style="width: 100%;">
+        <p class="ger-newsletter__message ger-newsletter__message--success">
           {{ section.settings.success_message }}
         </p>
       {% endif %}
       {% if form.errors %}
-        <p class="ger-newsletter__message" style="width: 100%;">
+        <p class="ger-newsletter__message">
           {{ form.errors.translated_fields.email | capitalize }}
           {{ form.errors.messages.email }}
         </p>
@@ -58,32 +60,26 @@
   "settings": [
     {
       "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "Stay in touch"
-    },
-    {
-      "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Join Our Newsletter"
+      "default": "Join the Gulshan-e-Rehmat Family"
     },
     {
       "type": "textarea",
       "id": "text",
       "label": "Text",
-      "default": "Be first to know about new arrivals, exclusive drops, and fabric stories."
+      "default": "Get early access to new collections and exclusive offers."
     },
     {
       "type": "text",
       "id": "placeholder",
       "label": "Email placeholder",
-      "default": "Enter your email"
+      "default": "Enter your email address"
     },
     {
       "type": "text",
       "id": "button_label",
-      "label": "Button label",
+      "label": "Submit button label",
       "default": "Subscribe"
     },
     {
