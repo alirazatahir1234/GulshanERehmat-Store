@@ -17,8 +17,11 @@
           <span class="ger-top-bar__icon" aria-hidden="true">
             {% case icon_type %}
               {% when 'truck' %}
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16">
-                  <path d="M3 7h11v10H3zM14 10h4l3 3v4h-7V10z"/><circle cx="7" cy="18" r="1.5"/><circle cx="17" cy="18" r="1.5"/>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="15" height="15" aria-hidden="true">
+                  <path d="M1 7h12v9H1z"/>
+                  <path d="M13 10h4l3 3v3h-7v-6z"/>
+                  <circle cx="5.5" cy="17.5" r="1.5"/>
+                  <circle cx="16.5" cy="17.5" r="1.5"/>
                 </svg>
               {% when 'shield' %}
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16">
@@ -105,17 +108,8 @@
         {
           "type": "message",
           "settings": {
-            "text": "Free Shipping on Orders Above Rs. 5,000",
-            "align": "left",
-            "show_icon": true,
-            "icon": "truck"
-          }
-        },
-        {
-          "type": "message",
-          "settings": {
             "text": "Elegance in Every Thread",
-            "align": "center"
+            "align": "left"
           }
         },
         {

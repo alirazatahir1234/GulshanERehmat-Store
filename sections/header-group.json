@@ -17,24 +17,14 @@
         "msg1": {
           "type": "message",
           "settings": {
-            "text": "Free Shipping on Orders Above Rs. 5,000",
-            "link": "",
-            "align": "left",
-            "show_icon": true,
-            "icon": "truck"
-          }
-        },
-        "msg2": {
-          "type": "message",
-          "settings": {
             "text": "Elegance in Every Thread",
             "link": "",
-            "align": "center",
+            "align": "left",
             "show_icon": false,
             "icon": "none"
           }
         },
-        "msg3": {
+        "msg2": {
           "type": "message",
           "settings": {
             "text": "Easy Returns | Secure Payment | Premium Fabrics | PKR",
@@ -47,8 +37,7 @@
       },
       "block_order": [
         "msg1",
-        "msg2",
-        "msg3"
+        "msg2"
       ],
       "settings": {}
     },

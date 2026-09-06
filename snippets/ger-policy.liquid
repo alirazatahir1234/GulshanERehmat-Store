@@ -1,0 +1,92 @@
+{%- doc -%}
+  Shop policy layout. Privacy Policy uses the premium GER mockup design.
+{%- enddoc -%}
+
+{%- liquid
+  assign is_privacy = false
+  if policy.url contains 'privacy-policy'
+    assign is_privacy = true
+  endif
+-%}
+
+{%- if is_privacy -%}
+  <div class="ger-privacy" data-ger-privacy>
+    <header class="ger-privacy__hero">
+      <div class="ger-privacy__hero-bg" aria-hidden="true"></div>
+      <div class="ger-privacy__hero-inner">
+        <div class="ger-privacy__hero-copy">
+          <h1 class="ger-privacy__hero-title">Privacy Policy</h1>
+          <p class="ger-privacy__hero-text">
+            Your privacy is important to us. This Privacy Policy explains how Gulshan-e-Rehmat
+            collects, uses, and protects your personal information when you visit our website
+            or make a purchase.
+          </p>
+        </div>
+        <p class="ger-privacy__hero-script" aria-hidden="true">Elegance, Trust, Always</p>
+      </div>
+    </header>
+
+    <nav class="ger-privacy__breadcrumb" aria-label="Breadcrumb">
+      <div class="ger-privacy__container">
+        <a href="{{ routes.root_url }}">Home</a>
+        <span class="ger-privacy__breadcrumb-sep" aria-hidden="true">›</span>
+        <span class="ger-privacy__breadcrumb-current">Privacy Policy</span>
+      </div>
+    </nav>
+
+    <div class="ger-privacy__main">
+      <div class="ger-privacy__container">
+        <div class="ger-privacy__sections" data-ger-privacy-sections></div>
+
+        {%- comment -%} Source HTML kept for legal accuracy; enhanced into sections by JS. {%- endcomment -%}
+        <div class="ger-privacy__source" data-ger-privacy-source hidden>
+          {{ policy.body }}
+        </div>
+
+        <noscript>
+          <div class="ger-privacy__body rte">
+            {{ policy.body }}
+          </div>
+        </noscript>
+      </div>
+    </div>
+
+    <aside class="ger-privacy__trust">
+      <div class="ger-privacy__trust-inner">
+        <span class="ger-privacy__trust-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 21s-7.2-4.35-9.6-8.4C.6 9.45 2.1 6 5.4 6c1.8 0 3.15 1.05 3.9 2.1C10.05 7.05 11.4 6 13.2 6c3.3 0 4.8 3.45 3 6.6C19.2 16.65 12 21 12 21z" fill="currentColor"/>
+          </svg>
+        </span>
+        <h2 class="ger-privacy__trust-title">Your Trust Inspires Us</h2>
+        <p class="ger-privacy__trust-text">
+          At Gulshan-e-Rehmat, your privacy is not just a policy — it’s a promise.
+        </p>
+      </div>
+    </aside>
+
+    {%- liquid
+      assign privacy_email = 'sales@gulshanerehmat.com'
+      assign privacy_phone = '+92 333 8709009'
+      assign privacy_address = 'Main Bazar Pasrur'
+    -%}
+    <script type="application/json" data-ger-privacy-contact>
+      {
+        "email": {{ privacy_email | json }},
+        "phone": {{ privacy_phone | json }},
+        "address": {{ privacy_address | json }}
+      }
+    </script>
+  </div>
+
+  <script src="{{ 'ger-privacy-policy.js' | asset_url }}" defer></script>
+{%- else -%}
+  <section class="ger-policy-simple">
+    <div class="ger-policy-simple__inner">
+      <h1 class="ger-policy-simple__title">{{ policy.title }}</h1>
+      <div class="ger-policy-simple__body rte">
+        {{ policy.body }}
+      </div>
+    </div>
+  </section>
+{%- endif -%}

@@ -29,6 +29,27 @@
     {% endif %}
 
     {{ content_for_header }}
+
+    {%- comment -%}
+      Shopify Online Store ignores templates/policy.liquid and injects .shopify-policy__*.
+      Load GER Privacy Policy redesign assets only on that URL.
+    {%- endcomment -%}
+    {%- if request.path contains '/policies/privacy-policy' -%}
+      {{ 'ger-privacy-policy.css' | asset_url | stylesheet_tag }}
+      {%- liquid
+        assign privacy_email = 'sales@gulshanerehmat.com'
+        assign privacy_phone = '+92 333 8709009'
+        assign privacy_address = 'Main Bazar Pasrur'
+      -%}
+      <script type="application/json" id="ger-privacy-contact">
+        {
+          "email": {{ privacy_email | json }},
+          "phone": {{ privacy_phone | json }},
+          "address": {{ privacy_address | json }}
+        }
+      </script>
+      <script src="{{ 'ger-privacy-policy.js' | asset_url }}" defer></script>
+    {%- endif -%}
   </head>
 
   <body

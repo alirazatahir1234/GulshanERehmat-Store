@@ -212,55 +212,6 @@
           </div>
         </div>
       </div>
-
-      <div class="man-mega-menu__panel" data-mega-panel="essentials" role="tabpanel" hidden>
-        <div class="man-mega-menu__column">
-          <h3 class="man-mega-menu__heading">MEN'S ESSENTIALS</h3>
-          <div class="man-mega-menu__separator" aria-hidden="true"></div>
-          <div class="man-mega-menu__links" data-man-links>
-            <a href="{{ url_essentials }}">Men's Accessories</a>
-            <a href="{{ url_essentials }}">Premium Essentials</a>
-            <a href="{{ url_essentials }}">Formal Wear</a>
-            <a href="{{ url_essentials }}">Traditional Wear</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div
-      class="man-mega-menu__essentials man-mega-menu__essentials--last"
-      data-essentials-panel
-      data-mega-category="essentials"
-      role="tab"
-      aria-selected="false"
-      tabindex="0"
-    >
-      <a href="{{ url_essentials }}" class="man-mega-menu__essentials-link" data-essentials-link>
-        {% if use_essentials_asset %}
-          <img
-            src="{{ 'man-mega-essentials.jpg' | asset_url }}"
-            alt="Men's Essentials"
-            class="man-mega-menu__essentials-image"
-            loading="lazy"
-            width="600"
-            height="400"
-          >
-        {% elsif img_essentials != blank %}
-          {{ img_essentials | image_url: width: 600 | image_tag: class: 'man-mega-menu__essentials-image', loading: 'lazy', alt: "Men's Essentials" }}
-        {% else %}
-          <div class="man-mega-menu__essentials-placeholder" aria-hidden="true"></div>
-        {% endif %}
-        <div class="man-mega-menu__essentials-text">
-          <h3 class="man-mega-menu__essentials-title">Men's Essentials</h3>
-          <div class="man-mega-menu__essentials-rule" aria-hidden="true"></div>
-          <p class="man-mega-menu__essentials-tagline" data-essentials-tagline>
-            <span class="man-mega-menu__essentials-tagline-track">
-              <span class="man-mega-menu__essentials-tagline-text">Gulshan E Rehmat — Elegance in Every Thread</span>
-              <span class="man-mega-menu__essentials-tagline-text" aria-hidden="true">Gulshan E Rehmat — Elegance in Every Thread</span>
-            </span>
-          </p>
-        </div>
-      </a>
     </div>
   </div>
 </div>
