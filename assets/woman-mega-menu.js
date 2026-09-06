@@ -1,15 +1,60 @@
 /**
- * Woman mega menu: Printed Three Piece activation + fabric hover image swap.
+ * Woman mega menu: category card filtering + fabric hover image swap.
  */
 function initWomanMegaMenu(root) {
   if (!(root instanceof HTMLElement) || root.dataset.womanMegaReady === 'true') return;
 
+  const cards = Array.from(root.querySelectorAll('[data-mega-category]'));
+  const panels = Array.from(root.querySelectorAll('[data-mega-panel]'));
   const trigger = root.querySelector('[data-fabric-menu]');
   const fabricColumn = root.querySelector('[data-fabric-column]');
   const fabricLinks = root.querySelectorAll('[data-fabric-link]');
   const featureLink = root.querySelector('[data-feature-link]');
   const featureTitle = root.querySelector('[data-feature-heading]');
   const featureSubtitle = root.querySelector('[data-feature-subheading]');
+
+  let activeCategory = '';
+
+  const setCategory = (category, { force = false } = {}) => {
+    if (!category || (!force && category === activeCategory)) return;
+    activeCategory = category;
+
+    cards.forEach((card) => {
+      const isActive = card.getAttribute('data-mega-category') === category;
+      card.classList.toggle('is-active', isActive);
+      card.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+
+    panels.forEach((panel) => {
+      const isActive = panel.getAttribute('data-mega-panel') === category;
+      panel.classList.toggle('is-active', isActive);
+
+      if (isActive) {
+        panel.removeAttribute('hidden');
+        panel.classList.remove('is-animating');
+        void panel.offsetWidth;
+        panel.classList.add('is-animating');
+      } else {
+        panel.setAttribute('hidden', '');
+        panel.classList.remove('is-animating');
+      }
+    });
+  };
+
+  cards.forEach((card) => {
+    const category = card.getAttribute('data-mega-category');
+
+    card.addEventListener('pointerenter', () => setCategory(category));
+    card.addEventListener('focus', () => setCategory(category));
+
+    card.addEventListener('click', (event) => {
+      // First click selects the category panel; second click (when already active) navigates.
+      if (category !== activeCategory) {
+        event.preventDefault();
+        setCategory(category);
+      }
+    });
+  });
 
   const activateFabrics = () => {
     trigger?.classList.add('is-active');
@@ -60,6 +105,10 @@ function initWomanMegaMenu(root) {
     link.addEventListener('pointerenter', () => setActiveFabric(link));
     link.addEventListener('focus', () => setActiveFabric(link));
   });
+
+  const initial =
+    root.querySelector('[data-mega-category].is-active')?.getAttribute('data-mega-category') || 'unstitched';
+  setCategory(initial, { force: true });
 
   root.dataset.womanMegaReady = 'true';
 }

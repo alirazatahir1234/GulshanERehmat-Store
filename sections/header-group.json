@@ -18,6 +18,7 @@
           "type": "message",
           "settings": {
             "text": "Free Shipping on Orders Above Rs. 5,000",
+            "link": "",
             "align": "left",
             "show_icon": true,
             "icon": "truck"
@@ -27,6 +28,7 @@
           "type": "message",
           "settings": {
             "text": "Elegance in Every Thread",
+            "link": "",
             "align": "center",
             "show_icon": false,
             "icon": "none"
@@ -36,6 +38,7 @@
           "type": "message",
           "settings": {
             "text": "Easy Returns | Secure Payment | Premium Fabrics | PKR",
+            "link": "",
             "align": "right",
             "show_icon": false,
             "icon": "none"
@@ -58,7 +61,7 @@
           "settings": {
             "hide_logo_on_home_page": false,
             "padding-block-start": 8,
-            "padding-block-end": 8
+            "padding-block-end": 50
           },
           "blocks": {}
         },
@@ -114,8 +117,8 @@
         "actions_font_size": "0.875rem",
         "actions_font": "body",
         "actions_text_case": "none",
-        "background_color_top": "{{ settings.color_palette.background }}",
-        "text_color_top": "{{ settings.color_palette.foreground }}",
+        "background_color_top": "{{ settings.color_palette.foreground }}",
+        "text_color_top": "{{ settings.color_palette.background }}",
         "background_color_bottom": "{{ settings.color_palette.foreground }}",
         "text_color_bottom": "{{ settings.color_palette.background }}",
         "bubble_style": "custom",

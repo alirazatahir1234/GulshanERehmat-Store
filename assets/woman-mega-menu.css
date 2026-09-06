@@ -1,8 +1,8 @@
 .woman-mega-menu {
   --woman-mega-text: #27352f;
   --woman-mega-muted: #666666;
-  --woman-mega-accent: #c2185b;
-  --woman-mega-accent-hover: #a0144a;
+  --woman-mega-accent: #d81b70;
+  --woman-mega-accent-hover: #b01058;
   --woman-mega-gold: var(--woman-mega-accent);
   --woman-mega-gold-hover: var(--woman-mega-accent-hover);
   --woman-mega-surface: #faf5f7;
@@ -47,11 +47,17 @@
   background: var(--woman-mega-surface);
   text-decoration: none;
   color: #1d2924;
-  transition: box-shadow 0.25s ease;
+  border: 2px solid transparent;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .woman-mega-menu__card:hover {
   box-shadow: 0 8px 24px rgba(39, 53, 47, 0.1);
+}
+
+.woman-mega-menu__card.is-active {
+  border-color: var(--woman-mega-accent);
+  box-shadow: 0 10px 28px rgba(216, 27, 112, 0.16);
 }
 
 .woman-mega-menu__card-content {
@@ -138,9 +144,49 @@
 
 /* ——— Bottom content grid ——— */
 
-.woman-mega-menu__content {
+.woman-mega-menu__panels {
+  position: relative;
+  min-height: 280px;
+}
+
+.woman-mega-menu__panel {
+  display: none;
+}
+
+.woman-mega-menu__panel.is-active {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1.15fr 1.15fr;
+}
+
+.woman-mega-menu__panel.is-active.is-animating {
+  animation: woman-mega-panel-in 0.28s ease;
+}
+
+@keyframes woman-mega-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .woman-mega-menu__panel.is-active.is-animating {
+    animation: none;
+  }
+}
+
+.woman-mega-menu__content {
+  grid-template-columns: 1.5fr 1fr 1.15fr;
+  gap: 30px;
+  align-items: start;
+  margin-top: 8px;
+}
+
+.woman-mega-menu__panel--simple {
+  grid-template-columns: minmax(220px, 420px);
   gap: 30px;
   align-items: start;
   margin-top: 8px;
@@ -153,9 +199,46 @@
   border-right: 1px solid var(--woman-mega-border);
 }
 
-.woman-mega-menu__column--right {
-  padding-right: 0;
+.woman-mega-menu__column--simple,
+.woman-mega-menu__panel--simple .woman-mega-menu__column {
   border-right: none;
+  padding-right: 0;
+}
+
+.woman-mega-menu__simple-links {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  max-width: 360px;
+}
+
+.woman-mega-menu__simple-links a {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  color: var(--woman-mega-text);
+  padding: 11px 12px;
+  font-size: 15px;
+  line-height: 1.35;
+  border: none;
+  border-left: 2px solid transparent;
+  border-radius: 6px;
+  white-space: normal;
+  transition:
+    color 0.25s ease,
+    transform 0.25s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.woman-mega-menu__simple-links a:hover {
+  color: var(--woman-mega-accent-hover);
+  background: var(--woman-mega-cream);
+  border-left-color: var(--woman-mega-accent);
+  transform: translateX(4px);
+  box-shadow: 0 4px 14px rgba(216, 27, 112, 0.08);
 }
 
 .woman-mega-menu__heading {
@@ -231,12 +314,13 @@
 .woman-mega-menu__group a:hover,
 .woman-mega-menu__fabric-list a:hover,
 .woman-mega-menu__right-section a:hover,
+.woman-mega-menu__simple-links a:hover,
 .woman-mega-menu__fabric-link.is-active {
   color: var(--woman-mega-accent-hover);
   background: var(--woman-mega-cream);
   border-left-color: var(--woman-mega-accent);
   transform: translateX(4px);
-  box-shadow: 0 4px 14px rgba(194, 24, 91, 0.08);
+  box-shadow: 0 4px 14px rgba(216, 27, 112, 0.08);
 }
 
 .woman-mega-menu__fabric-trigger {
@@ -273,7 +357,7 @@
   background: var(--woman-mega-cream);
   border-left-color: var(--woman-mega-accent);
   color: var(--woman-mega-accent-hover);
-  box-shadow: 0 4px 14px rgba(194, 24, 91, 0.08);
+  box-shadow: 0 4px 14px rgba(216, 27, 112, 0.08);
 }
 
 .woman-mega-menu__fabric-trigger:hover span,
@@ -364,14 +448,15 @@
 /* Kill Horizon flex quirks that can force horizontal link rows */
 .menu-list__submenu .woman-mega-menu__right-section a,
 .menu-list__submenu .woman-mega-menu__group a,
-.menu-list__submenu .woman-mega-menu__fabric-list a {
+.menu-list__submenu .woman-mega-menu__fabric-list a,
+.menu-list__submenu .woman-mega-menu__simple-links a {
   display: block !important;
   float: none !important;
 }
 
 @media screen and (max-width: 1200px) {
   .woman-mega-menu__content {
-    grid-template-columns: 1.4fr 1fr 1.1fr;
+    grid-template-columns: 1.4fr 1fr;
   }
 
   .woman-mega-menu__feature {
@@ -389,7 +474,8 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .woman-mega-menu__content {
+  .woman-mega-menu__content,
+  .woman-mega-menu__panel--simple {
     grid-template-columns: 1fr;
     gap: 20px;
   }
@@ -401,7 +487,8 @@
     padding-bottom: 20px;
   }
 
-  .woman-mega-menu__column--right {
+  .woman-mega-menu__column--simple,
+  .woman-mega-menu__column--fabrics {
     border-bottom: none;
     padding-bottom: 0;
   }

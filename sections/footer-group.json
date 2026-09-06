@@ -63,13 +63,50 @@
             "link": "shopify://collections/men-waist-coats"
           }
         },
-        "cc1": { "type": "care_link", "settings": { "label": "Contact Us", "link": "shopify://pages/contact" } },
-        "cc2": { "type": "care_link", "settings": { "label": "Shipping Policy", "link": "shopify://policies/shipping-policy" } },
-        "cc3": { "type": "care_link", "settings": { "label": "Returns & Exchange", "link": "shopify://policies/refund-policy" } },
-        "cc4": { "type": "care_link", "settings": { "label": "Privacy Policy", "link": "shopify://policies/privacy-policy" } }
+        "cc1": {
+          "type": "care_link",
+          "settings": {
+            "label": "Contact Us",
+            "link": "shopify://pages/contact"
+          }
+        },
+        "cc2": {
+          "type": "care_link",
+          "settings": {
+            "label": "Shipping Policy",
+            "link": "shopify://policies/shipping-policy"
+          }
+        },
+        "cc3": {
+          "type": "care_link",
+          "settings": {
+            "label": "Returns & Exchange",
+            "link": "shopify://policies/refund-policy"
+          }
+        },
+        "cc4": {
+          "type": "care_link",
+          "settings": {
+            "label": "Privacy Policy",
+            "link": "shopify://policies/privacy-policy"
+          }
+        }
       },
-      "block_order": ["ww1", "ww2", "ww3", "ww4", "mm1", "mm2", "mm3", "cc1", "cc2", "cc3", "cc4"],
+      "block_order": [
+        "ww1",
+        "ww2",
+        "ww3",
+        "ww4",
+        "mm1",
+        "mm2",
+        "mm3",
+        "cc1",
+        "cc2",
+        "cc3",
+        "cc4"
+      ],
       "settings": {
+        "logo": "shopify://shop_images/latest.png",
         "brand_name": "GULSHAN-E-REHMAT",
         "tagline": "Elegance in Every Thread",
         "women_heading": "SHOP WOMEN",
@@ -85,5 +122,7 @@
       }
     }
   },
-  "order": ["ger_footer"]
+  "order": [
+    "ger_footer"
+  ]
 }
