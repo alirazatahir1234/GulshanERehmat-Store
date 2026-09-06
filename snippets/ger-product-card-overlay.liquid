@@ -1,0 +1,42 @@
+{%- doc -%}
+  New badge + wishlist overlay for collection product cards.
+
+  @param {object} product - Product object
+  @param {boolean} [show_new_badge] - Whether to show New badge
+  @param {boolean} [enable_wishlist] - Whether to show wishlist button
+{%- enddoc -%}
+
+{%- liquid
+  assign show_new = show_new_badge | default: true
+  assign show_wish = enable_wishlist | default: true
+  assign is_new = false
+  if show_new and product != blank
+    if product.tags contains 'new' or product.tags contains 'New' or product.tags contains 'NEW'
+      assign is_new = true
+    endif
+  endif
+-%}
+
+{%- if product != blank -%}
+  {%- if show_new or show_wish -%}
+  <div class="ger-product-card-overlay">
+    {% if is_new %}
+      <span class="ger-product-card-overlay__badge">New</span>
+    {% endif %}
+    {% if show_wish %}
+      <button
+        type="button"
+        class="ger-product-card-overlay__wishlist"
+        data-ger-wishlist
+        data-wishlist-key="{{ product.id }}"
+        aria-label="Add to wishlist"
+        aria-pressed="false"
+      >
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M12 20s-7-4.5-7-10a4 4 0 017-2.5A4 4 0 0119 10c0 5.5-7 10-7 10z"/>
+        </svg>
+      </button>
+    {% endif %}
+  </div>
+  {%- endif -%}
+{%- endif -%}

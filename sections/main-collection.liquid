@@ -6,6 +6,11 @@
   fetchpriority="low"
 ></script>
 
+{% if template.name == 'collection' %}
+  {{ 'ger-collection.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'ger-collection.js' | asset_url }}" defer></script>
+{% endif %}
+
 {% javascript %}
   const url = new URL(window.location.href);
   if (url.hash) {
@@ -35,9 +40,11 @@
   class="section-background{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
 ></div>
 {% # theme-check-disable-next-line UnknownFilter %}
-<collection-component view-event-payload="{{ collection | standard_event_data: 'view' | escape }}">
+<collection-component
+  class="ger-collection-page"
+  view-event-payload="{{ collection | standard_event_data: 'view' | escape }}">
   <results-list
-    class="section product-grid-container{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
+    class="section product-grid-container ger-collection-page{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
     style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
     section-id="{{ section.id }}"
     infinite-scroll="{{ section.settings.enable_infinite_scroll }}"

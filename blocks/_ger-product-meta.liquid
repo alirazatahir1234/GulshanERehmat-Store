@@ -1,0 +1,22 @@
+{%- doc -%}
+  Product type + truncated description for collection cards.
+{%- enddoc -%}
+
+{% assign product = closest.product %}
+
+{% if product != blank %}
+  {% if product.type != blank %}
+    <p class="ger-product-type">{{ product.type }}</p>
+  {% endif %}
+  {% if product.description != blank %}
+    <p class="ger-product-desc">{{ product.description | strip_html | truncate: 140 }}</p>
+  {% endif %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "GER Product meta",
+  "tag": null,
+  "settings": []
+}
+{% endschema %}

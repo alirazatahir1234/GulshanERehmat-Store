@@ -1,95 +1,13 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */{
+{
   "sections": {
-    "section": {
-      "type": "section",
-      "blocks": {
-        "text_tqQTNE": {
-          "type": "text",
-          "name": "t:names.title",
-          "settings": {
-            "text": "<h1>{{ closest.collection.title }}</h1>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h2",
-            "font": "var(--font-body--family)",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "text_twGGkJ": {
-          "type": "text",
-          "name": "t:names.description",
-          "settings": {
-            "text": "{{ closest.collection.description }}",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "text_tqQTNE",
-        "text_twGGkJ"
-      ],
-      "name": "t:names.heading",
+    "ger_collection_hero": {
+      "type": "ger-collection-hero",
       "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 12,
-        "section_width": "page-width",
-        "section_height_custom": 50,
-        "background_media": "none",
-        "background_color": "{{ settings.color_palette.background }}",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "eyebrow": "Fresh styles just landed",
+        "heading": "",
+        "subtitle": "Discover the latest fabrics, designs and colors \u2014 made for your next signature look.",
+        "script_text": "New Looks New Stories.",
+        "show_gradient": true
       }
     },
     "main": {
@@ -100,11 +18,11 @@
           "static": true,
           "settings": {
             "enable_filtering": true,
-            "filter_style": "horizontal",
+            "filter_style": "vertical",
             "filter_width": "centered",
             "text_label_case": "default",
-            "show_swatch_label": false,
-            "show_filter_label": false,
+            "show_swatch_label": true,
+            "show_filter_label": true,
             "enable_sorting": true,
             "enable_grid_density": true,
             "padding-block-start": 8,
@@ -112,7 +30,7 @@
             "padding-inline-start": 0,
             "padding-inline-end": 0,
             "facets_margin_bottom": 8,
-            "facets_margin_right": 20
+            "facets_margin_right": 28
           },
           "blocks": {}
         },
@@ -120,13 +38,13 @@
           "type": "_product-card",
           "static": true,
           "settings": {
-            "product_card_gap": 4,
+            "product_card_gap": 8,
             "border": "none",
             "border_width": 1,
             "border_opacity": 100,
             "border_radius": 0,
             "padding-block-start": 0,
-            "padding-block-end": 0,
+            "padding-block-end": 12,
             "padding-inline-start": 0,
             "padding-inline-end": 0
           },
@@ -134,7 +52,7 @@
             "card-gallery": {
               "type": "_product-card-gallery",
               "settings": {
-                "image_ratio": "adapt",
+                "image_ratio": "portrait",
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
@@ -146,15 +64,15 @@
               },
               "blocks": {}
             },
-            "product_title_4nY4eT": {
+            "product_title": {
               "type": "product-title",
               "name": "t:names.product_title",
               "settings": {
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
+                "type_preset": "h5",
+                "font": "var(--font-heading--family)",
                 "font_size": "1rem",
                 "line_height": "normal",
                 "letter_spacing": "normal",
@@ -163,14 +81,18 @@
                 "background": false,
                 "background_color": "#00000026",
                 "corner_radius": 0,
-                "padding-block-start": 4,
+                "padding-block-start": 10,
                 "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-start": 10,
+                "padding-inline-end": 10
               },
               "blocks": {}
             },
-            "price_EzJzMm": {
+            "product_meta": {
+              "type": "_ger-product-meta",
+              "settings": {}
+            },
+            "price": {
               "type": "price",
               "settings": {
                 "show_sale_price_first": true,
@@ -180,29 +102,47 @@
                 "width": "100%",
                 "alignment": "left",
                 "font": "var(--font-body--family)",
-                "font_size": "1rem",
+                "font_size": "0.9375rem",
                 "line_height": "normal",
                 "letter_spacing": "normal",
                 "case": "none",
+                "padding-block-start": 4,
+                "padding-block-end": 8,
+                "padding-inline-start": 10,
+                "padding-inline-end": 10
+              },
+              "blocks": {}
+            },
+            "buy_buttons": {
+              "type": "buy-buttons",
+              "name": "Add to cart",
+              "settings": {
+                "stacking": true,
+                "show_pickup_availability": false,
+                "gift_card_form": false,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-start": 10,
+                "padding-inline-end": 10
               },
               "blocks": {}
             }
           },
           "block_order": [
             "card-gallery",
-            "product_title_4nY4eT",
-            "price_EzJzMm"
+            "product_title",
+            "product_meta",
+            "price",
+            "buy_buttons"
           ]
         }
       },
       "settings": {
         "layout_type": "grid",
-        "product_card_size": "medium",
+        "product_card_size": "small",
         "mobile_product_card_size": "small",
+        "enable_infinite_scroll": false,
+        "products_per_page": 12,
         "product_grid_width": "centered",
         "full_width_on_mobile": true,
         "columns_gap_horizontal": 16,
@@ -211,12 +151,57 @@
         "padding-inline-end": 0,
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 0,
-        "padding-block-end": 32
+        "padding-block-end": 48
       }
+    },
+    "ger_benefits": {
+      "type": "ger-benefits-bar",
+      "blocks": {
+        "benefit_shipping": {
+          "type": "benefit",
+          "settings": {
+            "icon": "shipping",
+            "title": "Free Shipping",
+            "text": "On Orders Above Rs. 5,000"
+          }
+        },
+        "benefit_quality": {
+          "type": "benefit",
+          "settings": {
+            "icon": "quality",
+            "title": "Premium Quality",
+            "text": "Fabrics You Can Trust"
+          }
+        },
+        "benefit_secure": {
+          "type": "benefit",
+          "settings": {
+            "icon": "secure",
+            "title": "Secure Payment",
+            "text": "100% Safe Checkout"
+          }
+        },
+        "benefit_returns": {
+          "type": "benefit",
+          "settings": {
+            "icon": "support",
+            "title": "Easy Returns",
+            "text": "Hassle-Free Support"
+          }
+        }
+      },
+      "block_order": [
+        "benefit_shipping",
+        "benefit_quality",
+        "benefit_secure",
+        "benefit_returns"
+      ],
+      "settings": {}
     }
   },
   "order": [
-    "section",
-    "main"
+    "ger_collection_hero",
+    "main",
+    "ger_benefits"
   ]
 }

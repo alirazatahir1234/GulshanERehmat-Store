@@ -363,52 +363,63 @@
     start();
   }
 
-  function initWishlist(root) {
-    var keyStore = 'ger_wishlist_ids';
-    var saved = [];
+  function getWishlistIds() {
     try {
-      saved = JSON.parse(localStorage.getItem(keyStore) || '[]');
-      if (!Array.isArray(saved)) saved = [];
-    } catch (e) {
-      saved = [];
-    }
+      var saved = JSON.parse(localStorage.getItem('ger_wishlist_ids') || '[]');
+      return Array.isArray(saved) ? saved : [];
+    } catch (e) { return []; }
+  }
 
-    function persist() {
-      try {
-        localStorage.setItem(keyStore, JSON.stringify(saved));
-      } catch (e) {}
-    }
+  function setWishlistIds(ids) {
+    try { localStorage.setItem('ger_wishlist_ids', JSON.stringify(ids)); } catch (e) {}
+    syncWishlistHeaderBadge(ids);
+    document.dispatchEvent(new CustomEvent('ger:wishlist:change', { detail: { ids: ids } }));
+  }
 
-    root.querySelectorAll('[data-ger-wishlist]').forEach(function (btn) {
+  function syncWishlistHeaderBadge(ids) {
+    var list = ids || getWishlistIds();
+    document.querySelectorAll('[data-ger-wishlist-count-text]').forEach(function (el) {
+      el.textContent = String(list.length);
+    });
+    document.querySelectorAll('[data-ger-wishlist-count]').forEach(function (el) {
+      el.classList.toggle('is-empty', list.length === 0);
+    });
+  }
+
+  function initWishlist(root) {
+    var scope = root || document;
+    var saved = getWishlistIds();
+    scope.querySelectorAll('[data-ger-wishlist]').forEach(function (btn) {
+      if (btn.dataset.gerWishlistBound === '1') return;
+      btn.dataset.gerWishlistBound = '1';
       var id = String(btn.getAttribute('data-wishlist-key') || '');
       if (!id) return;
-
       function apply() {
+        saved = getWishlistIds();
         var active = saved.indexOf(id) !== -1;
         btn.classList.toggle('is-active', active);
         btn.setAttribute('aria-pressed', active ? 'true' : 'false');
-        var label = active ? 'Remove from wishlist' : 'Add to wishlist';
-        btn.setAttribute('aria-label', label);
+        btn.setAttribute('aria-label', active ? 'Remove from wishlist' : 'Add to wishlist');
       }
-
       apply();
       btn.addEventListener('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
+        saved = getWishlistIds();
         var i = saved.indexOf(id);
-        if (i === -1) saved.push(id);
-        else saved.splice(i, 1);
-        persist();
+        if (i === -1) saved.push(id); else saved.splice(i, 1);
+        setWishlistIds(saved);
         apply();
       });
     });
+    syncWishlistHeaderBadge(saved);
   }
 
   function boot() {
     document.querySelectorAll('[data-ger-hero]').forEach(initHero);
     document.querySelectorAll('[data-ger-testimonials]').forEach(initTestimonials);
     document.querySelectorAll('[data-ger-collections]').forEach(initCollections);
-    document.querySelectorAll('[data-ger-featured]').forEach(initWishlist);
+    initWishlist(document);
     initFadeIns();
   }
 
@@ -419,4 +430,5 @@
   }
 
   document.addEventListener('shopify:section:load', boot);
+  document.addEventListener('ger:wishlist:change', function () { syncWishlistHeaderBadge(); });
 })();

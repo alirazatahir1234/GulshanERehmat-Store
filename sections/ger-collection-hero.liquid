@@ -1,0 +1,149 @@
+{{ 'ger-collection.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'ger-collection.js' | asset_url }}" defer></script>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@400;500;600&family=Great+Vibes&display=swap"
+>
+
+{%- liquid
+  assign eyebrow = section.settings.eyebrow | default: 'Fresh styles just landed'
+  assign heading = section.settings.heading
+  if heading == blank
+    assign heading = collection.title
+  endif
+  assign subtitle = section.settings.subtitle
+  if subtitle == blank and collection.description != blank
+    assign subtitle = collection.description | strip_html | truncate: 160
+  endif
+  assign model_image = section.settings.model_image
+  if model_image == blank and collection.image
+    assign model_image = collection.image
+  endif
+-%}
+
+<section
+  class="ger-collection-hero{% if section.settings.show_gradient %} ger-collection-hero--gradient{% endif %}"
+  {{ section.shopify_attributes }}
+>
+  {% if section.settings.floral_left != blank %}
+    <img
+      class="ger-collection-hero__floral ger-collection-hero__floral--left"
+      src="{{ section.settings.floral_left | image_url: width: 320 }}"
+      alt=""
+      width="160"
+      height="160"
+      loading="lazy"
+      decoding="async"
+    >
+  {% endif %}
+  {% if section.settings.floral_right != blank %}
+    <img
+      class="ger-collection-hero__floral ger-collection-hero__floral--right"
+      src="{{ section.settings.floral_right | image_url: width: 320 }}"
+      alt=""
+      width="160"
+      height="160"
+      loading="lazy"
+      decoding="async"
+    >
+  {% endif %}
+
+  <div class="ger-container ger-collection-hero__inner">
+    <div class="ger-collection-hero__copy">
+      {% if eyebrow != blank %}
+        <p class="ger-collection-hero__eyebrow">{{ eyebrow }}</p>
+      {% endif %}
+      {% if heading != blank %}
+        <h1 class="ger-collection-hero__heading">{{ heading }}</h1>
+      {% endif %}
+      {% if subtitle != blank %}
+        <p class="ger-collection-hero__subtitle">{{ subtitle }}</p>
+      {% endif %}
+    </div>
+
+    <div class="ger-collection-hero__media">
+      {% if model_image != blank %}
+        {{
+          model_image
+          | image_url: width: 1200
+          | image_tag:
+            class: 'ger-collection-hero__image',
+            widths: '400, 600, 800, 1000, 1200',
+            sizes: '(min-width: 990px) 45vw, 90vw',
+            loading: 'eager',
+            fetchpriority: 'high',
+            alt: model_image.alt | default: heading
+        }}
+      {% else %}
+        <div class="ger-collection-hero__placeholder" aria-hidden="true"></div>
+      {% endif %}
+      {% if section.settings.script_text != blank %}
+        <span class="ger-collection-hero__script">{{ section.settings.script_text }}</span>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GER Collection hero",
+  "tag": "section",
+  "class": "ger-collection-hero-section",
+  "enabled_on": {
+    "templates": ["collection"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small heading",
+      "default": "Fresh styles just landed"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Main heading",
+      "info": "Leave blank to use the collection title."
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Description",
+      "default": "Discover the latest fabrics, designs and colors — made for your next signature look."
+    },
+    {
+      "type": "text",
+      "id": "script_text",
+      "label": "Script overlay text",
+      "default": "New Looks New Stories."
+    },
+    {
+      "type": "image_picker",
+      "id": "model_image",
+      "label": "Hero model image",
+      "info": "Falls back to the collection image if empty."
+    },
+    {
+      "type": "image_picker",
+      "id": "floral_left",
+      "label": "Decorative floral (left)"
+    },
+    {
+      "type": "image_picker",
+      "id": "floral_right",
+      "label": "Decorative floral (right)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_gradient",
+      "label": "Soft cream and pink gradient",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "GER Collection hero"
+    }
+  ]
+}
+{% endschema %}

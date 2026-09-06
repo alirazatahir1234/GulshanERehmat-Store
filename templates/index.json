@@ -1,6 +1,10 @@
 /*
  * ------------------------------------------------------------
- * Gulshan E Rehmat homepage — custom GER sections + Featured Fabrics
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
 {
@@ -9,6 +13,19 @@
       "type": "ger-hero-slider",
       "blocks": {
         "slide_1": {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "NEW SEASON",
+            "heading": "Crafted for Timeless Beauty",
+            "text": "Discover premium fabrics designed to elevate every occasion.",
+            "button_label": "SHOP NOW",
+            "button_link": "",
+            "detail_top": "New Designs",
+            "detail_bottom": "This Season",
+            "script_text": "Elegance in Every Thread."
+          }
+        },
+        "slide_2": {
           "type": "slide",
           "settings": {
             "eyebrow": "UNSTITCHED COLLECTION",
@@ -21,7 +38,7 @@
             "script_text": "Fabric That Inspires Your Story."
           }
         },
-        "slide_2": {
+        "slide_3": {
           "type": "slide",
           "settings": {
             "eyebrow": "WINTER COLLECTION",
@@ -33,19 +50,6 @@
             "detail_bottom": "This Season",
             "script_text": "Fabric That Inspires Your Story."
           }
-        },
-        "slide_3": {
-          "type": "slide",
-          "settings": {
-            "eyebrow": "NEW SEASON",
-            "heading": "Crafted for Timeless Beauty",
-            "text": "Discover premium fabrics designed to elevate every occasion.",
-            "button_label": "SHOP NOW",
-            "button_link": "",
-            "detail_top": "New Designs",
-            "detail_bottom": "This Season",
-            "script_text": "Elegance in Every Thread."
-          }
         }
       },
       "block_order": [
@@ -54,7 +58,7 @@
         "slide_3"
       ],
       "settings": {
-        "autoplay_speed": 6
+        "autoplay_speed": 4
       }
     },
     "ger_benefits": {
@@ -107,64 +111,82 @@
         "c1": {
           "type": "collection_card",
           "settings": {
+            "collection": "",
             "title": "Summer Collection",
-            "text": "Light, Breezy & Beautiful"
+            "text": "Light, Breezy & Beautiful",
+            "link": ""
           }
         },
         "c2": {
           "type": "collection_card",
           "settings": {
+            "collection": "",
             "title": "Winter Collection",
-            "text": "Warmth with Elegance"
+            "text": "Warmth with Elegance",
+            "link": ""
           }
         },
         "c3": {
           "type": "collection_card",
           "settings": {
+            "collection": "",
             "title": "Printed Collection",
-            "text": "Everyday Style"
+            "text": "Everyday Style",
+            "link": ""
           }
         },
         "c4": {
           "type": "collection_card",
           "settings": {
+            "collection": "",
             "title": "Embroidered Collection",
-            "text": "Crafted to Impress"
+            "text": "Crafted to Impress",
+            "link": ""
           }
         },
         "c5": {
           "type": "collection_card",
           "settings": {
+            "collection": "",
             "title": "Luxury Collection",
-            "text": "Premium Fabrics for Special Moments"
+            "text": "Premium Fabrics for Special Moments",
+            "link": ""
           }
         },
         "c6": {
           "type": "collection_card",
           "settings": {
+            "collection": "",
             "title": "Unstitched Collection",
-            "text": "Create Your Own Style"
+            "text": "Create Your Own Style",
+            "link": ""
           }
         },
         "c7": {
           "type": "collection_card",
           "settings": {
+            "collection": "",
             "title": "Festive Collection",
-            "text": "Celebrate in Style"
+            "text": "Celebrate in Style",
+            "link": ""
           }
         },
         "c8": {
           "type": "collection_card",
           "settings": {
+            "collection": "",
             "title": "New Arrivals",
-            "text": "Discover the Latest Designs"
+            "text": "Discover the Latest Designs",
+            "link": ""
           }
         },
         "c9": {
           "type": "collection_card",
           "settings": {
+            "collection": "",
             "title": "Best Sellers",
-            "text": "Our Most Loved Fabrics"
+            "text": "Our Most Loved Fabrics",
+            "link": ""
           }
         }
       },
@@ -198,8 +220,10 @@
         "p1": {
           "type": "product_card",
           "settings": {
+            "product": "",
             "title": "Graceful Purple Prints",
             "price": "Rs. 2,650",
+            "link": "",
             "rating": 5,
             "reviews": 24
           }
@@ -207,8 +231,10 @@
         "p2": {
           "type": "product_card",
           "settings": {
+            "product": "",
             "title": "Modern Square Prints",
             "price": "Rs. 2,650",
+            "link": "",
             "rating": 5,
             "reviews": 18
           }
@@ -216,8 +242,10 @@
         "p3": {
           "type": "product_card",
           "settings": {
+            "product": "",
             "title": "Classic Blue Florals",
             "price": "Rs. 2,750",
+            "link": "",
             "rating": 5,
             "reviews": 32
           }
@@ -225,8 +253,10 @@
         "p4": {
           "type": "product_card",
           "settings": {
+            "product": "",
             "title": "Nature Inspired",
             "price": "Rs. 2,650",
+            "link": "",
             "rating": 5,
             "reviews": 19
           }
@@ -234,8 +264,10 @@
         "p5": {
           "type": "product_card",
           "settings": {
+            "product": "",
             "title": "Royal Red Roses",
             "price": "Rs. 2,650",
+            "link": "",
             "rating": 5,
             "reviews": 15
           }
@@ -243,8 +275,10 @@
         "p6": {
           "type": "product_card",
           "settings": {
+            "product": "",
             "title": "Vibrant Blooms",
             "price": "Rs. 2,750",
+            "link": "",
             "rating": 5,
             "reviews": 26
           }
@@ -281,37 +315,43 @@
         "lb1": {
           "type": "image",
           "settings": {
-            "alt": "Navy floral embroidered suit"
+            "alt": "Navy floral embroidered suit",
+            "link": ""
           }
         },
         "lb2": {
           "type": "image",
           "settings": {
-            "alt": "Red and cream floral suit"
+            "alt": "Red and cream floral suit",
+            "link": ""
           }
         },
         "lb3": {
           "type": "image",
           "settings": {
-            "alt": "Navy gold embroidered suit"
+            "alt": "Navy gold embroidered suit",
+            "link": ""
           }
         },
         "lb4": {
           "type": "image",
           "settings": {
-            "alt": "Sage green embroidered suit"
+            "alt": "Sage green embroidered suit",
+            "link": ""
           }
         },
         "lb5": {
           "type": "image",
           "settings": {
-            "alt": "Blue and white printed suit"
+            "alt": "Blue and white printed suit",
+            "link": ""
           }
         },
         "lb6": {
           "type": "image",
           "settings": {
-            "alt": "Purple floral embroidered suit"
+            "alt": "Purple floral embroidered suit",
+            "link": ""
           }
         }
       },
@@ -415,35 +455,51 @@
       "blocks": {
         "ig1": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "link": ""
+          }
         },
         "ig2": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "link": ""
+          }
         },
         "ig3": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "link": ""
+          }
         },
         "ig4": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "link": ""
+          }
         },
         "ig5": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "link": ""
+          }
         },
         "ig6": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "link": ""
+          }
         },
         "ig7": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "link": ""
+          }
         },
         "ig8": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "link": ""
+          }
         }
       },
       "block_order": [

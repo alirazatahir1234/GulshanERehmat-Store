@@ -54,6 +54,7 @@ export default class ResultsList extends PaginatedList {
     const { grid } = this.refs;
     if (!grid) return;
     grid.setAttribute('product-grid-view', value);
+    document.documentElement.classList.toggle('ger-collection-list-view', value === 'list');
   }
 
   /**

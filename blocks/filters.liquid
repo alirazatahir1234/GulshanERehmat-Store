@@ -109,9 +109,13 @@
   {% if block_settings.filter_style == 'vertical' %}
     {% # These elements are always rendered in the horizontal bar that's why we apply the .facets--horizontal class %}
     <div
-      class="facets facets--horizontal facets-controls-wrapper spacing-style{% if has_custom_color %} color-custom-{{ block.id }}{% endif %}"
+      class="facets facets--horizontal facets-controls-wrapper spacing-style ger-collection-toolbar{% if has_custom_color %} color-custom-{{ block.id }}{% endif %}"
       style="{% render 'spacing-style', settings: block_settings %}{% if block_settings.text_label_case == 'uppercase' %} --facet-label-transform: uppercase;{% endif %}"
     >
+      {% if template.name == 'collection' %}
+        {% render 'ger-collection-breadcrumb', collection: collection %}
+      {% endif %}
+
       {% if block_settings.enable_filtering %}
         <h4 class="facets--filters-title">{{ 'content.filters' | t }}</h4>
       {% endif %}

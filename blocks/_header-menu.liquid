@@ -497,6 +497,20 @@
     color: var(--menu-top-level-font-color);
   }
 
+  .menu-list__link--active,
+  .menu-list__link[aria-current='page'] {
+    color: #d81b70 !important;
+    text-decoration: none;
+    box-shadow: inset 0 -1px 0 #d81b70;
+  }
+
+  .menu-list:where(:has(.menu-list__list-item:not([aria-hidden='true']) .menu-list__link--active))
+    .menu-list__link--active,
+  .menu-list:where(:has(.menu-list__list-item:not([aria-hidden='true']) .menu-list__link[aria-current='page']))
+    .menu-list__link[aria-current='page'] {
+    color: #d81b70 !important;
+  }
+
   .overflow-menu::part(list) {
     /* Make sure focus outline is not cut off by overflow hidden */
     --focus-outline-size: calc(var(--focus-outline-offset) + var(--focus-outline-width));

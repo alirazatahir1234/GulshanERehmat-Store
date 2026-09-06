@@ -1,0 +1,11 @@
+{%- doc -%}
+  Collection breadcrumb: Home > Collection title
+
+  @param {object} [collection] - Collection object
+{%- enddoc -%}
+
+<nav class="ger-collection-breadcrumb" aria-label="Breadcrumb">
+  <a href="{{ routes.root_url }}">Home</a>
+  <span class="ger-collection-breadcrumb__sep" aria-hidden="true">›</span>
+  <span class="ger-collection-breadcrumb__current">{{ collection.title }}</span>
+</nav>

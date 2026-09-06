@@ -2,6 +2,29 @@
 <script src="{{ 'ger-homepage.js' | asset_url }}" defer></script>
 
 <section class="ger-section ger-benefits" {{ section.shopify_attributes }}>
+  {% if section.settings.floral_left != blank %}
+    <img
+      class="ger-benefits__floral ger-benefits__floral--left"
+      src="{{ section.settings.floral_left | image_url: width: 240 }}"
+      alt=""
+      width="120"
+      height="120"
+      loading="lazy"
+      decoding="async"
+    >
+  {% endif %}
+  {% if section.settings.floral_right != blank %}
+    <img
+      class="ger-benefits__floral ger-benefits__floral--right"
+      src="{{ section.settings.floral_right | image_url: width: 240 }}"
+      alt=""
+      width="120"
+      height="120"
+      loading="lazy"
+      decoding="async"
+    >
+  {% endif %}
+
   <div class="ger-container ger-benefits__grid ger-fade-in">
     {% for block in section.blocks %}
       <div class="ger-benefit" {{ block.shopify_attributes }}>
@@ -15,6 +38,10 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <path d="M12 3l2.2 4.5L19 8.2l-3.5 3.4.8 4.9L12 14.2 7.7 16.5l.8-4.9L5 8.2l4.8-.7L12 3z"/>
               </svg>
+            {% when 'secure' %}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><path d="M9.5 12l1.8 1.8L15 10"/>
+              </svg>
             {% when 'returns' %}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <path d="M4 12a8 8 0 0113.5-5.8M20 12a8 8 0 01-13.5 5.8"/><path d="M17 3v4h4M7 21v-4H3"/>
@@ -27,7 +54,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 2.5"/>
               </svg>
-          {% endcase %}
+            {% endcase %}
         </div>
         {% if block.settings.title != blank %}
           <h3 class="ger-benefit__title">{{ block.settings.title }}</h3>
@@ -48,6 +75,18 @@
   "disabled_on": {
     "groups": ["header", "footer"]
   },
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "floral_left",
+      "label": "Decorative floral (left)"
+    },
+    {
+      "type": "image_picker",
+      "id": "floral_right",
+      "label": "Decorative floral (right)"
+    }
+  ],
   "blocks": [
     {
       "type": "benefit",
@@ -59,9 +98,10 @@
           "label": "Icon",
           "options": [
             { "value": "shipping", "label": "Shipping" },
-            { "value": "quality", "label": "Quality" },
+            { "value": "quality", "label": "Quality / Diamond" },
+            { "value": "secure", "label": "Secure / Shield" },
             { "value": "returns", "label": "Returns" },
-            { "value": "support", "label": "Support" },
+            { "value": "support", "label": "Support / Headset" },
             { "value": "clock", "label": "Clock" }
           ],
           "default": "shipping"
@@ -89,32 +129,32 @@
           "type": "benefit",
           "settings": {
             "icon": "shipping",
-            "title": "Free shipping",
-            "text": "On orders over Rs. 5,000"
+            "title": "Free Shipping",
+            "text": "On Orders Above Rs. 5,000"
           }
         },
         {
           "type": "benefit",
           "settings": {
             "icon": "quality",
-            "title": "Premium quality",
-            "text": "Handpicked authentic fabrics"
+            "title": "Premium Quality",
+            "text": "Fabrics You Can Trust"
           }
         },
         {
           "type": "benefit",
           "settings": {
-            "icon": "returns",
-            "title": "Easy returns",
-            "text": "Hassle-free within 7 days"
+            "icon": "secure",
+            "title": "Secure Payment",
+            "text": "100% Safe Checkout"
           }
         },
         {
           "type": "benefit",
           "settings": {
             "icon": "support",
-            "title": "Expert support",
-            "text": "We're here to help you"
+            "title": "Easy Returns",
+            "text": "Hassle-Free Support"
           }
         }
       ]

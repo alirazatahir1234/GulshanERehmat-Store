@@ -34,7 +34,7 @@
       {{ 'icon-cart.svg' | inline_asset_content }}
     </span>
 
-    {% render 'cart-bubble', limit: 100 %}
+    {% render 'cart-bubble', limit: 100, show_empty: true %}
   </cart-icon>
 {% endcapture %}
 
@@ -112,6 +112,23 @@
       </shopify-account>
     </div>
   {% endif %}
+
+  <a
+    href="#wishlist"
+    class="header-actions__action ger-wishlist-header"
+    aria-label="Wishlist"
+    data-ger-wishlist-header
+  >
+    <span class="svg-wrapper" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 20s-7-4.5-7-10a4 4 0 017-2.5A4 4 0 0119 10c0 5.5-7 10-7 10z"/>
+      </svg>
+    </span>
+    <span class="ger-wishlist-header__badge cart-bubble" data-ger-wishlist-count aria-hidden="true">
+      <span class="cart-bubble__background" style="background-color: #d81b70;"></span>
+      <span class="cart-bubble__text" data-ger-wishlist-count-text>0</span>
+    </span>
+  </a>
 
   {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
     <button
@@ -330,4 +347,20 @@
       margin-inline-start: 0;
     }
   }
+  .ger-wishlist-header {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+    text-decoration: none;
+    min-width: var(--minimum-touch-target);
+    min-height: var(--minimum-touch-target);
+  }
+  .ger-wishlist-header__badge {
+    position: absolute; top: 4px; right: 2px; width: 18px; height: 18px;
+    display: flex; align-items: center; justify-content: center; pointer-events: none;
+  }
+  .ger-wishlist-header__badge .cart-bubble__background { position: absolute; inset: 0; border-radius: 50%; }
+  .ger-wishlist-header__badge .cart-bubble__text { position: relative; z-index: 1; color: #fff; font-size: 0.65rem; font-weight: 600; line-height: 1; }
 {% endstylesheet %}
