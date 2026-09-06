@@ -34,8 +34,31 @@
         <ul class="ger-footer__list">
           {% for block in section.blocks %}
             {% if block.type == 'women_link' %}
+              {% liquid
+                assign footer_link = block.settings.link
+                if footer_link == blank
+                  assign label_key = block.settings.label | downcase | strip
+                  if label_key contains 'unstitched'
+                    assign footer_col = collections['unstitched-summer-two-piece']
+                    if footer_col == blank
+                      assign footer_col = collections['unstitched']
+                    endif
+                  elsif label_key contains 'ready'
+                    assign footer_col = collections['ready-to-wear']
+                  elsif label_key contains 'wedding'
+                    assign footer_col = collections['wedding-collection']
+                  elsif label_key contains 'abaya'
+                    assign footer_col = collections['abaya-collection']
+                  else
+                    assign footer_col = nil
+                  endif
+                  if footer_col != blank
+                    assign footer_link = footer_col.url
+                  endif
+                endif
+              %}
               <li {{ block.shopify_attributes }}>
-                <a href="{{ block.settings.link | default: '#' }}">{{ block.settings.label }}</a>
+                <a href="{{ footer_link | default: '#' }}">{{ block.settings.label }}</a>
               </li>
             {% endif %}
           {% endfor %}
@@ -47,8 +70,32 @@
         <ul class="ger-footer__list">
           {% for block in section.blocks %}
             {% if block.type == 'men_link' %}
+              {% liquid
+                assign footer_link = block.settings.link
+                if footer_link == blank
+                  assign label_key = block.settings.label | downcase | strip
+                  if label_key contains 'summer'
+                    assign footer_col = collections['men-summer']
+                    if footer_col == blank
+                      assign footer_col = collections['men-summer-collection']
+                    endif
+                  elsif label_key contains 'winter'
+                    assign footer_col = collections['men-winter']
+                    if footer_col == blank
+                      assign footer_col = collections['men-winter-collection']
+                    endif
+                  elsif label_key contains 'waist'
+                    assign footer_col = collections['men-waist-coats']
+                  else
+                    assign footer_col = nil
+                  endif
+                  if footer_col != blank
+                    assign footer_link = footer_col.url
+                  endif
+                endif
+              %}
               <li {{ block.shopify_attributes }}>
-                <a href="{{ block.settings.link | default: '#' }}">{{ block.settings.label }}</a>
+                <a href="{{ footer_link | default: '#' }}">{{ block.settings.label }}</a>
               </li>
             {% endif %}
           {% endfor %}

@@ -14,17 +14,59 @@
     "ger_footer": {
       "type": "ger-footer",
       "blocks": {
-        "ww1": { "type": "women_link", "settings": { "label": "Unstitched" } },
-        "ww2": { "type": "women_link", "settings": { "label": "Ready to Wear" } },
-        "ww3": { "type": "women_link", "settings": { "label": "Wedding Collection" } },
-        "ww4": { "type": "women_link", "settings": { "label": "Abaya Collection" } },
-        "mm1": { "type": "men_link", "settings": { "label": "Summer Collection" } },
-        "mm2": { "type": "men_link", "settings": { "label": "Winter Collection" } },
-        "mm3": { "type": "men_link", "settings": { "label": "Waist Coats" } },
-        "cc1": { "type": "care_link", "settings": { "label": "Contact Us" } },
-        "cc2": { "type": "care_link", "settings": { "label": "Shipping Policy" } },
-        "cc3": { "type": "care_link", "settings": { "label": "Returns & Exchange" } },
-        "cc4": { "type": "care_link", "settings": { "label": "Privacy Policy" } }
+        "ww1": {
+          "type": "women_link",
+          "settings": {
+            "label": "Unstitched",
+            "link": "shopify://collections/unstitched-summer-two-piece"
+          }
+        },
+        "ww2": {
+          "type": "women_link",
+          "settings": {
+            "label": "Ready to Wear",
+            "link": "shopify://collections/ready-to-wear"
+          }
+        },
+        "ww3": {
+          "type": "women_link",
+          "settings": {
+            "label": "Wedding Collection",
+            "link": "shopify://collections/wedding-collection"
+          }
+        },
+        "ww4": {
+          "type": "women_link",
+          "settings": {
+            "label": "Abaya Collection",
+            "link": "shopify://collections/abaya-collection"
+          }
+        },
+        "mm1": {
+          "type": "men_link",
+          "settings": {
+            "label": "Summer Collection",
+            "link": "shopify://collections/men-summer"
+          }
+        },
+        "mm2": {
+          "type": "men_link",
+          "settings": {
+            "label": "Winter Collection",
+            "link": "shopify://collections/men-winter"
+          }
+        },
+        "mm3": {
+          "type": "men_link",
+          "settings": {
+            "label": "Waist Coats",
+            "link": "shopify://collections/men-waist-coats"
+          }
+        },
+        "cc1": { "type": "care_link", "settings": { "label": "Contact Us", "link": "shopify://pages/contact" } },
+        "cc2": { "type": "care_link", "settings": { "label": "Shipping Policy", "link": "shopify://policies/shipping-policy" } },
+        "cc3": { "type": "care_link", "settings": { "label": "Returns & Exchange", "link": "shopify://policies/refund-policy" } },
+        "cc4": { "type": "care_link", "settings": { "label": "Privacy Policy", "link": "shopify://policies/privacy-policy" } }
       },
       "block_order": ["ww1", "ww2", "ww3", "ww4", "mm1", "mm2", "mm3", "cc1", "cc2", "cc3", "cc4"],
       "settings": {
@@ -34,11 +76,11 @@
         "men_heading": "SHOP MEN",
         "care_heading": "CUSTOMER CARE",
         "social_heading": "FOLLOW US",
-        "instagram_url": "https://www.instagram.com/",
-        "facebook_url": "https://www.facebook.com/",
-        "tiktok_url": "https://www.tiktok.com/",
-        "youtube_url": "https://www.youtube.com/",
-        "pinterest_url": "https://www.pinterest.com/",
+        "instagram_url": "https://www.instagram.com/gulshanerehmatfabrics",
+        "facebook_url": "https://www.facebook.com/GulshanERehmat",
+        "tiktok_url": "https://www.tiktok.com/@gulshanerehmatfabrics",
+        "youtube_url": "https://youtube.com/@gulshanerehmatfabrics",
+        "pinterest_url": "",
         "copyright_text": "All rights reserved."
       }
     }
