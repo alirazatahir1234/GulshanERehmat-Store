@@ -1233,9 +1233,18 @@
     font-size: var(--menu-localization-font-size);
   }
 
-  /* GER: white logo row + black nav, empty left on desktop */
+  /* GER: solid black header rows (underlay alone can leave nav floating on hero) */
   #header-component {
     --ger-header-pink: #d81b70;
+  }
+
+  #header-component .header__row--top,
+  #header-component .header__row--bottom {
+    background-color: #000000 !important;
+  }
+
+  #header-component .header__underlay-closed {
+    background: #000000;
   }
 
   #header-component .header__row--top {

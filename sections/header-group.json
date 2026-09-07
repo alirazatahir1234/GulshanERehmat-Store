@@ -50,7 +50,7 @@
           "settings": {
             "hide_logo_on_home_page": false,
             "padding-block-start": 8,
-            "padding-block-end": 50
+            "padding-block-end": 12
           },
           "blocks": {}
         },

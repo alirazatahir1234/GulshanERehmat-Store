@@ -118,10 +118,10 @@
         /**
          * Transparent-header rules consume the measured heights at first paint on every
          * template, so the transparent case opts in globally here instead of per-section.
+         * Also measure for opaque headers so underlays cover the full logo + nav height
+         * (default --header-height: 60px is too short for the GER two-row header).
          */
-        if (document.querySelector('#header-component')?.hasAttribute('transparent')) {
-          measureHeaderHeights();
-        }
+        measureHeaderHeights();
 
         /**
          * Sets `--top-row-height`, consumed by the header underlays and submenus. Deferred to a
@@ -195,5 +195,7 @@
     {% if settings.quick_add or settings.mobile_quick_add %}
       {% render 'quick-add-modal' %}
     {% endif %}
+
+    {% render 'ger-whatsapp-button' %}
   </body>
 </html>
