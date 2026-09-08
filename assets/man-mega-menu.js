@@ -1,5 +1,5 @@
 /**
- * Man mega menu: category filtering + link hover active state.
+ * Man mega menu: category filtering, nested Wash n Wear brands, link hover.
  */
 function canHover() {
   return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -11,12 +11,42 @@ function initManMegaMenu(root) {
   const cards = Array.from(root.querySelectorAll('.man-mega-menu__card[data-mega-category]'));
   const panels = Array.from(root.querySelectorAll('[data-mega-panel]'));
   const linkGroups = root.querySelectorAll('[data-man-links]');
+  const nestedTriggers = Array.from(root.querySelectorAll('[data-nested-trigger]'));
+  const nestedPanels = Array.from(root.querySelectorAll('[data-nested-panel]'));
 
   let activeCategory = '';
+  let activeNestedId = '';
+
+  const setNested = (nestedId, { force = false } = {}) => {
+    if (!force && nestedId === activeNestedId) return;
+    activeNestedId = nestedId || '';
+
+    nestedPanels.forEach((panel) => {
+      const id = panel.getAttribute('data-nested-panel');
+      const isActive = Boolean(nestedId) && id === nestedId;
+      panel.classList.toggle('is-visible', isActive);
+      if (isActive) {
+        panel.removeAttribute('hidden');
+      } else {
+        panel.setAttribute('hidden', '');
+      }
+    });
+
+    nestedTriggers.forEach((trigger) => {
+      const id = trigger.getAttribute('data-nested-trigger');
+      const isActive = Boolean(nestedId) && id === nestedId;
+      trigger.classList.toggle('is-active', isActive);
+      trigger.classList.toggle('is-nested-open', isActive);
+      trigger.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+    });
+  };
+
+  const clearNested = () => setNested('', { force: true });
 
   const setCategory = (category, { force = false } = {}) => {
     if (!category || (!force && category === activeCategory)) return;
     activeCategory = category;
+    clearNested();
 
     cards.forEach((card) => {
       const isActive = card.getAttribute('data-mega-category') === category;
@@ -58,15 +88,70 @@ function initManMegaMenu(root) {
   });
 
   linkGroups.forEach((group) => {
-    const links = group.querySelectorAll('a');
+    const items = group.querySelectorAll('a, button, .man-mega-menu__link-disabled');
+    items.forEach((item) => {
+      const activate = () => {
+        items.forEach((el) => {
+          if (!el.hasAttribute('data-nested-trigger')) el.classList.remove('is-active');
+        });
+        if (!item.hasAttribute('data-nested-trigger')) {
+          item.classList.add('is-active');
+          clearNested();
+        }
+      };
+
+      item.addEventListener('pointerenter', activate);
+      item.addEventListener('focus', activate);
+    });
+  });
+
+  nestedTriggers.forEach((trigger) => {
+    const nestedId = trigger.getAttribute('data-nested-trigger');
+    if (!nestedId) return;
+
+    const openNested = () => setNested(nestedId);
+
+    if (canHover()) {
+      trigger.addEventListener('pointerenter', openNested);
+    }
+
+    trigger.addEventListener('focus', openNested);
+
+    trigger.addEventListener('click', (event) => {
+      const isOpen = activeNestedId === nestedId;
+      const isAnchor = trigger.tagName === 'A';
+
+      if (!canHover()) {
+        if (!isOpen) {
+          event.preventDefault();
+          setNested(nestedId);
+          return;
+        }
+        if (!isAnchor) {
+          event.preventDefault();
+          clearNested();
+        }
+        return;
+      }
+
+      if (!isAnchor) {
+        event.preventDefault();
+        setNested(nestedId);
+      }
+    });
+  });
+
+  nestedPanels.forEach((panel) => {
+    panel.addEventListener('pointerenter', () => {
+      const id = panel.getAttribute('data-nested-panel');
+      if (id) setNested(id);
+    });
+
+    const links = panel.querySelectorAll('a');
     links.forEach((link) => {
-      link.addEventListener('pointerenter', () => {
-        links.forEach((item) => item.classList.remove('is-active'));
-        link.classList.add('is-active');
-      });
       link.addEventListener('focus', () => {
-        links.forEach((item) => item.classList.remove('is-active'));
-        link.classList.add('is-active');
+        const id = panel.getAttribute('data-nested-panel');
+        if (id) setNested(id);
       });
     });
   });

@@ -57,6 +57,17 @@ class FacetsFormComponent extends Component {
     if (newParameters.get('filter.v.price.gte') === '') newParameters.delete('filter.v.price.gte');
     if (newParameters.get('filter.v.price.lte') === '') newParameters.delete('filter.v.price.lte');
 
+    // Treat full-range selections as "no price filter" so Clear All / defaults stay clean.
+    const gte = newParameters.get('filter.v.price.gte');
+    const lte = newParameters.get('filter.v.price.lte');
+    const normalize = (value) => String(value || '').replace(/[^\d.]/g, '');
+    if (gte != null && Number(normalize(gte)) === 0) newParameters.delete('filter.v.price.gte');
+    const priceFacet = this.querySelector('price-facet-component');
+    const rangeMax = priceFacet instanceof HTMLElement ? Number(priceFacet.dataset.rangeMaxMajor || 0) : 0;
+    if (lte != null && rangeMax > 0 && Number(normalize(lte)) >= rangeMax) {
+      newParameters.delete('filter.v.price.lte');
+    }
+
     newParameters.delete('page');
 
     const searchQuery = this.#getSearchQuery();
@@ -336,17 +347,27 @@ class PriceFacetComponent extends Component {
   currency;
   /** @type {string} */
   moneyFormat;
+  /** @type {number} */
+  #rangeLimit = 0;
+  /** @type {boolean} */
+  #syncing = false;
 
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('keydown', this.#onKeyDown);
     this.currency = this.dataset.currency ?? 'USD';
     this.moneyFormat = this.#extractMoneyPlaceholder(this.dataset.moneyFormat ?? '{{amount}}');
+    this.#rangeLimit = Number(this.dataset.rangeMaxMajor || 0) || this.#getRangeLimitFromInputs();
+    this.#bindRangeInputs();
+    this.#syncRangesFromInputs({ silent: true });
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('keydown', this.#onKeyDown);
+    const { minRange, maxRange } = this.refs;
+    minRange?.removeEventListener('input', this.#onMinRangeInput);
+    maxRange?.removeEventListener('input', this.#onMaxRangeInput);
   }
 
   /**
@@ -357,6 +378,150 @@ class PriceFacetComponent extends Component {
   #extractMoneyPlaceholder(format) {
     const match = format.match(/{{\s*\w+\s*}}/);
     return match ? match[0] : '{{amount}}';
+  }
+
+  #getRangeLimitFromInputs() {
+    const { maxInput, maxRange } = this.refs;
+    if (maxRange?.max) return Number(maxRange.max) || 0;
+    if (!maxInput) return 0;
+    return this.#parseMajorUnits(maxInput.getAttribute('data-max') || maxInput.placeholder || '0');
+  }
+
+  /**
+   * @param {string} displayValue
+   * @returns {number}
+   */
+  #parseMajorUnits(displayValue) {
+    const cleaned = String(displayValue || '')
+      .replace(/[^\d.,-]/g, '')
+      .replace(/,/g, '');
+    const value = Number.parseFloat(cleaned);
+    return Number.isFinite(value) ? value : 0;
+  }
+
+  /**
+   * @param {number} value
+   * @returns {string}
+   */
+  #formatMajorUnits(value) {
+    const rounded = Math.round(value);
+    try {
+      return new Intl.NumberFormat(undefined, {
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
+      }).format(rounded);
+    } catch {
+      return String(rounded);
+    }
+  }
+
+  #bindRangeInputs() {
+    const { minRange, maxRange } = this.refs;
+    if (!(minRange instanceof HTMLInputElement) || !(maxRange instanceof HTMLInputElement)) return;
+
+    minRange.addEventListener('input', this.#onMinRangeInput);
+    maxRange.addEventListener('input', this.#onMaxRangeInput);
+  }
+
+  #onMinRangeInput = () => {
+    const { minRange, maxRange } = this.refs;
+    if (!(minRange instanceof HTMLInputElement) || !(maxRange instanceof HTMLInputElement)) return;
+    let min = Number(minRange.value);
+    let max = Number(maxRange.value);
+    if (min > max) {
+      min = max;
+      minRange.value = String(min);
+    }
+    this.#updateSliderVisual(min, max);
+    this.#writeInputsFromRanges(min, max);
+  };
+
+  #onMaxRangeInput = () => {
+    const { minRange, maxRange } = this.refs;
+    if (!(minRange instanceof HTMLInputElement) || !(maxRange instanceof HTMLInputElement)) return;
+    let min = Number(minRange.value);
+    let max = Number(maxRange.value);
+    if (max < min) {
+      max = min;
+      maxRange.value = String(max);
+    }
+    this.#updateSliderVisual(min, max);
+    this.#writeInputsFromRanges(min, max);
+  };
+
+  /**
+   * @param {number} min
+   * @param {number} max
+   */
+  #updateSliderVisual(min, max) {
+    const slider = this.querySelector('[data-price-slider]');
+    if (!(slider instanceof HTMLElement)) return;
+    const limit = this.#rangeLimit || Number(this.refs.maxRange?.max) || 1;
+    slider.style.setProperty('--price-min', String(min));
+    slider.style.setProperty('--price-max', String(max));
+    slider.style.setProperty('--price-limit', String(limit > 0 ? limit : 1));
+
+    // Keep the active thumb above the other when they overlap.
+    const { minRange, maxRange } = this.refs;
+    if (minRange instanceof HTMLElement && maxRange instanceof HTMLElement) {
+      if (min >= max) {
+        minRange.style.zIndex = '5';
+        maxRange.style.zIndex = '4';
+      } else {
+        minRange.style.zIndex = '3';
+        maxRange.style.zIndex = '4';
+      }
+    }
+  }
+
+  /**
+   * @param {number} min
+   * @param {number} max
+   */
+  #writeInputsFromRanges(min, max) {
+    const { minInput, maxInput } = this.refs;
+    if (!(minInput instanceof HTMLInputElement) || !(maxInput instanceof HTMLInputElement)) return;
+    this.#syncing = true;
+    minInput.value = this.#formatMajorUnits(min);
+    maxInput.value = this.#formatMajorUnits(max);
+    this.#syncing = false;
+  }
+
+  /**
+   * @param {{silent?: boolean}} [options]
+   */
+  #syncRangesFromInputs(options = {}) {
+    const { minInput, maxInput, minRange, maxRange } = this.refs;
+    if (
+      !(minInput instanceof HTMLInputElement) ||
+      !(maxInput instanceof HTMLInputElement) ||
+      !(minRange instanceof HTMLInputElement) ||
+      !(maxRange instanceof HTMLInputElement)
+    ) {
+      return;
+    }
+
+    const limit = this.#rangeLimit || Number(maxRange.max) || this.#parseMajorUnits(maxInput.getAttribute('data-max') || '0');
+    let min = this.#parseMajorUnits(minInput.value || '0');
+    let max = this.#parseMajorUnits(maxInput.value || String(limit));
+
+    if (!Number.isFinite(min)) min = 0;
+    if (!Number.isFinite(max) || maxInput.value.trim() === '') max = limit;
+
+    min = Math.max(0, Math.min(min, limit));
+    max = Math.max(0, Math.min(max, limit));
+    if (min > max) min = max;
+
+    this.#syncing = true;
+    minRange.value = String(Math.round(min));
+    maxRange.value = String(Math.round(max));
+    this.#syncing = false;
+    this.#updateSliderVisual(min, max);
+
+    if (!options.silent) {
+      minInput.value = this.#formatMajorUnits(min);
+      maxInput.value = this.#formatMajorUnits(max);
+    }
   }
 
   /**
@@ -374,10 +539,13 @@ class PriceFacetComponent extends Component {
    * Updates price filter and results
    */
   updatePriceFilterAndResults() {
+    if (this.#syncing) return;
+
     const { minInput, maxInput } = this.refs;
 
     this.#adjustToValidValues(minInput);
     this.#adjustToValidValues(maxInput);
+    this.#syncRangesFromInputs({ silent: true });
 
     const facetsForm = this.closest('facets-form-component');
     if (!(facetsForm instanceof FacetsFormComponent)) return;

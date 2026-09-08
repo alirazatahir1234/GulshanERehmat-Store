@@ -260,6 +260,11 @@
                   %}
                 {% else %}
                   {{ rendered_filters }}
+                  {% if template.name == 'collection' %}
+                    <button type="submit" class="ger-apply-filters">
+                      Apply Filters
+                    </button>
+                  {% endif %}
                 {% endif %}
               </div>
 

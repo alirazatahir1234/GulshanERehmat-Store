@@ -1,0 +1,39 @@
+{%- doc -%}
+  Nested submenu trigger for Man mega menu.
+  Links to the collection when it exists; otherwise a button (no 404).
+
+  @param {string} nested_id - Matches data-nested-panel id
+  @param {string} label - Visible label
+  @param {string} [handle] - Optional collection handle for parent link
+
+  @example
+  {% render 'man-mega-nested-trigger', nested_id: 'wash-brands', label: 'Wash n Wear', handle: 'men-wash-n-wear' %}
+{%- enddoc -%}
+
+{% liquid
+  assign col = nil
+  if handle != blank
+    assign col = collections[handle]
+  endif
+%}
+{% if col != blank %}
+  <a
+    href="{{ col.url }}"
+    class="man-mega-menu__nested-trigger"
+    data-nested-trigger="{{ nested_id }}"
+    aria-expanded="false"
+    aria-controls="man-nested-{{ nested_id }}"
+  >
+    {{ label }}
+  </a>
+{% else %}
+  <button
+    type="button"
+    class="man-mega-menu__nested-trigger"
+    data-nested-trigger="{{ nested_id }}"
+    aria-expanded="false"
+    aria-controls="man-nested-{{ nested_id }}"
+  >
+    {{ label }}
+  </button>
+{% endif %}

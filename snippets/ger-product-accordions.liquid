@@ -1,0 +1,143 @@
+{%- doc -%}
+  GER PDP accordions: trust rows + product details / fabric / size / shipping.
+  @param {object} product - Product object
+{%- enddoc -%}
+
+{%- liquid
+  assign fabric = product.metafields.custom.fabric.value | default: product.metafields.custom.fabric
+  assign pieces = product.metafields.custom.pieces.value | default: product.metafields.custom.pieces
+  assign season = product.metafields.custom.season.value | default: product.metafields.custom.season
+  assign design = product.metafields.custom.design.value | default: product.metafields.custom.design
+  assign style_val = product.metafields.custom.style.value | default: product.type
+  assign color_val = blank
+  for option in product.options_with_values
+    assign on = option.name | downcase
+    if on contains 'color' or on contains 'colour'
+      assign color_val = option.selected_value | default: option.values.first
+      break
+    endif
+  endfor
+  if color_val == blank
+    for tag in product.tags
+      assign td = tag | downcase
+      if td contains 'navy' or td contains 'blue' or td contains 'white' or td contains 'beige' or td contains 'black' or td contains 'pink' or td contains 'red' or td contains 'green'
+        if color_val == blank
+          assign color_val = tag
+        else
+          assign color_val = color_val | append: ' & ' | append: tag
+        endif
+      endif
+    endfor
+  endif
+-%}
+
+<div class="ger-pdp__panels">
+  <div class="ger-pdp__mini-accordions">
+    <details class="ger-pdp__mini-acc">
+      <summary>
+        <span class="ger-pdp__mini-icon" aria-hidden="true">🚚</span>
+        <span>Delivery Information</span>
+        <span class="ger-pdp__plus" aria-hidden="true"></span>
+      </summary>
+      <div class="ger-pdp__mini-body">
+        <p>Free shipping on eligible orders. Delivery across Pakistan.</p>
+      </div>
+    </details>
+    <details class="ger-pdp__mini-acc">
+      <summary>
+        <span class="ger-pdp__mini-icon" aria-hidden="true">↻</span>
+        <span>Easy Returns &amp; Exchange</span>
+        <span class="ger-pdp__plus" aria-hidden="true"></span>
+      </summary>
+      <div class="ger-pdp__mini-body">
+        <p>Easy return and exchange policy available. <a href="/policies/refund-policy">View policy</a>.</p>
+      </div>
+    </details>
+    <details class="ger-pdp__mini-acc">
+      <summary>
+        <span class="ger-pdp__mini-icon" aria-hidden="true">🔒</span>
+        <span>Secure Payment</span>
+        <span class="ger-pdp__plus" aria-hidden="true"></span>
+      </summary>
+      <div class="ger-pdp__mini-body">
+        <p>Secure checkout experience with trusted payment methods.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="ger-pdp__detail-accordions">
+    <details class="ger-pdp__detail-acc" open>
+      <summary>PRODUCT DETAILS <span class="ger-pdp__plus" aria-hidden="true"></span></summary>
+      <div class="ger-pdp__detail-body">
+        <dl class="ger-pdp__specs">
+          {%- if color_val != blank -%}
+            <div><dt>COLOR</dt><dd>{{ color_val }}</dd></div>
+          {%- endif -%}
+          {%- if fabric != blank -%}
+            <div><dt>FABRIC</dt><dd>{{ fabric }}</dd></div>
+          {%- endif -%}
+          {%- if design != blank -%}
+            <div><dt>DESIGN</dt><dd>{{ design }}</dd></div>
+          {%- elsif product.tags contains 'Floral' or product.tags contains 'floral' -%}
+            <div><dt>DESIGN</dt><dd>Floral / Botanical Print</dd></div>
+          {%- endif -%}
+          {%- if pieces != blank -%}
+            <div><dt>PIECES</dt><dd>{{ pieces }}</dd></div>
+          {%- endif -%}
+          {%- if style_val != blank -%}
+            <div><dt>STYLE</dt><dd>{{ style_val }}</dd></div>
+          {%- endif -%}
+          {%- if season != blank -%}
+            <div><dt>SEASON</dt><dd>{{ season }}</dd></div>
+          {%- endif -%}
+          <div><dt>BRAND</dt><dd>{{ product.vendor | default: 'Gulshan E Rehmat' }}</dd></div>
+        </dl>
+        {%- if product.description != blank -%}
+          <div class="ger-pdp__full-desc rte">{{ product.description }}</div>
+        {%- endif -%}
+      </div>
+    </details>
+
+    <details class="ger-pdp__detail-acc" id="ger-fabric-care">
+      <summary>FABRIC &amp; CARE <span class="ger-pdp__plus" aria-hidden="true"></span></summary>
+      <div class="ger-pdp__detail-body">
+        {%- if fabric != blank -%}
+          <p><strong>Fabric:</strong> {{ fabric }}</p>
+        {%- else -%}
+          <p><strong>Fabric:</strong> Premium breathable fabric crafted for comfort and elegance.</p>
+        {%- endif -%}
+        {%- if product.metafields.custom.care_instructions != blank -%}
+          <div class="rte">{{ product.metafields.custom.care_instructions | metafield_tag }}</div>
+        {%- else -%}
+          <p><strong>Care Instructions:</strong></p>
+          <ul>
+            <li>Hand wash recommended</li>
+            <li>Use mild detergent</li>
+            <li>Do not bleach</li>
+            <li>Dry in shade</li>
+            <li>Iron at medium temperature</li>
+          </ul>
+        {%- endif -%}
+      </div>
+    </details>
+
+    <details class="ger-pdp__detail-acc" id="ger-size-guide">
+      <summary>SIZE GUIDE <span class="ger-pdp__plus" aria-hidden="true"></span></summary>
+      <div class="ger-pdp__detail-body">
+        {%- if product.metafields.custom.size_guide != blank -%}
+          <div class="rte">{{ product.metafields.custom.size_guide | metafield_tag }}</div>
+        {%- else -%}
+          <p>This is an unstitched fabric product. Stitch according to your preferred measurements. For ready-to-wear sizing guidance, contact us on WhatsApp.</p>
+        {%- endif -%}
+      </div>
+    </details>
+
+    <details class="ger-pdp__detail-acc">
+      <summary>SHIPPING &amp; RETURNS <span class="ger-pdp__plus" aria-hidden="true"></span></summary>
+      <div class="ger-pdp__detail-body">
+        <p>We deliver across Pakistan. Shipping timelines vary by city.</p>
+        <p>Returns and exchanges are available as per our <a href="/policies/refund-policy">Refund &amp; Exchange Policy</a>.</p>
+      </div>
+    </details>
+  </div>
+</div>

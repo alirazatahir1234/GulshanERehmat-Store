@@ -1,0 +1,143 @@
+<script
+  src="{{ 'product-recommendations.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+
+{%- liquid
+  assign max_products = section.settings.max_products | default: 4
+-%}
+
+<product-recommendations
+  id="GerProductRecommendations-{{ section.id }}"
+  class="ger-recs"
+  data-url="{{ routes.product_recommendations_url }}?limit={{ max_products }}"
+  data-section-id="{{ section.id }}"
+  data-product-id="{{ product.id }}"
+  data-intent="{{ section.settings.recommendation_type | default: 'related' }}"
+  data-recommendations-performed="{{ recommendations.performed }}"
+  {{ section.shopify_attributes }}
+>
+  <div class="ger-recs__shell">
+    <div class="ger-recs__head">
+      <h2 class="ger-recs__title">{{ section.settings.heading | default: 'YOU MAY ALSO LIKE' }}</h2>
+      {%- if section.settings.view_all_url != blank -%}
+        <a class="ger-recs__view-all" href="{{ section.settings.view_all_url }}">View All →</a>
+      {%- endif -%}
+    </div>
+
+    {%- if recommendations.performed or true -%}
+      {%- liquid
+        if recommendations.performed and recommendations.products_count == 0
+          assign products = collections.all.products | reject: 'id', product.id
+        elsif recommendations.performed
+          assign products = recommendations.products
+        else
+          assign products = collections.all.products | reject: 'id', product.id
+        endif
+      -%}
+
+      <div class="ger-recs__grid" data-ger-recs-grid>
+        {%- for rec_product in products limit: max_products -%}
+          {%- liquid
+            assign rec_variant = rec_product.selected_or_first_available_variant
+            assign rec_on_sale = false
+            if rec_variant.compare_at_price > rec_variant.price
+              assign rec_on_sale = true
+              assign rec_save = rec_variant.compare_at_price | minus: rec_variant.price | times: 100.0 | divided_by: rec_variant.compare_at_price | round
+            endif
+          -%}
+          <article class="ger-recs__card">
+            <a class="ger-recs__media" href="{{ rec_product.url }}">
+              {%- if rec_product.featured_media -%}
+                {{
+                  rec_product.featured_media
+                  | image_url: width: 800
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '300, 400, 600, 800',
+                    sizes: '(min-width: 990px) 22vw, 45vw',
+                    class: 'ger-recs__img',
+                    alt: rec_product.featured_media.alt | default: rec_product.title | escape
+                }}
+              {%- else -%}
+                {{ 'product-1' | placeholder_svg_tag: 'ger-recs__img' }}
+              {%- endif -%}
+              {%- if rec_on_sale -%}
+                <span class="ger-recs__badge">{{ rec_save }}% OFF</span>
+              {%- endif -%}
+              <span class="ger-recs__wishlist" aria-hidden="true">♡</span>
+              <span class="ger-recs__quick">QUICK ADD</span>
+            </a>
+            {%- if rec_product.type != blank -%}
+              <p class="ger-recs__label">{{ rec_product.type }}</p>
+            {%- endif -%}
+            <h3 class="ger-recs__name">
+              <a href="{{ rec_product.url }}">{{ rec_product.title }}</a>
+            </h3>
+            <p class="ger-recs__price">
+              {%- if rec_on_sale -%}
+                <span class="ger-recs__compare">{{ rec_variant.compare_at_price | money }}</span>
+              {%- endif -%}
+              <span>{{ rec_variant.price | money }}</span>
+            </p>
+            {%- form 'product', rec_product, class: 'ger-recs__quick-form' -%}
+              <input type="hidden" name="id" value="{{ rec_variant.id }}">
+              <input type="hidden" name="quantity" value="1">
+              <button type="submit" class="ger-recs__quick-btn" {% unless rec_variant.available %}disabled{% endunless %}>
+                QUICK ADD
+              </button>
+            {%- endform -%}
+          </article>
+        {%- else -%}
+          <p class="ger-recs__empty">More products coming soon.</p>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</product-recommendations>
+
+{% schema %}
+{
+  "name": "GER Recommendations",
+  "tag": "section",
+  "class": "ger-product-recommendations-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "YOU MAY ALSO LIKE"
+    },
+    {
+      "type": "url",
+      "id": "view_all_url",
+      "label": "View all link"
+    },
+    {
+      "type": "select",
+      "id": "recommendation_type",
+      "label": "Recommendation type",
+      "options": [
+        { "value": "related", "label": "Related" },
+        { "value": "complementary", "label": "Complementary" }
+      ],
+      "default": "related"
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "label": "Maximum products",
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "GER Recommendations"
+    }
+  ]
+}
+{% endschema %}

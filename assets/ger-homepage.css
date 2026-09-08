@@ -479,30 +479,64 @@
   .ger-hero,
   .ger-hero__slide.is-active,
   .ger-hero__inner {
-    min-height: min(72vh, 640px);
+    min-height: min(75vh, 680px);
   }
 
   .ger-hero__img,
   .ger-hero__media img {
-    object-position: 68% 28%;
+    object-position: 62% 22%;
   }
 
   .ger-hero__overlay {
     background: linear-gradient(
       180deg,
-      rgba(255, 252, 248, 0.55) 0%,
-      rgba(255, 252, 248, 0.82) 42%,
-      rgba(255, 252, 248, 0.92) 100%
+      rgba(8, 8, 8, 0.12) 0%,
+      rgba(8, 8, 8, 0.05) 28%,
+      rgba(255, 252, 248, 0.55) 55%,
+      rgba(255, 252, 248, 0.94) 100%
     );
   }
 
   .ger-hero__inner {
     align-items: flex-end;
-    padding-bottom: 3.5rem;
+    padding-inline: 1.15rem;
+    padding-bottom: 3.75rem;
   }
 
   .ger-hero__content {
     max-width: 100%;
+  }
+
+  .ger-hero__eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    margin-bottom: 0.65rem;
+  }
+
+  .ger-hero__heading,
+  .ger-hero__heading--primary {
+    font-size: clamp(2rem, 9vw, 2.35rem);
+    line-height: 1.1;
+    margin-bottom: 0.7rem;
+  }
+
+  .ger-hero__text {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    margin-bottom: 1.25rem;
+    max-width: 22rem;
+  }
+
+  .ger-hero__cta {
+    min-height: 48px;
+    padding: 0.9rem 1.5rem;
+    font-size: 0.8125rem;
+    border-radius: 4px;
+  }
+
+  .ger-hero__detail-top,
+  .ger-hero__detail-bottom {
+    font-size: 0.6875rem;
   }
 
   .ger-hero__script {
@@ -1875,6 +1909,7 @@
 
 .ger-footer__bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.12);
+  margin-top: 1.5rem;
   padding-top: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -1904,3 +1939,607 @@
     text-align: left;
   }
 }
+
+/* =========================================================
+   MOBILE HOMEPAGE POLISH (≤749px) — desktop unchanged
+   ========================================================= */
+@media (max-width: 749px) {
+  :root {
+    --ger-pad: 1.1rem;
+  }
+
+  .ger-section {
+    --ger-mobile-section-gap: 3.5rem;
+  }
+
+  /* Announcement bar readability */
+  .ger-top-bar {
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+  }
+
+  .ger-top-bar__inner {
+    padding-block: 0.65rem;
+    justify-content: center;
+  }
+
+  .ger-top-bar__item--left,
+  .ger-top-bar__item--right {
+    display: none;
+  }
+
+  .ger-top-bar__item--center {
+    flex: 1;
+    text-align: center;
+    font-weight: 500;
+    white-space: normal;
+    line-height: 1.35;
+  }
+
+  /* Benefits — premium 2×2 cards */
+  .ger-benefits__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    padding-block: 1.75rem;
+  }
+
+  .ger-benefit {
+    background: #ffffff;
+    border: 1px solid rgba(31, 31, 31, 0.06);
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(31, 31, 31, 0.04);
+    padding: 1.1rem 0.7rem 1rem;
+    gap: 0.55rem;
+    min-height: 100%;
+  }
+
+  .ger-benefit__icon {
+    width: 2.65rem;
+    height: 2.65rem;
+  }
+
+  .ger-benefit__title {
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    line-height: 1.25;
+  }
+
+  .ger-benefit__text {
+    font-size: 0.72rem;
+    line-height: 1.4;
+    max-width: 11rem;
+  }
+
+  .ger-benefits__floral {
+    opacity: 0.18;
+    width: 72px;
+  }
+
+  /* Shop by Collection — one large card + peek */
+  .ger-collections {
+    padding-block: 3.25rem 2.75rem;
+  }
+
+  .ger-collections__heading {
+    font-size: 1.55rem;
+  }
+
+  .ger-collections__subtitle {
+    font-size: 0.875rem;
+    margin-top: 0.35rem;
+  }
+
+  .ger-collections__track {
+    gap: 0.85rem;
+  }
+
+  .ger-collection-card {
+    flex: 0 0 82%;
+    border-radius: 12px;
+    box-shadow: 0 10px 28px rgba(31, 31, 31, 0.08);
+  }
+
+  .ger-collection-card__media {
+    aspect-ratio: 3 / 4;
+  }
+
+  .ger-collection-card__body {
+    padding: 1rem 1rem 1.15rem;
+  }
+
+  .ger-collection-card__title {
+    font-size: 1.15rem;
+  }
+
+  .ger-collection-card__text {
+    font-size: 0.8125rem;
+  }
+
+  .ger-collections__nav {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .ger-collections__nav--prev {
+    left: 0.15rem;
+  }
+
+  .ger-collections__nav--next {
+    right: 0.15rem;
+  }
+
+  /* Featured fabrics — wider swipe cards */
+  .ger-featured {
+    padding-block: 3rem 2.5rem;
+  }
+
+  .ger-featured__header {
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1.35rem;
+  }
+
+  .ger-featured__heading {
+    font-size: 1.55rem;
+  }
+
+  .ger-featured__subtitle {
+    font-size: 0.875rem;
+  }
+
+  .ger-featured__grid {
+    grid-auto-columns: minmax(78%, 1fr);
+    gap: 0.85rem;
+  }
+
+  .ger-product-card__media {
+    aspect-ratio: 4 / 5;
+    border-radius: 10px;
+  }
+
+  .ger-product-card__wish {
+    width: 2.35rem;
+    height: 2.35rem;
+    top: 0.7rem;
+    right: 0.7rem;
+  }
+
+  .ger-product-card__body {
+    padding-top: 0.85rem;
+  }
+
+  .ger-product-card__title {
+    font-size: 0.9375rem;
+    line-height: 1.35;
+    margin-bottom: 0.35rem;
+  }
+
+  .ger-product-card__price {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+
+  .ger-product-card__quick-form {
+    margin-top: 0.75rem;
+  }
+
+  .ger-product-card__quick-add {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 44px;
+    padding: 0.7rem 0.85rem;
+    border: none;
+    border-radius: 6px;
+    background: #111111;
+    color: #ffffff;
+    font-family: var(--ger-font-body);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.25s ease, opacity 0.25s ease;
+  }
+
+  .ger-product-card__quick-add:hover,
+  .ger-product-card__quick-add:focus-visible {
+    background: var(--ger-pink);
+    outline: none;
+  }
+
+  .ger-product-card__quick-add--link {
+    box-sizing: border-box;
+  }
+
+  /* Promo banner */
+  .ger-promo__inner {
+    padding-inline: 1.15rem;
+    padding-top: 8rem;
+    padding-bottom: 2rem;
+  }
+
+  .ger-promo__heading {
+    font-size: 1.75rem;
+  }
+
+  .ger-promo__text {
+    font-size: 0.9rem;
+  }
+
+  .ger-promo__cta {
+    min-height: 48px;
+    padding: 0.9rem 1.35rem;
+    border-radius: 4px;
+  }
+
+  /* New Arrivals / Lookbook — editorial swipe */
+  .ger-lookbook {
+    padding-block: 3rem 0;
+  }
+
+  .ger-lookbook__header {
+    margin-bottom: 1.35rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ger-lookbook__heading {
+    font-size: 1.55rem;
+  }
+
+  .ger-lookbook__subtitle {
+    font-size: 0.875rem;
+  }
+
+  .ger-lookbook__cta {
+    min-height: 44px;
+    padding-inline: 1.1rem;
+  }
+
+  .ger-lookbook__gallery {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 0.75rem;
+    padding-inline: var(--ger-pad);
+    padding-bottom: 0.35rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .ger-lookbook__gallery::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ger-lookbook__item {
+    flex: 0 0 78%;
+    scroll-snap-align: start;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .ger-lookbook__media {
+    aspect-ratio: 3 / 4;
+    border-radius: 12px;
+  }
+
+  /* Why Choose — 2×2 premium cards */
+  .ger-why {
+    padding-block: 3.25rem;
+  }
+
+  .ger-why__heading {
+    font-size: 1.55rem;
+  }
+
+  .ger-why__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .ger-why-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.65rem;
+    padding: 1.25rem 0.85rem 1.15rem;
+    background: #ffffff;
+    border: 1px solid rgba(31, 31, 31, 0.06);
+    border-radius: 12px;
+    box-shadow: 0 8px 22px rgba(31, 31, 31, 0.04);
+  }
+
+  .ger-why-card__icon {
+    flex-basis: auto;
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .ger-why-card__title {
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+
+  .ger-why-card__text {
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+
+  /* Testimonials carousel */
+  .ger-testimonials {
+    padding-block: 3rem 3.5rem;
+  }
+
+  .ger-testimonials__heading {
+    font-size: 1.55rem;
+  }
+
+  .ger-testimonials__subtitle {
+    margin: 0.55rem 0 0;
+    font-size: 0.875rem;
+    color: var(--ger-text-muted);
+  }
+
+  .ger-testimonials__carousel {
+    position: relative;
+  }
+
+  .ger-testimonials__grid {
+    display: block;
+  }
+
+  .ger-testimonials__card {
+    display: none;
+    position: relative;
+    padding: 1.75rem 1.35rem 1.5rem;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #fff9fb 0%, #fff3f7 100%);
+    box-shadow: 0 10px 28px rgba(40, 20, 30, 0.06);
+  }
+
+  .ger-testimonials__card.is-active {
+    display: block;
+  }
+
+  .ger-testimonials__mark {
+    display: block;
+    font-family: var(--ger-font-display);
+    font-size: 3.5rem;
+    line-height: 0.7;
+    color: var(--ger-pink);
+    opacity: 0.55;
+    margin-bottom: 0.65rem;
+  }
+
+  .ger-testimonials__quote {
+    font-family: var(--ger-font-display);
+    font-size: 1.05rem;
+    line-height: 1.55;
+    margin-bottom: 1rem;
+  }
+
+  .ger-testimonials__nav {
+    position: absolute;
+    top: 42%;
+    z-index: 2;
+    transform: translateY(-50%);
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: 1px solid rgba(31, 31, 31, 0.1);
+    background: #ffffff;
+    color: #1f1f1f;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(31, 31, 31, 0.08);
+  }
+
+  .ger-testimonials__nav--prev {
+    left: -0.15rem;
+  }
+
+  .ger-testimonials__nav--next {
+    right: -0.15rem;
+  }
+
+  .ger-testimonials__dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.45rem;
+    margin-top: 1.15rem;
+  }
+
+  .ger-testimonials__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    padding: 0;
+    background: #f3c7db;
+    cursor: pointer;
+  }
+
+  .ger-testimonials__dot.is-active {
+    background: var(--ger-pink);
+    transform: scale(1.15);
+  }
+
+  /* Instagram — airier masonry feel */
+  .ger-instagram {
+    padding-block: 3rem 2.75rem;
+  }
+
+  .ger-instagram__heading {
+    font-size: 1.45rem;
+  }
+
+  .ger-instagram__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 120px;
+    gap: 0.65rem;
+    padding-inline: var(--ger-pad);
+  }
+
+  .ger-instagram__item {
+    aspect-ratio: auto;
+    height: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .ger-instagram__item:nth-child(1) {
+    grid-row: span 2;
+  }
+
+  .ger-instagram__item:nth-child(4) {
+    grid-row: span 2;
+  }
+
+  .ger-instagram__item:nth-child(5) {
+    grid-row: span 2;
+  }
+
+  .ger-instagram__cta-wrap {
+    margin-top: 1.35rem;
+    text-align: center;
+  }
+
+  .ger-instagram__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-height: 48px;
+    padding: 0.85rem 1.35rem;
+    border: 1.5px solid var(--ger-pink);
+    border-radius: 6px;
+    background: #ffffff;
+    color: var(--ger-pink);
+    font-family: var(--ger-font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  /* Newsletter */
+  .ger-newsletter {
+    padding-block: 3rem;
+    text-align: center;
+  }
+
+  .ger-newsletter__inner {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .ger-newsletter__heading {
+    font-size: 1.55rem;
+  }
+
+  .ger-newsletter__text {
+    font-size: 0.9rem;
+    margin-inline: auto;
+  }
+
+  .ger-newsletter__form {
+    width: 100%;
+    max-width: 24rem;
+  }
+
+  .ger-newsletter__field {
+    min-height: 52px;
+  }
+
+  .ger-newsletter__input {
+    min-height: 52px;
+    font-size: 0.9375rem;
+  }
+
+  .ger-newsletter__submit {
+    min-width: 52px;
+    min-height: 52px;
+  }
+
+  /* We Accept (if present) */
+  .ger-we-accept {
+    padding-block: 2.75rem;
+  }
+}
+
+/* Desktop: keep all testimonials visible; hide mobile carousel chrome */
+@media (min-width: 750px) {
+  .ger-testimonials__nav,
+  .ger-testimonials__dots {
+    display: none;
+  }
+
+  .ger-testimonials__subtitle {
+    margin: 0.55rem 0 0;
+    font-size: 0.95rem;
+    color: var(--ger-text-muted);
+  }
+
+  .ger-testimonials__mark {
+    display: block;
+    font-family: var(--ger-font-display);
+    font-size: 3rem;
+    line-height: 0.7;
+    color: var(--ger-pink);
+    opacity: 0.4;
+    margin-bottom: 0.5rem;
+  }
+
+  .ger-testimonials__card {
+    display: block !important;
+  }
+
+  .ger-product-card__quick-form,
+  .ger-product-card__quick-add {
+    display: none;
+  }
+
+  .ger-instagram__cta-wrap {
+    margin-top: 1.75rem;
+    text-align: center;
+  }
+
+  .ger-instagram__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-height: 48px;
+    padding: 0.85rem 1.5rem;
+    border: 1.5px solid var(--ger-pink);
+    border-radius: 6px;
+    background: #ffffff;
+    color: var(--ger-pink);
+    font-family: var(--ger-font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.25s ease, color 0.25s ease;
+  }
+
+  .ger-instagram__cta:hover,
+  .ger-instagram__cta:focus-visible {
+    background: var(--ger-pink);
+    color: #ffffff;
+    outline: none;
+  }
+}
+

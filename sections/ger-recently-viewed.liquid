@@ -1,0 +1,43 @@
+{%- doc -%}
+  Recently viewed products slider. Populated by ger-product.js via localStorage.
+{%- enddoc -%}
+
+<section
+  id="GerRecentlyViewed-{{ section.id }}"
+  class="ger-rv"
+  data-ger-recently-viewed
+  data-exclude-handle="{{ product.handle }}"
+  {{ section.shopify_attributes }}
+>
+  <div class="ger-rv__shell">
+    <div class="ger-rv__head">
+      <h2 class="ger-rv__title">{{ section.settings.heading | default: 'RECENTLY VIEWED' }}</h2>
+    </div>
+    <div class="ger-rv__track-wrap">
+      <div class="ger-rv__track" data-ger-rv-track>
+        <p class="ger-rv__empty" data-ger-rv-empty>Your recently viewed products will appear here.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GER Recently Viewed",
+  "tag": "section",
+  "class": "ger-recently-viewed-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "RECENTLY VIEWED"
+    }
+  ],
+  "presets": [
+    {
+      "name": "GER Recently Viewed"
+    }
+  ]
+}
+{% endschema %}

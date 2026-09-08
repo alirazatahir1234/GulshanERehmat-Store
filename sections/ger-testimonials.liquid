@@ -1,30 +1,81 @@
 {{ 'ger-homepage.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'ger-homepage.js' | asset_url }}" defer></script>
 
-<section class="ger-section ger-testimonials" {{ section.shopify_attributes }}>
+<section
+  class="ger-section ger-testimonials"
+  data-ger-testimonials
+  {{ section.shopify_attributes }}
+>
   <div class="ger-container ger-testimonials__wrap">
     <div class="ger-testimonials__header ger-fade-in">
       {% if section.settings.heading != blank %}
         <h2 class="ger-testimonials__heading">{{ section.settings.heading }}</h2>
       {% endif %}
+      {% if section.settings.subtitle != blank %}
+        <p class="ger-testimonials__subtitle">{{ section.settings.subtitle }}</p>
+      {% endif %}
     </div>
 
-    <div class="ger-testimonials__grid">
-      {% for block in section.blocks %}
-        <blockquote class="ger-testimonials__card ger-fade-in" {{ block.shopify_attributes }}>
-          {% if block.settings.quote != blank %}
-            <p class="ger-testimonials__quote">“{{ block.settings.quote }}”</p>
-          {% endif %}
-          <div class="ger-testimonials__stars" aria-label="5 out of 5 stars">
-            {% for i in (1..5) %}
-              <span aria-hidden="true">★</span>
-            {% endfor %}
-          </div>
-          {% if block.settings.author != blank %}
-            <cite class="ger-testimonials__author">— {{ block.settings.author }}</cite>
-          {% endif %}
-        </blockquote>
-      {% endfor %}
+    <div class="ger-testimonials__carousel">
+      {% if section.blocks.size > 1 %}
+        <button
+          type="button"
+          class="ger-testimonials__nav ger-testimonials__nav--prev"
+          data-ger-testimonial-prev
+          aria-label="Previous review"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="ger-testimonials__nav ger-testimonials__nav--next"
+          data-ger-testimonial-next
+          aria-label="Next review"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      {% endif %}
+
+      <div class="ger-testimonials__grid">
+        {% for block in section.blocks %}
+          <blockquote
+            class="ger-testimonials__card ger-fade-in{% if forloop.first %} is-active{% endif %}"
+            data-ger-testimonial
+            {{ block.shopify_attributes }}
+          >
+            <span class="ger-testimonials__mark" aria-hidden="true">“</span>
+            {% if block.settings.quote != blank %}
+              <p class="ger-testimonials__quote">{{ block.settings.quote }}</p>
+            {% endif %}
+            <div class="ger-testimonials__stars" aria-label="5 out of 5 stars">
+              {% for i in (1..5) %}
+                <span aria-hidden="true">★</span>
+              {% endfor %}
+            </div>
+            {% if block.settings.author != blank %}
+              <cite class="ger-testimonials__author">— {{ block.settings.author }}</cite>
+            {% endif %}
+          </blockquote>
+        {% endfor %}
+      </div>
+
+      {% if section.blocks.size > 1 %}
+        <div class="ger-testimonials__dots" role="tablist" aria-label="Customer reviews">
+          {% for block in section.blocks %}
+            <button
+              type="button"
+              class="ger-testimonials__dot{% if forloop.first %} is-active{% endif %}"
+              data-ger-testimonial-dot
+              aria-label="Show review {{ forloop.index }}"
+              aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+            ></button>
+          {% endfor %}
+        </div>
+      {% endif %}
     </div>
   </div>
 </section>
@@ -43,6 +94,12 @@
       "id": "heading",
       "label": "Heading",
       "default": "What Our Customers Say"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Real stories. Real experiences."
     }
   ],
   "blocks": [

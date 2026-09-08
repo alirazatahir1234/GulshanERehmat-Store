@@ -111,7 +111,8 @@
       "foreground": "#000000",
       "color1": "#333333",
       "color2": "#DFDFDF"
-    }
+    },
+    "auto_open_cart_drawer": true
   },
   "presets": {
     "Horizon": {

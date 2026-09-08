@@ -11,8 +11,15 @@
   assign show_wish = enable_wishlist | default: true
   assign is_new = false
   if show_new and product != blank
-    if product.tags contains 'new' or product.tags contains 'New' or product.tags contains 'NEW'
+    if product.tags contains 'new' or product.tags contains 'New' or product.tags contains 'NEW' or product.tags contains 'New Arrival'
       assign is_new = true
+    else
+      assign now_ts = 'now' | date: '%s'
+      assign created_ts = product.created_at | date: '%s'
+      assign age_seconds = now_ts | minus: created_ts
+      if age_seconds < 5184000
+        assign is_new = true
+      endif
     endif
   endif
 -%}

@@ -1286,6 +1286,35 @@
     font-weight: 600;
   }
 
+  /* Mobile-only header polish — desktop unchanged */
+  @media screen and (max-width: 749px) {
+    #header-component .header__columns {
+      --header-mobile-bookend: 48px;
+      min-height: 64px;
+    }
+
+    #header-component .header__row--top {
+      --header-padding: 0.65rem;
+    }
+
+    #header-component .header-logo__image {
+      max-height: 3.25rem;
+    }
+
+    #header-component .header__icon--menu,
+    #header-component .search-action,
+    #header-component .header-actions__action {
+      min-width: 44px;
+      min-height: 44px;
+    }
+
+    #header-component .cart-bubble {
+      width: 18px;
+      height: 18px;
+      font-size: 0.65rem;
+    }
+  }
+
   @media screen and (min-width: 750px) {
     /* Keep left side empty: no hamburger / left search on desktop */
     #header-component .header__row--top .header-drawer,

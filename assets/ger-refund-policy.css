@@ -1,0 +1,418 @@
+/* Gulshan E Rehmat — Refund & Exchange Policy (overrides Shopify policy page) */
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+body.ger-refund-page .shopify-policy__container,
+.shopify-policy__container.ger-refund-host {
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.shopify-policy__container:not(.ger-refund-host) {
+  min-height: 50vh;
+}
+
+body.ger-refund-page .shopify-policy__title,
+.shopify-policy__container.ger-refund-host > .shopify-policy__title {
+  display: none !important;
+}
+
+.ger-refund {
+  --ger-pink: #d81b70;
+  --ger-pink-soft: #fff0f6;
+  --ger-pink-circle: #f8d5e4;
+  --ger-dark: #111111;
+  --ger-text: #3a3a3a;
+  --ger-text-muted: #6b6b6b;
+  --ger-border: #ece8e6;
+  --ger-white: #ffffff;
+  --ger-font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --ger-font-body: 'Poppins', system-ui, sans-serif;
+  --ger-font-script: 'Great Vibes', 'Brush Script MT', cursive;
+  --ger-content-max: 72rem;
+  --ger-pad: clamp(1.25rem, 4vw, 3.5rem);
+
+  background: var(--ger-white);
+  color: var(--ger-text);
+  font-family: var(--ger-font-body);
+}
+
+.ger-refund *,
+.ger-refund *::before,
+.ger-refund *::after {
+  box-sizing: border-box;
+}
+
+.ger-refund__container {
+  width: 100%;
+  max-width: var(--ger-content-max);
+  margin: 0 auto;
+  padding-inline: var(--ger-pad);
+}
+
+.ger-refund__highlight {
+  color: var(--ger-pink);
+  font-weight: 600;
+}
+
+/* Hero */
+.ger-refund__hero {
+  position: relative;
+  overflow: hidden;
+  min-height: clamp(200px, 28vw, 280px);
+  display: flex;
+  align-items: center;
+}
+
+.ger-refund__hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 100% at 20% 40%, rgba(255, 255, 255, 0.5) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 80% at 85% 50%, rgba(216, 27, 112, 0.14) 0%, transparent 55%),
+    linear-gradient(115deg, #f8dce8 0%, #f3c0d8 35%, #efb0ce 60%, #f7d4e4 100%);
+}
+
+.ger-refund__hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    105deg,
+    transparent 0,
+    transparent 32px,
+    rgba(255, 255, 255, 0.06) 32px,
+    rgba(255, 255, 255, 0.06) 64px
+  );
+  pointer-events: none;
+}
+
+.ger-refund__hero-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--ger-content-max);
+  margin: 0 auto;
+  padding: clamp(2.25rem, 5vw, 3.75rem) var(--ger-pad);
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+  gap: 2rem;
+  align-items: center;
+}
+
+.ger-refund__hero-title {
+  margin: 0 0 0.85rem;
+  font-family: var(--ger-font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--ger-dark);
+}
+
+.ger-refund__hero-text {
+  margin: 0;
+  max-width: 34rem;
+  font-size: clamp(0.95rem, 0.9rem + 0.2vw, 1.05rem);
+  line-height: 1.7;
+  color: var(--ger-text-muted);
+}
+
+.ger-refund__hero-accents {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  justify-self: end;
+  text-align: right;
+  font-family: var(--ger-font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(216, 27, 112, 0.75);
+  line-height: 1.9;
+}
+
+/* Breadcrumb */
+.ger-refund__breadcrumb {
+  padding: 1.1rem 0 0.25rem;
+  font-size: 0.875rem;
+  color: var(--ger-text-muted);
+}
+
+.ger-refund__breadcrumb a {
+  color: var(--ger-text-muted);
+  text-decoration: none;
+}
+
+.ger-refund__breadcrumb a:hover {
+  color: var(--ger-pink);
+}
+
+.ger-refund__breadcrumb-sep {
+  margin: 0 0.45rem;
+  opacity: 0.7;
+}
+
+.ger-refund__breadcrumb-current {
+  color: var(--ger-dark);
+  font-weight: 500;
+}
+
+/* Main */
+.ger-refund__main {
+  padding: clamp(1.5rem, 4vw, 2.75rem) 0 clamp(2.5rem, 5vw, 4rem);
+}
+
+.ger-refund__intro {
+  max-width: 48rem;
+  margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
+  font-size: clamp(0.98rem, 0.94rem + 0.15vw, 1.06rem);
+  line-height: 1.75;
+  color: var(--ger-text);
+}
+
+.ger-refund__intro p {
+  margin: 0 0 1rem;
+}
+
+.ger-refund__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.25rem, 3vw, 2rem) clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.ger-refund__card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.ger-refund__card-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--ger-pink-circle);
+  color: var(--ger-pink);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.ger-refund__card-icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.ger-refund__card-title {
+  margin: 0 0 0.65rem;
+  font-family: var(--ger-font-display);
+  font-weight: 700;
+  font-size: clamp(1.15rem, 1.05rem + 0.4vw, 1.45rem);
+  line-height: 1.25;
+  color: var(--ger-dark);
+}
+
+.ger-refund__card-num {
+  color: var(--ger-pink);
+  margin-right: 0.15rem;
+}
+
+.ger-refund__card-content {
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--ger-text);
+}
+
+.ger-refund__card-content p {
+  margin: 0 0 0.75rem;
+}
+
+.ger-refund__card-content ul {
+  margin: 0 0 0.85rem;
+  padding-left: 1.15rem;
+}
+
+.ger-refund__card-content li {
+  margin-bottom: 0.4rem;
+}
+
+.ger-refund__card-content h3 {
+  font-family: var(--ger-font-display);
+  font-size: 1.05rem;
+  margin: 0.85rem 0 0.35rem;
+  color: var(--ger-dark);
+}
+
+/* Contact */
+.ger-refund__contact {
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  padding: clamp(1.35rem, 3vw, 1.85rem) clamp(1.25rem, 3vw, 2rem);
+  background: var(--ger-pink-soft);
+  border: 1px solid rgba(216, 27, 112, 0.12);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.ger-refund__contact-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--ger-pink);
+  display: grid;
+  place-items: center;
+}
+
+.ger-refund__contact-icon svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.ger-refund__contact-title {
+  margin: 0 0 0.35rem;
+  font-family: var(--ger-font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--ger-dark);
+}
+
+.ger-refund__contact-text {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--ger-text-muted);
+  line-height: 1.5;
+}
+
+.ger-refund__contact-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.65rem;
+}
+
+.ger-refund__wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.25rem;
+  background: var(--ger-pink);
+  color: #fff !important;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: 0;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.ger-refund__wa:hover {
+  background: #b8245f;
+  transform: translateY(-1px);
+}
+
+.ger-refund__email {
+  color: var(--ger-pink);
+  font-size: 0.92rem;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.ger-refund__email:hover {
+  text-decoration: underline;
+}
+
+/* Trust bar */
+.ger-refund__trust {
+  background: var(--ger-white);
+  border-top: 1px solid var(--ger-border);
+  padding: clamp(2rem, 4vw, 3rem) 0;
+}
+
+.ger-refund__trust-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.ger-refund__trust-icon {
+  display: inline-flex;
+  color: var(--ger-pink);
+  margin-bottom: 0.65rem;
+}
+
+.ger-refund__trust-icon svg {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.ger-refund__trust-item h3 {
+  margin: 0;
+  font-family: var(--ger-font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ger-dark);
+}
+
+.ger-refund__thanks {
+  margin: 0;
+  padding: 1.75rem var(--ger-pad) 2.5rem;
+  text-align: center;
+  font-family: var(--ger-font-script);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  color: var(--ger-pink);
+}
+
+@media (max-width: 899px) {
+  .ger-refund__hero-inner {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .ger-refund__hero-accents {
+    justify-self: start;
+    text-align: left;
+  }
+
+  .ger-refund__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ger-refund__contact {
+    grid-template-columns: auto 1fr;
+  }
+
+  .ger-refund__contact-actions {
+    grid-column: 1 / -1;
+    align-items: stretch;
+  }
+
+  .ger-refund__wa {
+    justify-content: center;
+  }
+
+  .ger-refund__email {
+    text-align: center;
+  }
+
+  .ger-refund__trust-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.75rem 1rem;
+  }
+}
+
+@media (max-width: 549px) {
+  .ger-refund__card {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .ger-refund__trust-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

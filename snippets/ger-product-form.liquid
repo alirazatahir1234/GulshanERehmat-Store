@@ -1,0 +1,257 @@
+{%- doc -%}
+  GER PDP purchase panel: price, variants, qty, ATC, Buy Now, WhatsApp.
+  @param {object} product - Product object
+  @param {string} section_id - Section id
+  @param {string} product_form_id - Form id
+{%- enddoc -%}
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign compare_at = current_variant.compare_at_price
+  assign price = current_variant.price
+  assign on_sale = false
+  if compare_at != blank and compare_at > price
+    assign on_sale = true
+    assign save_amount = compare_at | minus: price
+    assign save_pct = save_amount | times: 100.0 | divided_by: compare_at | round
+  endif
+
+  assign color_option = blank
+  assign size_option = blank
+  for option in product.options_with_values
+    assign opt_name = option.name | downcase
+    if opt_name contains 'color' or opt_name contains 'colour' or opt_name contains 'shade'
+      assign color_option = option
+    elsif opt_name contains 'size'
+      assign size_option = option
+    endif
+  endfor
+
+  assign wa_number = '923338709009'
+  assign wa_plain = 'Hello Gulshan E Rehmat, I am interested in: ' | append: product.title | append: ' — ' | append: shop.url | append: product.url
+  assign wa_encoded = wa_plain | url_encode
+  assign wa_href = 'https://wa.me/' | append: wa_number | append: '?text=' | append: wa_encoded
+
+  assign collection_label = product.type
+  if product.collections.size > 0
+    assign collection_label = product.collections.first.title
+  endif
+
+  assign short_desc = product.metafields.custom.short_description | default: product.description | strip_html | truncate: 160
+-%}
+
+<div class="ger-pdp__info" data-ger-info>
+  {%- if product.type != blank or collection_label != blank -%}
+    <p class="ger-pdp__eyebrow">
+      {%- if product.type != blank -%}{{ product.type | upcase }}{%- endif -%}
+      {%- if product.type != blank and collection_label != blank and product.type != collection_label %} | {% endif -%}
+      {%- if collection_label != blank and collection_label != product.type -%}{{ collection_label | upcase }}{%- endif -%}
+    </p>
+  {%- endif -%}
+
+  <h1 class="ger-pdp__title">{{ product.title }}</h1>
+
+  {%- liquid
+    assign rating_value = product.metafields.reviews.rating.value
+    assign rating_count = product.metafields.reviews.rating_count
+  -%}
+  {%- if rating_value != blank and rating_count != blank and rating_count > 0 -%}
+    <div class="ger-pdp__rating" aria-label="{{ rating_value }} out of 5 stars from {{ rating_count }} reviews">
+      <span class="ger-pdp__stars" aria-hidden="true">
+        {%- assign full_stars = rating_value | floor -%}
+        {%- for i in (1..5) -%}
+          <span class="ger-pdp__star{% if i <= full_stars %} is-filled{% endif %}">★</span>
+        {%- endfor -%}
+      </span>
+      <span class="ger-pdp__rating-score">{{ rating_value }}</span>
+      <span class="ger-pdp__rating-count">({{ rating_count }} Reviews)</span>
+    </div>
+  {%- endif -%}
+
+  <div class="ger-pdp__price-row" data-ger-price>
+    {%- if on_sale -%}
+      <span class="ger-pdp__price-compare" data-ger-compare>{{ compare_at | money }}</span>
+    {%- endif -%}
+    <span class="ger-pdp__price" data-ger-current-price>{{ price | money }}</span>
+    {%- if on_sale -%}
+      <span class="ger-pdp__save-badge" data-ger-save-badge>{{ save_pct }}% OFF</span>
+    {%- endif -%}
+  </div>
+
+  {%- if short_desc != blank -%}
+    <p class="ger-pdp__short-desc">{{ short_desc }}</p>
+  {%- endif -%}
+
+  {%- form 'product', product, id: product_form_id, class: 'ger-pdp__form', data-ger-product-form: '', data-type: 'add-to-cart-form' -%}
+    <input type="hidden" name="id" value="{{ current_variant.id }}" data-ger-variant-id>
+
+    {%- unless product.has_only_default_variant -%}
+      <script type="application/json" data-ger-variants>
+        {{ product.variants | json }}
+      </script>
+      <script type="application/json" data-ger-options>
+        {{ product.options_with_values | json }}
+      </script>
+
+      {%- if color_option != blank -%}
+        <div class="ger-pdp__option" data-ger-option data-option-name="{{ color_option.name | escape }}">
+          <div class="ger-pdp__option-label">
+            <span>COLOR:</span>
+            <strong data-ger-option-label>{{ color_option.selected_value | default: color_option.values.first }}</strong>
+          </div>
+          <div class="ger-pdp__swatches" role="list">
+            {%- for value in color_option.values -%}
+              {%- assign swatch_available = value.available -%}
+              <button
+                type="button"
+                class="ger-pdp__swatch{% if color_option.selected_value == value or color_option.selected_value == blank and forloop.first %} is-selected{% endif %}{% unless swatch_available %} is-unavailable{% endunless %}"
+                data-ger-swatch
+                data-option-position="{{ color_option.position }}"
+                data-value="{{ value | escape }}"
+                aria-label="{{ value | escape }}"
+                {% unless swatch_available %}aria-disabled="true"{% endunless %}
+                style="--swatch-color: {% if value.swatch.color %}{{ value.swatch.color }}{% else %}#1a2744{% endif %}"
+              >
+                <span class="ger-pdp__swatch-dot"></span>
+              </button>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if size_option != blank -%}
+        <div class="ger-pdp__option" data-ger-option data-option-name="{{ size_option.name | escape }}">
+          <div class="ger-pdp__option-label ger-pdp__option-label--size">
+            <span>SIZE</span>
+            <a href="#ger-size-guide" class="ger-pdp__size-guide-link" data-ger-size-guide-link>SIZE GUIDE</a>
+          </div>
+          <div class="ger-pdp__sizes" role="list">
+            {%- for value in size_option.values -%}
+              <button
+                type="button"
+                class="ger-pdp__size{% if size_option.selected_value == value or size_option.selected_value == blank and forloop.first %} is-selected{% endif %}{% unless value.available %} is-unavailable{% endunless %}"
+                data-ger-size
+                data-option-position="{{ size_option.position }}"
+                data-value="{{ value | escape }}"
+                {% unless value.available %}aria-disabled="true" disabled{% endunless %}
+              >
+                {{ value }}
+              </button>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- for option in product.options_with_values -%}
+        {%- liquid
+          assign skip_option = false
+          if color_option != blank and option.position == color_option.position
+            assign skip_option = true
+          endif
+          if size_option != blank and option.position == size_option.position
+            assign skip_option = true
+          endif
+        -%}
+        {%- unless skip_option -%}
+          <div class="ger-pdp__option" data-ger-option data-option-name="{{ option.name | escape }}">
+            <div class="ger-pdp__option-label">
+              <span>{{ option.name | upcase }}:</span>
+              <strong data-ger-option-label>{{ option.selected_value | default: option.values.first }}</strong>
+            </div>
+            <div class="ger-pdp__sizes" role="list">
+              {%- for value in option.values -%}
+                <button
+                  type="button"
+                  class="ger-pdp__size{% if option.selected_value == value or option.selected_value == blank and forloop.first %} is-selected{% endif %}{% unless value.available %} is-unavailable{% endunless %}"
+                  data-ger-size
+                  data-option-position="{{ option.position }}"
+                  data-value="{{ value | escape }}"
+                  {% unless value.available %}aria-disabled="true" disabled{% endunless %}
+                >
+                  {{ value }}
+                </button>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endunless -%}
+      {%- endfor -%}
+    {%- endunless -%}
+
+    {%- if current_variant.inventory_management != blank and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= 10 and current_variant.inventory_policy == 'deny' -%}
+      <p class="ger-pdp__stock" data-ger-stock>Only {{ current_variant.inventory_quantity }} left in stock</p>
+    {%- endif -%}
+
+    <div class="ger-pdp__qty-row">
+      <div class="ger-pdp__qty" data-ger-qty>
+        <button type="button" class="ger-pdp__qty-btn" data-ger-qty-minus aria-label="Decrease quantity">−</button>
+        <input
+          class="ger-pdp__qty-input"
+          type="number"
+          name="quantity"
+          value="1"
+          min="1"
+          inputmode="numeric"
+          data-ger-qty-input
+          aria-label="Quantity"
+        >
+        <button type="button" class="ger-pdp__qty-btn" data-ger-qty-plus aria-label="Increase quantity">+</button>
+      </div>
+    </div>
+
+    <button
+      type="submit"
+      name="add"
+      class="ger-pdp__btn ger-pdp__btn--bag"
+      data-ger-add-to-cart
+      {% unless current_variant.available %}disabled{% endunless %}
+    >
+      <span data-ger-atc-label>{% if current_variant.available %}ADD TO BAG{% else %}SOLD OUT{% endif %}</span>
+    </button>
+
+    <button
+      type="button"
+      class="ger-pdp__btn ger-pdp__btn--buy"
+      data-ger-buy-now
+      {% unless current_variant.available %}disabled{% endunless %}
+    >
+      BUY IT NOW
+    </button>
+  {%- endform -%}
+
+  <a
+    class="ger-pdp__btn ger-pdp__btn--whatsapp"
+    href="{{ wa_href }}"
+    target="_blank"
+    rel="noopener noreferrer"
+    data-ger-whatsapp
+  >
+    <svg class="ger-pdp__wa-icon" viewBox="0 0 32 32" width="20" height="20" fill="currentColor" aria-hidden="true">
+      <path d="M16 3C8.82 3 3 8.82 3 16c0 2.29.6 4.52 1.74 6.48L3 29l6.68-1.71A12.9 12.9 0 0 0 16 29c7.18 0 13-5.82 13-13S23.18 3 16 3zm0 23.67c-2.04 0-4.03-.55-5.77-1.6l-.41-.24-3.96 1.01 1.06-3.86-.27-.4A10.64 10.64 0 1 1 16 26.67zm5.84-7.98c-.32-.16-1.89-.93-2.18-1.04-.29-.11-.5-.16-.71.16-.21.32-.82 1.04-1.01 1.25-.18.21-.37.24-.68.08-1.86-.93-3.08-1.66-4.31-3.77-.33-.57.33-.53.94-1.77.1-.21.05-.39-.03-.55-.08-.16-.71-1.71-.97-2.34-.26-.62-.53-.54-.71-.55h-.61c-.21 0-.55.08-.84.39-.29.32-1.1 1.08-1.1 2.63s1.13 3.05 1.29 3.26c.16.21 2.23 3.4 5.4 4.77.75.32 1.34.51 1.8.65.76.24 1.45.21 2 .13.61-.09 1.89-.77 2.16-1.51.26-.74.26-1.37.18-1.51-.08-.13-.29-.21-.61-.37z"/>
+    </svg>
+    ORDER ON WHATSAPP
+  </a>
+
+  <div class="ger-pdp__secondary-links">
+    <button type="button" class="ger-pdp__text-link" data-ger-wishlist aria-label="Add to wishlist">♡ Add to Wishlist</button>
+    <button type="button" class="ger-pdp__text-link" data-ger-share aria-label="Share product">Share Product</button>
+  </div>
+
+  <div class="ger-pdp__trust-strip" aria-label="Shopping benefits">
+    <div class="ger-pdp__trust-item">
+      <span aria-hidden="true">🚚</span>
+      <span>Fast Delivery</span>
+    </div>
+    <div class="ger-pdp__trust-item">
+      <span aria-hidden="true">↻</span>
+      <span>Easy Returns</span>
+    </div>
+    <div class="ger-pdp__trust-item">
+      <span aria-hidden="true">🔒</span>
+      <span>Secure Payments</span>
+    </div>
+    <div class="ger-pdp__trust-item">
+      <span aria-hidden="true">✦</span>
+      <span>Premium Quality</span>
+    </div>
+  </div>
+</div>

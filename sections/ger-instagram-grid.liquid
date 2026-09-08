@@ -69,6 +69,20 @@
       {% endif %}
     {% endfor %}
   </div>
+
+  {% if section.settings.profile_url != blank and section.settings.button_label != blank %}
+    <div class="ger-container ger-instagram__cta-wrap ger-fade-in">
+      <a
+        href="{{ section.settings.profile_url }}"
+        class="ger-instagram__cta"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {{ section.settings.button_label }}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  {% endif %}
 </section>
 
 {% schema %}
@@ -90,6 +104,12 @@
       "type": "url",
       "id": "profile_url",
       "label": "Instagram profile URL"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Follow button label",
+      "default": "FOLLOW ON INSTAGRAM"
     }
   ],
   "blocks": [

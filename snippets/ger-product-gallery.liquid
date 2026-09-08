@@ -1,0 +1,170 @@
+{%- doc -%}
+  GER PDP image gallery: vertical thumbs + main media + editorial masonry.
+  @param {object} product - Product object
+  @param {string} section_id - Section id for unique element ids
+{%- enddoc -%}
+
+{%- liquid
+  assign featured = product.selected_or_first_available_variant.featured_media | default: product.featured_media
+  assign media_count = product.media.size
+-%}
+
+<div class="ger-pdp__gallery" data-ger-gallery>
+  <div class="ger-pdp__gallery-main-row">
+    {%- if media_count > 1 -%}
+      <div class="ger-pdp__thumbs" data-ger-thumbs role="tablist" aria-label="Product images">
+        {%- for media in product.media -%}
+          {%- liquid
+            assign is_active = false
+            if featured != blank and media.id == featured.id
+              assign is_active = true
+            elsif featured == blank and forloop.first
+              assign is_active = true
+            endif
+          -%}
+          <button
+            type="button"
+            class="ger-pdp__thumb{% if is_active %} is-active{% endif %}"
+            data-ger-thumb
+            data-media-id="{{ media.id }}"
+            data-index="{{ forloop.index0 }}"
+            role="tab"
+            aria-selected="{% if is_active %}true{% else %}false{% endif %}"
+            aria-label="View image {{ forloop.index }}"
+          >
+            {%- if media.media_type == 'image' -%}
+              {{
+                media
+                | image_url: width: 160
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '80, 120, 160',
+                  sizes: '72px',
+                  class: 'ger-pdp__thumb-img',
+                  alt: media.alt | default: product.title | escape
+              }}
+            {%- else -%}
+              {{
+                media.preview_image
+                | image_url: width: 160
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '80, 120, 160',
+                  sizes: '72px',
+                  class: 'ger-pdp__thumb-img',
+                  alt: media.alt | default: product.title | escape
+              }}
+            {%- endif -%}
+          </button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <div class="ger-pdp__main-media" data-ger-main-media>
+      {%- if featured != blank -%}
+        <div class="ger-pdp__main-frame" data-ger-main-frame>
+          {%- for media in product.media -%}
+            {%- liquid
+              assign is_active = false
+              if featured != blank and media.id == featured.id
+                assign is_active = true
+              elsif featured == blank and forloop.first
+                assign is_active = true
+              endif
+            -%}
+            <div
+              class="ger-pdp__main-slide{% if is_active %} is-active{% endif %}"
+              data-ger-main-slide
+              data-media-id="{{ media.id }}"
+              data-index="{{ forloop.index0 }}"
+              {% unless is_active %}hidden{% endunless %}
+            >
+              {%- if media.media_type == 'image' -%}
+                <button type="button" class="ger-pdp__zoom-trigger" data-ger-zoom-open data-index="{{ forloop.index0 }}" aria-label="Zoom image {{ forloop.index }}">
+                  {%- if forloop.first -%}
+                    {{
+                      media
+                      | image_url: width: 1600
+                      | image_tag:
+                        loading: 'eager',
+                        widths: '400, 600, 800, 1000, 1200, 1600',
+                        sizes: '(min-width: 990px) 52vw, 100vw',
+                        class: 'ger-pdp__main-img',
+                        alt: media.alt | default: product.title | escape
+                    }}
+                  {%- else -%}
+                    {{
+                      media
+                      | image_url: width: 1600
+                      | image_tag:
+                        loading: 'lazy',
+                        widths: '400, 600, 800, 1000, 1200, 1600',
+                        sizes: '(min-width: 990px) 52vw, 100vw',
+                        class: 'ger-pdp__main-img',
+                        alt: media.alt | default: product.title | escape
+                    }}
+                  {%- endif -%}
+                </button>
+              {%- elsif media.media_type == 'video' or media.media_type == 'external_video' -%}
+                {{ media | media_tag: image_size: '1200x', class: 'ger-pdp__main-video', autoplay: false, controls: true }}
+              {%- else -%}
+                {{
+                  media.preview_image
+                  | image_url: width: 1600
+                  | image_tag:
+                    loading: 'lazy',
+                    class: 'ger-pdp__main-img',
+                    alt: media.alt | default: product.title | escape
+                }}
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+
+          <span class="ger-pdp__badge-new">New Arrival</span>
+          <span class="ger-pdp__zoom-hint" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M16.5 16.5L21 21M11 8v6M8 11h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            Click to zoom
+          </span>
+          {%- if media_count > 1 -%}
+            <span class="ger-pdp__counter" data-ger-counter>1 / {{ media_count }}</span>
+            <button type="button" class="ger-pdp__nav ger-pdp__nav--prev" data-ger-nav="-1" aria-label="Previous image">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button type="button" class="ger-pdp__nav ger-pdp__nav--next" data-ger-nav="1" aria-label="Next image">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          {%- endif -%}
+        </div>
+      {%- else -%}
+        <div class="ger-pdp__main-placeholder">{{ 'product-1' | placeholder_svg_tag }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if media_count > 1 -%}
+    <div class="ger-pdp__masonry" data-ger-masonry aria-label="Product gallery">
+      {%- for media in product.media -%}
+        {%- if media.media_type == 'image' -%}
+          <button
+            type="button"
+            class="ger-pdp__masonry-item ger-pdp__masonry-item--{{ forloop.index }}"
+            data-ger-masonry-item
+            data-index="{{ forloop.index0 }}"
+            aria-label="Open image {{ forloop.index }}"
+          >
+            {{
+              media
+              | image_url: width: 1200
+              | image_tag:
+                loading: 'lazy',
+                widths: '400, 600, 800, 1200',
+                sizes: '(min-width: 990px) 40vw, 100vw',
+                class: 'ger-pdp__masonry-img',
+                alt: media.alt | default: product.title | escape
+            }}
+          </button>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>

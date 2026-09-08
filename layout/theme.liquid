@@ -32,7 +32,7 @@
 
     {%- comment -%}
       Shopify Online Store ignores templates/policy.liquid and injects .shopify-policy__*.
-      Load GER Privacy Policy redesign assets only on that URL.
+      Load GER policy redesigns only on matching policy URLs.
     {%- endcomment -%}
     {%- if request.path contains '/policies/privacy-policy' -%}
       {{ 'ger-privacy-policy.css' | asset_url | stylesheet_tag }}
@@ -49,6 +49,14 @@
         }
       </script>
       <script src="{{ 'ger-privacy-policy.js' | asset_url }}" defer></script>
+    {%- endif -%}
+    {%- if request.path contains '/policies/refund-policy' -%}
+      {{ 'ger-refund-policy.css' | asset_url | stylesheet_tag }}
+      <script src="{{ 'ger-refund-policy.js' | asset_url }}" defer></script>
+    {%- endif -%}
+    {%- if request.page_type == 'product' -%}
+      {{ 'ger-product.css' | asset_url | stylesheet_tag }}
+      <script src="{{ 'ger-product.js' | asset_url }}" defer></script>
     {%- endif -%}
   </head>
 

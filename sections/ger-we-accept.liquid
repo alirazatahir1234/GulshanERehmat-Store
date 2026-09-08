@@ -1,0 +1,228 @@
+{{ 'ger-homepage.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'ger-homepage.js' | asset_url }}" defer></script>
+
+<section
+  class="ger-section ger-we-accept"
+  style="--ger-we-accept-pad-top: {{ section.settings.padding_top }}px; --ger-we-accept-pad-bottom: {{ section.settings.padding_bottom }}px;"
+  {{ section.shopify_attributes }}
+>
+  <div class="ger-we-accept__wave ger-we-accept__wave--left" aria-hidden="true"></div>
+  <div class="ger-we-accept__wave ger-we-accept__wave--right" aria-hidden="true"></div>
+
+  {% if section.settings.floral_left != blank %}
+    {{
+      section.settings.floral_left
+      | image_url: width: 360
+      | image_tag:
+        class: 'ger-we-accept__floral ger-we-accept__floral--left',
+        widths: '180, 280, 360',
+        sizes: '140px',
+        loading: 'lazy',
+        alt: ''
+    }}
+  {% else %}
+    <svg class="ger-we-accept__floral ger-we-accept__floral--left ger-we-accept__floral-svg" viewBox="0 0 120 200" fill="none" aria-hidden="true">
+      <path d="M20 180c20-40 10-70 35-95 18-18 40-22 55-18" stroke="currentColor" stroke-width="1.2"/>
+      <path d="M55 85c-12-8-18-22-12-38 10 4 18 14 20 28" stroke="currentColor" stroke-width="1.1"/>
+      <path d="M72 100c8-16 24-22 38-16-6 12-18 20-32 22" stroke="currentColor" stroke-width="1.1"/>
+      <path d="M48 120c-14-4-28 6-30 22 14 0 26-8 32-20" stroke="currentColor" stroke-width="1.1"/>
+      <path d="M40 70c-6-14 2-28 16-32-2 12-6 22-16 32z" stroke="currentColor" stroke-width="1"/>
+      <path d="M78 70c10-10 26-8 32 4-12 2-24 4-32 14" stroke="currentColor" stroke-width="1"/>
+    </svg>
+  {% endif %}
+  {% if section.settings.floral_right != blank %}
+    {{
+      section.settings.floral_right
+      | image_url: width: 360
+      | image_tag:
+        class: 'ger-we-accept__floral ger-we-accept__floral--right',
+        widths: '180, 280, 360',
+        sizes: '140px',
+        loading: 'lazy',
+        alt: ''
+    }}
+  {% else %}
+    <svg class="ger-we-accept__floral ger-we-accept__floral--right ger-we-accept__floral-svg" viewBox="0 0 120 200" fill="none" aria-hidden="true">
+      <path d="M100 20c-20 40-10 70-35 95-18 18-40 22-55 18" stroke="currentColor" stroke-width="1.2"/>
+      <path d="M65 115c12 8 18 22 12 38-10-4-18-14-20-28" stroke="currentColor" stroke-width="1.1"/>
+      <path d="M48 100c-8 16-24 22-38 16 6-12 18-20 32-22" stroke="currentColor" stroke-width="1.1"/>
+      <path d="M72 80c14 4 28-6 30-22-14 0-26 8-32 20" stroke="currentColor" stroke-width="1.1"/>
+      <path d="M80 130c6 14-2 28-16 32 2-12 6-22 16-32z" stroke="currentColor" stroke-width="1"/>
+      <path d="M42 130c-10 10-26 8-32-4 12-2 24-4 32-14" stroke="currentColor" stroke-width="1"/>
+    </svg>
+  {% endif %}
+
+  <div class="ger-container ger-we-accept__inner ger-fade-in">
+    <div class="ger-we-accept__header">
+      <div class="ger-we-accept__shield-row">
+        <span class="ger-we-accept__rule" aria-hidden="true"></span>
+        <span class="ger-we-accept__shield" aria-hidden="true">
+          <svg viewBox="0 0 32 36" fill="none" xmlns="http://www.w3.org/2000/svg" width="30" height="34">
+            <path
+              d="M16 2.5L28 7.2v9.3c0 7-5 12.8-12 15.1C9 29.3 4 23.5 4 16.5V7.2L16 2.5z"
+              stroke="currentColor"
+              stroke-width="1.5"
+              fill="none"
+            />
+            <rect x="12.4" y="15.2" width="7.2" height="6.8" rx="1.2" stroke="currentColor" stroke-width="1.35" fill="none"/>
+            <path d="M14.2 15.2v-1.7a1.8 1.8 0 013.6 0v1.7" stroke="currentColor" stroke-width="1.35" fill="none"/>
+          </svg>
+        </span>
+        <span class="ger-we-accept__rule" aria-hidden="true"></span>
+      </div>
+
+      {% if section.settings.heading_we != blank or section.settings.heading_accept != blank %}
+        <h2 class="ger-we-accept__heading">
+          {% if section.settings.heading_we != blank %}
+            <span class="ger-we-accept__heading-we">{{ section.settings.heading_we }}</span>
+          {% endif %}
+          {% if section.settings.heading_accept != blank %}
+            <span class="ger-we-accept__heading-accept">{{ section.settings.heading_accept }}</span>
+          {% endif %}
+        </h2>
+      {% endif %}
+
+      {% if section.settings.subtitle != blank %}
+        <p class="ger-we-accept__subtitle">{{ section.settings.subtitle }}</p>
+      {% endif %}
+    </div>
+
+    {% if section.blocks.size > 0 %}
+      <ul class="ger-we-accept__grid" role="list">
+        {% for block in section.blocks %}
+          <li class="ger-we-accept__card" {{ block.shopify_attributes }}>
+            <div class="ger-we-accept__logo">
+              {% if block.settings.logo != blank %}
+                {{
+                  block.settings.logo
+                  | image_url: width: 200
+                  | image_tag:
+                    widths: '80, 120, 160, 200',
+                    sizes: '72px',
+                    loading: 'lazy',
+                    alt: block.settings.label | default: 'Payment method'
+                }}
+              {% else %}
+                <span class="ger-we-accept__monogram" aria-hidden="true">
+                  {{ block.settings.label | slice: 0, 1 | upcase }}
+                </span>
+              {% endif %}
+            </div>
+            {% if block.settings.label != blank %}
+              <p class="ger-we-accept__label">{{ block.settings.label }}</p>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if section.settings.tagline != blank %}
+      <div class="ger-we-accept__tagline-row">
+        <span class="ger-we-accept__rule" aria-hidden="true"></span>
+        <p class="ger-we-accept__tagline">{{ section.settings.tagline }}</p>
+        <span class="ger-we-accept__rule" aria-hidden="true"></span>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GER We Accept",
+  "tag": "section",
+  "class": "ger-we-accept-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading_we",
+      "label": "Heading (dark word)",
+      "default": "We"
+    },
+    {
+      "type": "text",
+      "id": "heading_accept",
+      "label": "Heading (pink word)",
+      "default": "Accept"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Safe. Secure. Flexible Payments."
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Bottom tagline",
+      "default": "SHOP WITH CONFIDENCE"
+    },
+    {
+      "type": "image_picker",
+      "id": "floral_left",
+      "label": "Decorative floral (left)"
+    },
+    {
+      "type": "image_picker",
+      "id": "floral_right",
+      "label": "Decorative floral (right)"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 24,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 24,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "blocks": [
+    {
+      "type": "method",
+      "name": "Payment method",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Name",
+          "default": "Visa"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Logo"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GER We Accept",
+      "blocks": [
+        { "type": "method", "settings": { "label": "Visa" } },
+        { "type": "method", "settings": { "label": "Mastercard" } },
+        { "type": "method", "settings": { "label": "Raast" } },
+        { "type": "method", "settings": { "label": "Google Pay" } },
+        { "type": "method", "settings": { "label": "JazzCash" } },
+        { "type": "method", "settings": { "label": "Easypaisa" } },
+        { "type": "method", "settings": { "label": "UnionPay" } },
+        { "type": "method", "settings": { "label": "PayPak" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -140,6 +140,22 @@
                 </span>
                 <span class="ger-product-card__reviews">({{ reviews }})</span>
               </div>
+              {% if product != blank and product.selected_or_first_available_variant.available %}
+                {% form 'product', product, class: 'ger-product-card__quick-form' %}
+                  <input
+                    type="hidden"
+                    name="id"
+                    value="{{ product.selected_or_first_available_variant.id }}"
+                  >
+                  <button type="submit" name="add" class="ger-product-card__quick-add">
+                    Quick Add
+                  </button>
+                {% endform %}
+              {% elsif card_url != blank %}
+                <a href="{{ card_url }}" class="ger-product-card__quick-add ger-product-card__quick-add--link">
+                  Shop Now
+                </a>
+              {% endif %}
             </div>
           </article>
         {% endfor %}
