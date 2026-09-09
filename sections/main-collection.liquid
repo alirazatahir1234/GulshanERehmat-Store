@@ -70,20 +70,46 @@
       {% paginate collection.products by products_per_page %}
         {% capture children %}
           {% for product in collection.products %}
-            <li
-              id="{{ section.id }}-{{ product.id }}"
-              class="product-grid__item product-grid__item--{{ forloop.index0 }}"
-              data-page="{{ paginate.current_page }}"
-              data-product-id="{{ product.id }}"
-              ref="cards[]"
-            >
-              {% content_for 'block',
-                type: '_product-card',
-                id: 'product-card',
-                closest.product: product,
-                product_view_context: 'collection'
+            {% liquid
+              assign color_option_position = blank
+              for option in product.options_with_values
+                assign option_name = option.name | downcase | strip
+                if option_name == 'color' or option_name == 'colour' or option_name == 'shade'
+                  assign color_option_position = forloop.index0
+                  break
+                endif
+              endfor
+
+              assign explode_colors = false
+              if color_option_position != blank and product.variants.size > 1
+                assign explode_colors = true
+              endif
+            %}
+
+            {% if explode_colors %}
+              {% render 'ger-collection-product-items',
+                product: product,
+                section: section,
+                paginate: paginate,
+                product_index: forloop.index0,
+                color_option_position: color_option_position
               %}
-            </li>
+            {% else %}
+              <li
+                id="{{ section.id }}-{{ product.id }}"
+                class="product-grid__item product-grid__item--{{ forloop.index0 }}"
+                data-page="{{ paginate.current_page }}"
+                data-product-id="{{ product.id }}"
+                ref="cards[]"
+              >
+                {% content_for 'block',
+                  type: '_product-card',
+                  id: 'product-card',
+                  closest.product: product,
+                  product_view_context: 'collection'
+                %}
+              </li>
+            {% endif %}
           {% endfor %}
         {% endcapture %}
 
