@@ -258,20 +258,7 @@
       var atc = block.querySelector('.add-to-cart-button, button[type="submit"][name="add"]');
       if (atc) ensureAtcLabel(atc);
 
-      if (block.querySelector('.ger-buy-now')) return;
-
-      var buyNow = document.createElement('button');
-      buyNow.type = 'button';
-      buyNow.className = 'ger-buy-now';
-      buyNow.textContent = 'Buy it now';
-      buyNow.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        addToCartAndCheckout(form);
-      });
-
-      var formButtons = block.querySelector('[ref="productFormButtons"], .product-form-buttons') || form;
-      formButtons.appendChild(buyNow);
+      /* Minimal catalog cards: no Buy it now button (ATC only, hover on desktop) */
     });
   }
 

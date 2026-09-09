@@ -17,13 +17,33 @@ function initManMegaMenu(root) {
   let activeCategory = '';
   let activeNestedId = '';
 
+  const getNestedChain = (nestedId) => {
+    if (!nestedId) return [];
+    const byId = new Map(
+      nestedPanels.map((panel) => [panel.getAttribute('data-nested-panel'), panel])
+    );
+    const chain = [];
+    let current = nestedId;
+    const guard = new Set();
+
+    while (current && !guard.has(current)) {
+      guard.add(current);
+      chain.unshift(current);
+      const panel = byId.get(current);
+      current = panel?.getAttribute('data-nested-parent') || '';
+    }
+
+    return chain;
+  };
+
   const setNested = (nestedId, { force = false } = {}) => {
     if (!force && nestedId === activeNestedId) return;
     activeNestedId = nestedId || '';
+    const chain = getNestedChain(nestedId);
 
     nestedPanels.forEach((panel) => {
       const id = panel.getAttribute('data-nested-panel');
-      const isActive = Boolean(nestedId) && id === nestedId;
+      const isActive = chain.includes(id);
       panel.classList.toggle('is-visible', isActive);
       if (isActive) {
         panel.removeAttribute('hidden');
@@ -34,7 +54,7 @@ function initManMegaMenu(root) {
 
     nestedTriggers.forEach((trigger) => {
       const id = trigger.getAttribute('data-nested-trigger');
-      const isActive = Boolean(nestedId) && id === nestedId;
+      const isActive = chain.includes(id);
       trigger.classList.toggle('is-active', isActive);
       trigger.classList.toggle('is-nested-open', isActive);
       trigger.setAttribute('aria-expanded', isActive ? 'true' : 'false');
@@ -147,12 +167,19 @@ function initManMegaMenu(root) {
       if (id) setNested(id);
     });
 
-    const links = panel.querySelectorAll('a');
+    const links = panel.querySelectorAll('a, button');
     links.forEach((link) => {
-      link.addEventListener('focus', () => {
+      const activate = () => {
         const id = panel.getAttribute('data-nested-panel');
-        if (id) setNested(id);
-      });
+        if (!id) return;
+        // Non-trigger links reset to this panel level (closes deeper nests)
+        if (!link.hasAttribute('data-nested-trigger')) {
+          setNested(id);
+        }
+      };
+
+      link.addEventListener('pointerenter', activate);
+      link.addEventListener('focus', activate);
     });
   });
 

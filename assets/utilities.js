@@ -783,15 +783,22 @@ export class ResizeNotifier extends ResizeObserver {
 
 /**
  * Sets the menuStyle dataset attribute on the header component element.
+ * GER: force drawer below 1024px so tablet widths (e.g. 927px) get hamburger.
  */
+let gerMenuStyleListenerBound = false;
+
 export function setHeaderMenuStyle() {
   const headerComponent = /** @type {HTMLElement} | null */ (document.querySelector('#header-component'));
   if (headerComponent) {
     window.requestAnimationFrame(() => {
-      const overflowList = headerComponent?.querySelector('overflow-list');
-      const hasReachedMinimum = overflowList && overflowList.hasAttribute('minimum-reached');
-      headerComponent.dataset.menuStyle = isTouchDevice() || hasReachedMinimum ? 'drawer' : 'menu';
+      const useDrawer = window.matchMedia('(max-width: 1023px)').matches;
+      headerComponent.dataset.menuStyle = useDrawer ? 'drawer' : 'menu';
     });
+  }
+
+  if (!gerMenuStyleListenerBound && typeof window !== 'undefined') {
+    gerMenuStyleListenerBound = true;
+    window.matchMedia('(max-width: 1023px)').addEventListener('change', () => setHeaderMenuStyle());
   }
 }
 

@@ -1180,6 +1180,27 @@
     "name": "t:names.badges",
     "settings": [
       {
+        "type": "header",
+        "content": "Grand Opening"
+      },
+      {
+        "type": "checkbox",
+        "id": "grand_opening_enabled",
+        "label": "Enable Grand Opening badge",
+        "default": true,
+        "info": "Shows on products with a compare-at price higher than the selling price, or tagged grand-opening."
+      },
+      {
+        "type": "text",
+        "id": "grand_opening_badge_label",
+        "label": "Grand Opening badge label",
+        "default": "GRAND OPENING"
+      },
+      {
+        "type": "header",
+        "content": "Badge position"
+      },
+      {
         "type": "select",
         "id": "badge_position",
         "options": [

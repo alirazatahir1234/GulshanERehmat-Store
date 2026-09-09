@@ -1,16 +1,11 @@
 {%- doc -%}
-  Product type + truncated description for collection cards.
+  Brand line for collection product cards (vendor).
 {%- enddoc -%}
 
 {% assign product = closest.product %}
 
-{% if product != blank %}
-  {% if product.type != blank %}
-    <p class="ger-product-type">{{ product.type }}</p>
-  {% endif %}
-  {% if product.description != blank %}
-    <p class="ger-product-desc">{{ product.description | strip_html | truncate: 140 }}</p>
-  {% endif %}
+{% if product != blank and product.vendor != blank %}
+  <p class="ger-product-brand">{{ product.vendor }}</p>
 {% endif %}
 
 {% schema %}

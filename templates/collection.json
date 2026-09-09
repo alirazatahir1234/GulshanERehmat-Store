@@ -3,10 +3,10 @@
     "ger_collection_hero": {
       "type": "ger-collection-hero",
       "settings": {
-        "eyebrow": "Fresh styles just landed",
+        "eyebrow": "MEN COLLECTION",
         "heading": "",
-        "subtitle": "Discover the latest fabrics, designs and colors \u2014 made for your next signature look.",
-        "script_text": "New Looks\nNew Stories.",
+        "subtitle": "Discover the latest fabrics, designs and colors — made for your next signature look.",
+        "script_text": "",
         "show_gradient": true,
         "show_side_panel": true,
         "side_label": "Summer Collection",
@@ -47,7 +47,7 @@
             "border_opacity": 100,
             "border_radius": 0,
             "padding-block-start": 0,
-            "padding-block-end": 12,
+            "padding-block-end": 8,
             "padding-inline-start": 0,
             "padding-inline-end": 0
           },
@@ -55,17 +55,21 @@
             "card-gallery": {
               "type": "_product-card-gallery",
               "settings": {
-                "image_ratio": "portrait",
+                "image_ratio": "square",
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
-                "border_radius": 0,
+                "border_radius": 10,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "product_meta": {
+              "type": "_ger-product-meta",
+              "settings": {}
             },
             "product_title": {
               "type": "product-title",
@@ -74,9 +78,9 @@
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
-                "type_preset": "h5",
-                "font": "var(--font-heading--family)",
-                "font_size": "1rem",
+                "type_preset": "paragraph",
+                "font": "var(--font-body--family)",
+                "font_size": "0.9375rem",
                 "line_height": "normal",
                 "letter_spacing": "normal",
                 "case": "none",
@@ -84,35 +88,31 @@
                 "background": false,
                 "background_color": "#00000026",
                 "corner_radius": 0,
-                "padding-block-start": 10,
+                "padding-block-start": 0,
                 "padding-block-end": 0,
-                "padding-inline-start": 10,
-                "padding-inline-end": 10
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
               },
               "blocks": {}
-            },
-            "product_meta": {
-              "type": "_ger-product-meta",
-              "settings": {}
             },
             "price": {
               "type": "price",
               "settings": {
-                "show_sale_price_first": true,
+                "show_sale_price_first": false,
                 "show_installments": false,
                 "show_tax_info": false,
                 "type_preset": "h6",
                 "width": "100%",
                 "alignment": "left",
                 "font": "var(--font-body--family)",
-                "font_size": "0.9375rem",
+                "font_size": "1rem",
                 "line_height": "normal",
                 "letter_spacing": "normal",
                 "case": "none",
                 "padding-block-start": 4,
-                "padding-block-end": 8,
-                "padding-inline-start": 10,
-                "padding-inline-end": 10
+                "padding-block-end": 4,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
               },
               "blocks": {}
             },
@@ -125,16 +125,16 @@
                 "gift_card_form": false,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
-                "padding-inline-start": 10,
-                "padding-inline-end": 10
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
               },
               "blocks": {}
             }
           },
           "block_order": [
             "card-gallery",
-            "product_title",
             "product_meta",
+            "product_title",
             "price",
             "buy_buttons"
           ]
@@ -142,69 +142,42 @@
       },
       "settings": {
         "layout_type": "grid",
-        "product_card_size": "medium",
+        "product_card_size": "large",
         "mobile_product_card_size": "large",
         "enable_infinite_scroll": false,
         "products_per_page": 12,
         "product_grid_width": "centered",
         "full_width_on_mobile": true,
-        "columns_gap_horizontal": 20,
-        "columns_gap_vertical": 28,
+        "columns_gap_horizontal": 28,
+        "columns_gap_vertical": 36,
         "padding-inline-start": 0,
         "padding-inline-end": 0,
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 0,
-        "padding-block-end": 24
+        "padding-block-end": 32
       }
     },
-    "ger_benefits": {
-      "type": "ger-benefits-bar",
-      "blocks": {
-        "benefit_shipping": {
-          "type": "benefit",
-          "settings": {
-            "icon": "shipping",
-            "title": "Free Shipping",
-            "text": "On Orders Above Rs. 5,000"
-          }
-        },
-        "benefit_quality": {
-          "type": "benefit",
-          "settings": {
-            "icon": "quality",
-            "title": "Premium Quality",
-            "text": "Fabrics You Can Trust"
-          }
-        },
-        "benefit_secure": {
-          "type": "benefit",
-          "settings": {
-            "icon": "secure",
-            "title": "Secure Payment",
-            "text": "100% Safe Checkout"
-          }
-        },
-        "benefit_returns": {
-          "type": "benefit",
-          "settings": {
-            "icon": "support",
-            "title": "Easy Returns",
-            "text": "Hassle-Free Support"
-          }
-        }
-      },
-      "block_order": [
-        "benefit_shipping",
-        "benefit_quality",
-        "benefit_secure",
-        "benefit_returns"
-      ],
-      "settings": {}
+    "ger_collection_description": {
+      "type": "ger-collection-description",
+      "settings": {
+        "fallback_text": "<p>Experience comfort and style with our premium Wash n Wear collection for men. High-quality fabrics, elegant designs and versatile colors - perfect for every occasion. Discover the finest fabrics only at Gulshan-e-Rehmat.</p>"
+      }
+    },
+    "ger_newsletter": {
+      "type": "ger-newsletter",
+      "settings": {
+        "heading": "Join the Gulshan-e-Rehmat Family",
+        "text": "Subscribe to get exclusive offers and updates.",
+        "placeholder": "Your email address",
+        "button_label": "Subscribe",
+        "success_message": "Thanks for subscribing!"
+      }
     }
   },
   "order": [
     "ger_collection_hero",
     "main",
-    "ger_benefits"
+    "ger_collection_description",
+    "ger_newsletter"
   ]
 }

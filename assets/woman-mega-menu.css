@@ -494,6 +494,12 @@
   }
 }
 
+@media screen and (max-width: 749px) {
+  .woman-mega-menu {
+    display: none !important;
+  }
+}
+
 @media screen and (max-width: 600px) {
   .woman-mega-menu {
     width: 100%;

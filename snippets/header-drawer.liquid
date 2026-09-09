@@ -13,6 +13,8 @@
 
 {% render 'summary-icon-styles' %}
 
+{{ 'ger-mobile-drawer.css' | asset_url | stylesheet_tag }}
+
 {% liquid
   assign block_settings = block.settings
   assign max_featured_items = 4
@@ -111,11 +113,26 @@
             {% assign animation_index = 0 %}
             {%- for link in linklist.links -%}
               {% assign animation_index = animation_index | plus: 1 %}
+              {% liquid
+                assign link_title_down = link.title | downcase | strip
+                assign is_ger_man_drawer = false
+                assign is_ger_woman_drawer = false
+                if link_title_down == 'man' or link_title_down == 'men' or link.handle == 'man' or link.handle == 'men'
+                  assign is_ger_man_drawer = true
+                endif
+                if link_title_down == 'woman' or link_title_down == 'women' or link.handle == 'woman' or link.handle == 'women'
+                  assign is_ger_woman_drawer = true
+                endif
+              %}
               <li
                 style="--menu-drawer-animation-index: {{ animation_index }};"
-                class="{%- if block_settings.drawer_accordion -%}menu-drawer__list-item--deep{%- else -%}menu-drawer__list-item--flat{%- endif -%}{% if block_settings.drawer_dividers %} menu-drawer__list-item--divider{% endif %}"
+                class="{%- if block_settings.drawer_accordion -%}menu-drawer__list-item--deep{%- else -%}menu-drawer__list-item--flat{%- endif -%}{% if block_settings.drawer_dividers %} menu-drawer__list-item--divider{% endif %}{% if is_ger_man_drawer or is_ger_woman_drawer %} ger-drawer-cat__root{% endif %}"
               >
-                {% if block_settings.drawer_accordion and link.links != blank %}
+                {% if is_ger_man_drawer %}
+                  {% render 'ger-man-drawer-accordion', link: link, animation_index: animation_index %}
+                {% elsif is_ger_woman_drawer %}
+                  {% render 'ger-woman-drawer-accordion', link: link, animation_index: animation_index %}
+                {% elsif block_settings.drawer_accordion and link.links != blank %}
                   {%- comment -%}
                     Accordion for links with children, in menus with fewer than 3 levels of links
                   {%- endcomment -%}
@@ -135,8 +152,10 @@
                         class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element"
                       >
                         <span class="menu-drawer__menu-item-text wrap-text">{{ link.title | escape }}</span>
-                        <span class="svg-wrapper icon-plus">
-                          {{- 'icon-plus.svg' | inline_asset_content -}}
+                        <span class="ger-drawer-chevron" aria-hidden="true">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
                         </span>
                       </summary>
                       {% liquid
@@ -264,11 +283,26 @@
             {% assign animation_index = 0 %}
             {%- for link in linklist.links -%}
               {% assign animation_index = animation_index | plus: 1 %}
+              {% liquid
+                assign link_title_down = link.title | downcase | strip
+                assign is_ger_man_drawer = false
+                assign is_ger_woman_drawer = false
+                if link_title_down == 'man' or link_title_down == 'men' or link.handle == 'man' or link.handle == 'men'
+                  assign is_ger_man_drawer = true
+                endif
+                if link_title_down == 'woman' or link_title_down == 'women' or link.handle == 'woman' or link.handle == 'women'
+                  assign is_ger_woman_drawer = true
+                endif
+              %}
               <li
-                class="menu-drawer__list-item"
+                class="menu-drawer__list-item{% if is_ger_man_drawer or is_ger_woman_drawer %} ger-drawer-cat__root menu-drawer__list-item--deep{% endif %}"
                 style="--menu-drawer-animation-index: {{ animation_index }};"
               >
-                {%- if link.links != blank -%}
+                {%- if is_ger_man_drawer -%}
+                  {% render 'ger-man-drawer-accordion', link: link, animation_index: animation_index %}
+                {%- elsif is_ger_woman_drawer -%}
+                  {% render 'ger-woman-drawer-accordion', link: link, animation_index: animation_index %}
+                {%- elsif link.links != blank -%}
                   {%- comment -%}
                     Regardless of the Accordion setting, in menus with 3 levels of links, we use a details element to handle the top level of the menu for links that have children.
                   {%- endcomment -%}
@@ -397,9 +431,11 @@
                                         <span class="menu-drawer__menu-item-text wrap-text">
                                           {{- childlink.title | escape -}}
                                         </span>
-                                        <span class="svg-wrapper icon-plus">
-                                          {{- 'icon-plus.svg' | inline_asset_content -}}
-                                        </span>
+                                        <span class="ger-drawer-chevron" aria-hidden="true">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                        </span>
                                       </summary>
                                       {% liquid
                                         assign render_link_image = false
@@ -1488,5 +1524,36 @@
 
   .drawer-localization .language-selector .svg-wrapper.icon-caret svg {
     transform: none;
+  }
+
+  /* GER chevron visibility — wins over .menu-drawer svg sizing */
+  @media screen and (max-width: 749px) {
+    .menu-drawer .ger-drawer-chevron {
+      display: inline-flex !important;
+      margin-inline-start: auto;
+      flex-shrink: 0;
+      width: 1.5rem;
+      height: 1.5rem;
+      color: #d81b70;
+      transition: transform 0.25s ease;
+    }
+
+    .menu-drawer .ger-drawer-chevron svg {
+      width: 16px !important;
+      height: 16px !important;
+      display: block;
+    }
+
+    .menu-drawer details[open] > summary > .ger-drawer-chevron {
+      transform: rotate(180deg);
+    }
+
+    .menu-drawer summary.menu-drawer__menu-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: 0.75rem;
+    }
   }
 {% endstylesheet %}

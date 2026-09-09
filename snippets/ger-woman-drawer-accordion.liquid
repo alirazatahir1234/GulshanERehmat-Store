@@ -1,0 +1,281 @@
+{%- doc -%}
+  Nested Woman accordion for the mobile header drawer,
+  mirroring the desktop Woman mega menu categories.
+
+  @param {object} link - Top-level Woman/Women nav link
+  @param {number} [animation_index] - Drawer animation index
+
+  @example
+  {% render 'ger-woman-drawer-accordion', link: link, animation_index: animation_index %}
+{%- enddoc -%}
+
+{% liquid
+  assign woman_label = link.title | default: 'Woman'
+%}
+
+{% capture ger_woman_accordion %}
+  <details
+    id="Details-menu-drawer-ger-woman"
+    class="ger-drawer-cat ger-drawer-woman"
+  >
+    <summary
+      id="HeaderDrawer-ger-woman"
+      class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element ger-drawer-cat__summary"
+    >
+      <span class="menu-drawer__menu-item-text wrap-text">{{ woman_label | escape }}</span>
+      <span class="ger-drawer-chevron" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+    </summary>
+
+    <ul
+      class="menu-drawer__menu menu-drawer__menu--childlist menu-drawer__animated-element details-content ger-drawer-cat__level1"
+      role="list"
+      tabindex="-1"
+    >
+      {%- comment -%} Unstitched {%- endcomment -%}
+      <li class="menu-drawer__list-item">
+        <details id="Details-menu-drawer-ger-unstitched">
+          <summary class="menu-drawer__menu-item menu-drawer__menu-item--child ger-drawer-cat__summary">
+            <span class="menu-drawer__menu-item-text wrap-text">Unstitched</span>
+            <span class="ger-drawer-chevron" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </summary>
+          <ul class="menu-drawer__menu menu-drawer__menu--grandchildlist details-content ger-drawer-cat__level2" role="list">
+            <li class="menu-drawer__list-item">
+              <details id="Details-menu-drawer-ger-unstitch-summer">
+                <summary class="menu-drawer__menu-item menu-drawer__menu-item--child ger-drawer-cat__summary">
+                  <span class="menu-drawer__menu-item-text wrap-text">Summer Collection</span>
+                  <span class="ger-drawer-chevron" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+                </summary>
+                <ul class="menu-drawer__menu details-content ger-drawer-cat__level3" role="list">
+                  <li class="menu-drawer__list-item">
+                    <span class="ger-drawer-cat__link-wrap">
+                      {% render 'man-mega-link', handle: 'unstitched-summer-two-piece', label: 'Two Piece' %}
+                    </span>
+                  </li>
+                  <li class="menu-drawer__list-item">
+                    <span class="ger-drawer-cat__link-wrap">
+                      {% render 'man-mega-link', handle: 'unstitched-summer-printed-three-piece', label: 'Printed Three Piece' %}
+                    </span>
+                  </li>
+                  <li class="menu-drawer__list-item">
+                    <span class="ger-drawer-cat__link-wrap">
+                      {% render 'man-mega-link', handle: 'unstitched-summer-embroidered-three-piece', label: 'Embroidered Three Piece' %}
+                    </span>
+                  </li>
+                  <li class="menu-drawer__list-item">
+                    <span class="ger-drawer-cat__link-wrap">
+                      {% render 'man-mega-link', handle: 'unstitched-summer-formal-embroidered', label: 'Formal Embroidered Collection' %}
+                    </span>
+                  </li>
+                </ul>
+              </details>
+            </li>
+            <li class="menu-drawer__list-item">
+              <details id="Details-menu-drawer-ger-unstitch-winter">
+                <summary class="menu-drawer__menu-item menu-drawer__menu-item--child ger-drawer-cat__summary">
+                  <span class="menu-drawer__menu-item-text wrap-text">Winter Collection</span>
+                  <span class="ger-drawer-chevron" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+                </summary>
+                <ul class="menu-drawer__menu details-content ger-drawer-cat__level3" role="list">
+                  <li class="menu-drawer__list-item">
+                    <span class="ger-drawer-cat__link-wrap">
+                      {% render 'man-mega-link', handle: 'unstitched-winter-two-piece', label: 'Two Piece' %}
+                    </span>
+                  </li>
+                  <li class="menu-drawer__list-item">
+                    <details id="Details-menu-drawer-ger-winter-printed">
+                      <summary class="menu-drawer__menu-item menu-drawer__menu-item--child ger-drawer-cat__summary">
+                        <span class="menu-drawer__menu-item-text wrap-text">Printed Three Piece</span>
+                        <span class="ger-drawer-chevron" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+                      </summary>
+                      <ul class="menu-drawer__menu details-content ger-drawer-cat__level4" role="list">
+                        <li class="menu-drawer__list-item">
+                          <span class="ger-drawer-cat__link-wrap">
+                            {% render 'man-mega-link', handle: 'soft-marina', label: 'Soft Marina' %}
+                          </span>
+                        </li>
+                        <li class="menu-drawer__list-item">
+                          <span class="ger-drawer-cat__link-wrap">
+                            {% render 'man-mega-link', handle: 'khaddar', label: 'Khaddar' %}
+                          </span>
+                        </li>
+                        <li class="menu-drawer__list-item">
+                          <span class="ger-drawer-cat__link-wrap">
+                            {% render 'man-mega-link', handle: 'corduroy', label: 'Corduroy' %}
+                          </span>
+                        </li>
+                        <li class="menu-drawer__list-item">
+                          <span class="ger-drawer-cat__link-wrap">
+                            {% liquid
+                              if collections['china-patti'] != blank
+                                render 'man-mega-link', handle: 'china-patti', label: 'China Patti'
+                              else
+                                render 'man-mega-link', handle: 'chikankari', label: 'China Patti'
+                              endif
+                            %}
+                          </span>
+                        </li>
+                        <li class="menu-drawer__list-item">
+                          <span class="ger-drawer-cat__link-wrap">
+                            {% render 'man-mega-link', handle: 'pashmina-wool', label: 'Pashmina Wool' %}
+                          </span>
+                        </li>
+                        <li class="menu-drawer__list-item">
+                          <span class="ger-drawer-cat__link-wrap">
+                            {% render 'man-mega-link', handle: 'zari-marina', label: 'Zari Marina' %}
+                          </span>
+                        </li>
+                        <li class="menu-drawer__list-item">
+                          <span class="ger-drawer-cat__link-wrap">
+                            {% render 'man-mega-link', handle: 'silk-marina', label: 'Silk Marina' %}
+                          </span>
+                        </li>
+                        <li class="menu-drawer__list-item">
+                          <span class="ger-drawer-cat__link-wrap">
+                            {% render 'man-mega-link', handle: 'velvet', label: 'Velvet' %}
+                          </span>
+                        </li>
+                      </ul>
+                    </details>
+                  </li>
+                  <li class="menu-drawer__list-item">
+                    <span class="ger-drawer-cat__link-wrap">
+                      {% render 'man-mega-link', handle: 'unstitched-winter-embroidered-three-piece', label: 'Embroidered Three Piece' %}
+                    </span>
+                  </li>
+                  <li class="menu-drawer__list-item">
+                    <span class="ger-drawer-cat__link-wrap">
+                      {% render 'man-mega-link', handle: 'unstitched-winter-formal-embroidered', label: 'Formal Embroidered Collection' %}
+                    </span>
+                  </li>
+                </ul>
+              </details>
+            </li>
+          </ul>
+        </details>
+      </li>
+
+      {%- comment -%} Ready to Wear {%- endcomment -%}
+      <li class="menu-drawer__list-item">
+        <details id="Details-menu-drawer-ger-ready">
+          <summary class="menu-drawer__menu-item menu-drawer__menu-item--child ger-drawer-cat__summary">
+            <span class="menu-drawer__menu-item-text wrap-text">Ready to Wear</span>
+            <span class="ger-drawer-chevron" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </summary>
+          <ul class="menu-drawer__menu menu-drawer__menu--grandchildlist details-content ger-drawer-cat__level2" role="list">
+            <li class="menu-drawer__list-item">
+              <span class="ger-drawer-cat__link-wrap">
+                {% render 'man-mega-link', handle: 'ready-to-wear-printed-three-piece', label: 'Printed Three Piece' %}
+              </span>
+            </li>
+            <li class="menu-drawer__list-item">
+              <span class="ger-drawer-cat__link-wrap">
+                {% render 'man-mega-link', handle: 'ready-to-wear-embroidered-three-piece', label: 'Embroidered Three Piece' %}
+              </span>
+            </li>
+            <li class="menu-drawer__list-item">
+              <span class="ger-drawer-cat__link-wrap">
+                {% render 'man-mega-link', handle: 'ready-to-wear-formal-embroidered-three-piece', label: 'Formal Embroidered Three Piece' %}
+              </span>
+            </li>
+            <li class="menu-drawer__list-item">
+              <span class="ger-drawer-cat__link-wrap">
+                {% render 'man-mega-link', handle: 'ready-to-wear-two-piece', label: 'Two Piece' %}
+              </span>
+            </li>
+          </ul>
+        </details>
+      </li>
+
+      {%- comment -%} Wedding {%- endcomment -%}
+      <li class="menu-drawer__list-item">
+        <details id="Details-menu-drawer-ger-wedding">
+          <summary class="menu-drawer__menu-item menu-drawer__menu-item--child ger-drawer-cat__summary">
+            <span class="menu-drawer__menu-item-text wrap-text">Wedding Collection</span>
+            <span class="ger-drawer-chevron" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </summary>
+          <ul class="menu-drawer__menu menu-drawer__menu--grandchildlist details-content ger-drawer-cat__level2" role="list">
+            <li class="menu-drawer__list-item">
+              <span class="ger-drawer-cat__link-wrap">
+                {% render 'man-mega-link', handle: 'wedding-collection-unstitched', label: 'Unstitched Wedding Dress' %}
+              </span>
+            </li>
+            <li class="menu-drawer__list-item">
+              <span class="ger-drawer-cat__link-wrap">
+                {% render 'man-mega-link', handle: 'wedding-collection-ready-to-wear', label: 'Ready To Wear Wedding Dress' %}
+              </span>
+            </li>
+            <li class="menu-drawer__list-item">
+              <span class="ger-drawer-cat__link-wrap">
+                {% render 'man-mega-link', handle: 'wedding-collection', label: 'Bridal Collection' %}
+              </span>
+            </li>
+          </ul>
+        </details>
+      </li>
+
+      {%- comment -%} Abaya {%- endcomment -%}
+      <li class="menu-drawer__list-item">
+        <details id="Details-menu-drawer-ger-abaya">
+          <summary class="menu-drawer__menu-item menu-drawer__menu-item--child ger-drawer-cat__summary">
+            <span class="menu-drawer__menu-item-text wrap-text">Abaya Collection</span>
+            <span class="ger-drawer-chevron" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </summary>
+          <ul class="menu-drawer__menu menu-drawer__menu--grandchildlist details-content ger-drawer-cat__level2" role="list">
+            <li class="menu-drawer__list-item">
+              <span class="ger-drawer-cat__link-wrap">
+                {% render 'man-mega-link', handle: 'printed-abaya', label: 'Printed Abaya' %}
+              </span>
+            </li>
+            <li class="menu-drawer__list-item">
+              <span class="ger-drawer-cat__link-wrap">
+                {% render 'man-mega-link', handle: 'fancy-abaya', label: 'Fancy Abaya' %}
+              </span>
+            </li>
+            <li class="menu-drawer__list-item">
+              <span class="ger-drawer-cat__link-wrap">
+                {% render 'man-mega-link', handle: 'abaya-collection', label: 'Casual Abaya' %}
+              </span>
+            </li>
+          </ul>
+        </details>
+      </li>
+    </ul>
+  </details>
+{% endcapture %}
+
+{% render 'accordion-custom-component',
+  children: ger_woman_accordion,
+  open_by_default_on_mobile: false
+%}

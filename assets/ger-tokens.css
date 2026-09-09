@@ -1,0 +1,32 @@
+/* Gulshan-e-Rehmat — shared design tokens (load once globally) */
+:root {
+  --ger-pink: #d81b70;
+  --ger-pink-soft: #fff4f8;
+  --ger-pink-hover: #b8245f;
+  --ger-blush: #fdf1f6;
+  --ger-cream: #f7f2ee;
+  --ger-beige: #f7f2ee;
+  --ger-black: #000000;
+  --ger-dark: #171717;
+  --ger-text: #171717;
+  --ger-text-muted: #777777;
+  --ger-muted: #777777;
+  --ger-white: #ffffff;
+  --ger-bg: #f8f7f5;
+  --ger-border: #eeeeee;
+  --ger-font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --ger-font-body: 'Poppins', system-ui, sans-serif;
+  --ger-font-script: 'Great Vibes', 'Brush Script MT', cursive;
+  --ger-max: 1320px;
+  --ger-pad: clamp(1rem, 3.5vw, 2rem);
+  --ger-radius: 12px;
+  --ger-transition: 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  --ger-space-1: 8px;
+  --ger-space-2: 12px;
+  --ger-space-3: 16px;
+  --ger-space-4: 24px;
+  --ger-space-5: 32px;
+  --ger-space-6: 48px;
+  --ger-space-7: 64px;
+  --ger-space-8: 80px;
+}

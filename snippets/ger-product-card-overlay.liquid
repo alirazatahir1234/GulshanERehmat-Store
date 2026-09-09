@@ -1,34 +1,54 @@
 {%- doc -%}
-  New badge + wishlist overlay for collection product cards.
+  Badge + wishlist overlay for collection product cards.
+  Prefers GRAND OPENING when campaign is enabled and product is on sale / tagged.
 
   @param {object} product - Product object
-  @param {boolean} [show_new_badge] - Whether to show New badge
+  @param {boolean} [show_new_badge] - Whether to show New badge as fallback
   @param {boolean} [enable_wishlist] - Whether to show wishlist button
 {%- enddoc -%}
 
 {%- liquid
   assign show_new = show_new_badge | default: true
   assign show_wish = enable_wishlist | default: true
-  assign is_new = false
-  if show_new and product != blank
+  assign badge_label = blank
+  assign is_on_sale = false
+
+  if product != blank and product.compare_at_price > product.price
+    assign is_on_sale = true
+  endif
+
+  assign has_go_tag = false
+  if product != blank
+    if product.tags contains 'grand-opening' or product.tags contains 'Grand Opening' or product.tags contains 'GRAND OPENING'
+      assign has_go_tag = true
+    endif
+  endif
+
+  if settings.grand_opening_enabled and product != blank
+    if is_on_sale or has_go_tag
+      assign badge_label = settings.grand_opening_badge_label | default: 'GRAND OPENING'
+    endif
+  endif
+
+  if badge_label == blank and show_new and product != blank
     if product.tags contains 'new' or product.tags contains 'New' or product.tags contains 'NEW' or product.tags contains 'New Arrival'
-      assign is_new = true
+      assign badge_label = 'New'
     else
       assign now_ts = 'now' | date: '%s'
       assign created_ts = product.created_at | date: '%s'
       assign age_seconds = now_ts | minus: created_ts
       if age_seconds < 5184000
-        assign is_new = true
+        assign badge_label = 'New'
       endif
     endif
   endif
 -%}
 
 {%- if product != blank -%}
-  {%- if show_new or show_wish -%}
+  {%- if badge_label != blank or show_wish -%}
   <div class="ger-product-card-overlay">
-    {% if is_new %}
-      <span class="ger-product-card-overlay__badge">New</span>
+    {% if badge_label != blank %}
+      <span class="ger-product-card-overlay__badge">{{ badge_label }}</span>
     {% endif %}
     {% if show_wish %}
       <button

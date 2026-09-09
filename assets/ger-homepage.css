@@ -479,7 +479,7 @@
   .ger-hero,
   .ger-hero__slide.is-active,
   .ger-hero__inner {
-    min-height: min(75vh, 680px);
+    min-height: min(78vh, 720px);
   }
 
   .ger-hero__img,
@@ -499,8 +499,9 @@
 
   .ger-hero__inner {
     align-items: flex-end;
-    padding-inline: 1.15rem;
-    padding-bottom: 3.75rem;
+    padding-inline: 1.25rem;
+    padding-bottom: 4.25rem;
+    gap: 0.35rem;
   }
 
   .ger-hero__content {
@@ -508,35 +509,36 @@
   }
 
   .ger-hero__eyebrow {
-    font-size: 0.75rem;
-    letter-spacing: 0.2em;
-    margin-bottom: 0.65rem;
+    font-size: 0.8125rem;
+    letter-spacing: 0.18em;
+    margin-bottom: 0.85rem;
   }
 
   .ger-hero__heading,
   .ger-hero__heading--primary {
-    font-size: clamp(2rem, 9vw, 2.35rem);
-    line-height: 1.1;
-    margin-bottom: 0.7rem;
+    font-size: clamp(2.15rem, 9.5vw, 2.5rem);
+    line-height: 1.12;
+    margin-bottom: 0.95rem;
   }
 
   .ger-hero__text {
-    font-size: 0.9375rem;
-    line-height: 1.55;
-    margin-bottom: 1.25rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
     max-width: 22rem;
   }
 
   .ger-hero__cta {
     min-height: 48px;
-    padding: 0.9rem 1.5rem;
-    font-size: 0.8125rem;
+    padding: 0.95rem 1.6rem;
+    font-size: 0.875rem;
+    letter-spacing: 0.1em;
     border-radius: 4px;
   }
 
   .ger-hero__detail-top,
   .ger-hero__detail-bottom {
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
   }
 
   .ger-hero__script {
@@ -546,7 +548,17 @@
   .ger-hero__dots {
     right: 50%;
     transform: translateX(50%);
-    bottom: 1rem;
+    bottom: 1.15rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .ger-hero__inner {
+    padding-bottom: 4.5rem;
+  }
+
+  .ger-hero__detail {
+    display: none;
   }
 }
 
@@ -1945,11 +1957,16 @@
    ========================================================= */
 @media (max-width: 749px) {
   :root {
-    --ger-pad: 1.1rem;
+    --ger-pad: 1.25rem;
   }
 
   .ger-section {
     --ger-mobile-section-gap: 3.5rem;
+  }
+
+  .ger-btn:not(.ger-btn--link) {
+    min-height: 44px;
+    font-size: 0.8125rem;
   }
 
   /* Announcement bar readability */
@@ -1976,11 +1993,11 @@
     line-height: 1.35;
   }
 
-  /* Benefits — premium 2×2 cards */
+  /* Benefits — readable 2×2 cards */
   .ger-benefits__grid {
     grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-    padding-block: 1.75rem;
+    gap: 0.85rem;
+    padding-block: 1.85rem;
   }
 
   .ger-benefit {
@@ -1988,26 +2005,26 @@
     border: 1px solid rgba(31, 31, 31, 0.06);
     border-radius: 10px;
     box-shadow: 0 6px 18px rgba(31, 31, 31, 0.04);
-    padding: 1.1rem 0.7rem 1rem;
-    gap: 0.55rem;
+    padding: 1.25rem 0.85rem 1.15rem;
+    gap: 0.65rem;
     min-height: 100%;
   }
 
   .ger-benefit__icon {
-    width: 2.65rem;
-    height: 2.65rem;
+    width: 2.75rem;
+    height: 2.75rem;
   }
 
   .ger-benefit__title {
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
-    line-height: 1.25;
+    font-size: 0.8125rem;
+    letter-spacing: 0.05em;
+    line-height: 1.3;
   }
 
   .ger-benefit__text {
-    font-size: 0.72rem;
-    line-height: 1.4;
-    max-width: 11rem;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    max-width: 12rem;
   }
 
   .ger-benefits__floral {
@@ -2015,18 +2032,18 @@
     width: 72px;
   }
 
-  /* Shop by Collection — one large card + peek */
+  /* Shop by Collection — wider peek, clearer nav */
   .ger-collections {
     padding-block: 3.25rem 2.75rem;
   }
 
   .ger-collections__heading {
-    font-size: 1.55rem;
+    font-size: 1.75rem;
   }
 
   .ger-collections__subtitle {
-    font-size: 0.875rem;
-    margin-top: 0.35rem;
+    font-size: 0.9375rem;
+    margin-top: 0.4rem;
   }
 
   .ger-collections__track {
@@ -2034,7 +2051,7 @@
   }
 
   .ger-collection-card {
-    flex: 0 0 82%;
+    flex: 0 0 88%;
     border-radius: 12px;
     box-shadow: 0 10px 28px rgba(31, 31, 31, 0.08);
   }
@@ -2044,31 +2061,43 @@
   }
 
   .ger-collection-card__body {
-    padding: 1rem 1rem 1.15rem;
+    padding: 1.1rem 1.05rem 1.2rem;
   }
 
   .ger-collection-card__title {
-    font-size: 1.15rem;
+    font-size: 1.2rem;
   }
 
   .ger-collection-card__text {
+    font-size: 0.875rem;
+  }
+
+  .ger-collection-card__cta {
+    min-height: 44px;
     font-size: 0.8125rem;
+    display: inline-flex;
+    align-items: center;
   }
 
   .ger-collections__nav {
     width: 2.75rem;
     height: 2.75rem;
+    min-width: 44px;
+    min-height: 44px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 16px rgba(31, 31, 31, 0.14);
+    border: 1px solid rgba(31, 31, 31, 0.08);
   }
 
   .ger-collections__nav--prev {
-    left: 0.15rem;
+    left: 0.35rem;
   }
 
   .ger-collections__nav--next {
-    right: 0.15rem;
+    right: 0.35rem;
   }
 
-  /* Featured fabrics — wider swipe cards */
+  /* Featured fabrics — true 2-column grid */
   .ger-featured {
     padding-block: 3rem 2.5rem;
   }
@@ -2080,44 +2109,70 @@
   }
 
   .ger-featured__heading {
-    font-size: 1.55rem;
+    font-size: 1.75rem;
   }
 
   .ger-featured__subtitle {
-    font-size: 0.875rem;
+    font-size: 0.9375rem;
+  }
+
+  .ger-featured__view-all {
+    min-height: 44px;
+    font-size: 0.8125rem;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .ger-featured__scroller {
+    overflow-x: visible;
+    overflow-y: visible;
+    margin-inline: 0;
+    padding-inline: 0;
+    padding-bottom: 0;
   }
 
   .ger-featured__grid {
-    grid-auto-columns: minmax(78%, 1fr);
-    gap: 0.85rem;
+    display: grid;
+    grid-auto-flow: unset;
+    grid-auto-columns: unset;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem;
   }
 
   .ger-product-card__media {
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 3 / 4;
     border-radius: 10px;
   }
 
+  .ger-product-card__img {
+    object-fit: cover;
+  }
+
   .ger-product-card__wish {
-    width: 2.35rem;
-    height: 2.35rem;
-    top: 0.7rem;
-    right: 0.7rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    top: 0.55rem;
+    right: 0.55rem;
   }
 
   .ger-product-card__body {
-    padding-top: 0.85rem;
+    padding-top: 0.9rem;
   }
 
   .ger-product-card__title {
-    font-size: 0.9375rem;
+    font-size: 1rem;
     line-height: 1.35;
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.4rem;
   }
 
   .ger-product-card__price {
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 700;
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .ger-product-card__reviews {
+    font-size: 0.8125rem;
   }
 
   .ger-product-card__quick-form {
@@ -2130,15 +2185,15 @@
     justify-content: center;
     width: 100%;
     min-height: 44px;
-    padding: 0.7rem 0.85rem;
+    padding: 0.75rem 0.85rem;
     border: none;
     border-radius: 6px;
     background: #111111;
     color: #ffffff;
     font-family: var(--ger-font-body);
-    font-size: 0.72rem;
+    font-size: 0.8125rem;
     font-weight: 600;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     text-decoration: none;
     cursor: pointer;
@@ -2157,26 +2212,27 @@
 
   /* Promo banner */
   .ger-promo__inner {
-    padding-inline: 1.15rem;
+    padding-inline: 1.25rem;
     padding-top: 8rem;
-    padding-bottom: 2rem;
+    padding-bottom: 2.25rem;
   }
 
   .ger-promo__heading {
-    font-size: 1.75rem;
+    font-size: 1.85rem;
   }
 
   .ger-promo__text {
-    font-size: 0.9rem;
+    font-size: 0.9375rem;
   }
 
   .ger-promo__cta {
     min-height: 48px;
-    padding: 0.9rem 1.35rem;
+    padding: 0.95rem 1.4rem;
+    font-size: 0.8125rem;
     border-radius: 4px;
   }
 
-  /* New Arrivals / Lookbook — editorial swipe */
+  /* Lookbook — intentional carousel, clearer peek */
   .ger-lookbook {
     padding-block: 3rem 0;
   }
@@ -2188,23 +2244,24 @@
   }
 
   .ger-lookbook__heading {
-    font-size: 1.55rem;
+    font-size: 1.75rem;
   }
 
   .ger-lookbook__subtitle {
-    font-size: 0.875rem;
+    font-size: 0.9375rem;
   }
 
   .ger-lookbook__cta {
     min-height: 44px;
-    padding-inline: 1.1rem;
+    padding-inline: 1.15rem;
+    font-size: 0.8125rem;
   }
 
   .ger-lookbook__gallery {
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    gap: 0.75rem;
+    gap: 0.85rem;
     padding-inline: var(--ger-pad);
     padding-bottom: 0.35rem;
     -webkit-overflow-scrolling: touch;
@@ -2216,7 +2273,7 @@
   }
 
   .ger-lookbook__item {
-    flex: 0 0 78%;
+    flex: 0 0 85%;
     scroll-snap-align: start;
     border-radius: 12px;
     overflow: hidden;
@@ -2227,26 +2284,26 @@
     border-radius: 12px;
   }
 
-  /* Why Choose — 2×2 premium cards */
+  /* Why Choose — readable 2×2 cards */
   .ger-why {
     padding-block: 3.25rem;
   }
 
   .ger-why__heading {
-    font-size: 1.55rem;
+    font-size: 1.75rem;
   }
 
   .ger-why__grid {
     grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
+    gap: 0.85rem;
   }
 
   .ger-why-card {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 0.65rem;
-    padding: 1.25rem 0.85rem 1.15rem;
+    gap: 0.7rem;
+    padding: 1.35rem 0.95rem 1.25rem;
     background: #ffffff;
     border: 1px solid rgba(31, 31, 31, 0.06);
     border-radius: 12px;
@@ -2255,20 +2312,20 @@
 
   .ger-why-card__icon {
     flex-basis: auto;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.65rem;
+    height: 2.65rem;
   }
 
   .ger-why-card__title {
-    font-size: 0.78rem;
+    font-size: 0.875rem;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.35rem;
   }
 
   .ger-why-card__text {
-    font-size: 0.75rem;
-    line-height: 1.4;
+    font-size: 0.8125rem;
+    line-height: 1.45;
   }
 
   /* Testimonials carousel */
@@ -2277,17 +2334,18 @@
   }
 
   .ger-testimonials__heading {
-    font-size: 1.55rem;
+    font-size: 1.75rem;
   }
 
   .ger-testimonials__subtitle {
     margin: 0.55rem 0 0;
-    font-size: 0.875rem;
+    font-size: 0.9375rem;
     color: var(--ger-text-muted);
   }
 
   .ger-testimonials__carousel {
     position: relative;
+    padding-inline: 0.5rem;
   }
 
   .ger-testimonials__grid {
@@ -2297,7 +2355,7 @@
   .ger-testimonials__card {
     display: none;
     position: relative;
-    padding: 1.75rem 1.35rem 1.5rem;
+    padding: 1.85rem 1.5rem 1.65rem;
     border-radius: 14px;
     background: linear-gradient(180deg, #fff9fb 0%, #fff3f7 100%);
     box-shadow: 0 10px 28px rgba(40, 20, 30, 0.06);
@@ -2319,9 +2377,13 @@
 
   .ger-testimonials__quote {
     font-family: var(--ger-font-display);
-    font-size: 1.05rem;
+    font-size: 1.2rem;
     line-height: 1.55;
-    margin-bottom: 1rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .ger-testimonials__author {
+    font-size: 0.9375rem;
   }
 
   .ger-testimonials__nav {
@@ -2329,37 +2391,39 @@
     top: 42%;
     z-index: 2;
     transform: translateY(-50%);
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    min-width: 44px;
+    min-height: 44px;
     border-radius: 50%;
-    border: 1px solid rgba(31, 31, 31, 0.1);
+    border: 1px solid rgba(31, 31, 31, 0.12);
     background: #ffffff;
     color: #1f1f1f;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(31, 31, 31, 0.08);
+    box-shadow: 0 4px 16px rgba(31, 31, 31, 0.12);
   }
 
   .ger-testimonials__nav--prev {
-    left: -0.15rem;
+    left: 0.15rem;
   }
 
   .ger-testimonials__nav--next {
-    right: -0.15rem;
+    right: 0.15rem;
   }
 
   .ger-testimonials__dots {
     display: flex;
     justify-content: center;
-    gap: 0.45rem;
+    gap: 0.5rem;
     margin-top: 1.15rem;
   }
 
   .ger-testimonials__dot {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     border: none;
     padding: 0;
@@ -2372,40 +2436,40 @@
     transform: scale(1.15);
   }
 
-  /* Instagram — airier masonry feel */
+  /* Instagram — clean 2-column grid */
   .ger-instagram {
     padding-block: 3rem 2.75rem;
   }
 
   .ger-instagram__heading {
-    font-size: 1.45rem;
+    font-size: 1.7rem;
   }
 
   .ger-instagram__grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-auto-rows: 120px;
-    gap: 0.65rem;
+    grid-auto-rows: unset;
+    gap: 0.55rem;
     padding-inline: var(--ger-pad);
   }
 
   .ger-instagram__item {
-    aspect-ratio: auto;
-    height: 100%;
+    aspect-ratio: 1;
+    height: auto;
     border-radius: 10px;
     overflow: hidden;
   }
 
-  .ger-instagram__item:nth-child(1) {
-    grid-row: span 2;
-  }
-
-  .ger-instagram__item:nth-child(4) {
-    grid-row: span 2;
-  }
-
+  .ger-instagram__item:nth-child(1),
+  .ger-instagram__item:nth-child(4),
   .ger-instagram__item:nth-child(5) {
-    grid-row: span 2;
+    grid-row: auto;
+  }
+
+  .ger-instagram__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .ger-instagram__cta-wrap {
@@ -2419,13 +2483,13 @@
     justify-content: center;
     gap: 0.45rem;
     min-height: 48px;
-    padding: 0.85rem 1.35rem;
+    padding: 0.9rem 1.4rem;
     border: 1.5px solid var(--ger-pink);
     border-radius: 6px;
     background: #ffffff;
     color: var(--ger-pink);
     font-family: var(--ger-font-body);
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -2445,11 +2509,11 @@
   }
 
   .ger-newsletter__heading {
-    font-size: 1.55rem;
+    font-size: 1.7rem;
   }
 
   .ger-newsletter__text {
-    font-size: 0.9rem;
+    font-size: 0.9375rem;
     margin-inline: auto;
   }
 
@@ -2470,6 +2534,50 @@
   .ger-newsletter__submit {
     min-width: 52px;
     min-height: 52px;
+  }
+
+  /* Footer — tap-friendly spacing */
+  .ger-footer {
+    padding-block: clamp(3rem, 6vw, 4.25rem);
+  }
+
+  .ger-footer__col-title {
+    font-size: 0.8125rem;
+    margin-bottom: 1rem;
+  }
+
+  .ger-footer__list {
+    gap: 0.35rem;
+  }
+
+  .ger-footer__list a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 0.9375rem;
+    padding-block: 0.15rem;
+  }
+
+  .ger-footer__social {
+    gap: 0.35rem;
+  }
+
+  .ger-footer__social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .ger-footer__social-link svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .ger-footer__bottom {
+    font-size: 0.8125rem;
+    gap: 0.85rem;
   }
 
   /* We Accept (if present) */

@@ -1,11 +1,30 @@
 {%- doc -%}
-  Collection breadcrumb: Home > Collection title
+  Collection breadcrumb with optional parent chain via metafield.
+
+  Metafield: custom.breadcrumb_parents (list of collection references)
+  Fallback: Home › {collection.title}
 
   @param {object} [collection] - Collection object
 {%- enddoc -%}
 
+{%- liquid
+  assign crumbs = collection.metafields.custom.breadcrumb_parents.value
+-%}
+
 <nav class="ger-collection-breadcrumb" aria-label="Breadcrumb">
   <a href="{{ routes.root_url }}">Home</a>
+
+  {%- if crumbs != blank -%}
+    {%- for parent in crumbs -%}
+      <span class="ger-collection-breadcrumb__sep" aria-hidden="true">›</span>
+      {%- if parent.url != blank -%}
+        <a href="{{ parent.url }}">{{ parent.title }}</a>
+      {%- else -%}
+        <span>{{ parent.title }}</span>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+
   <span class="ger-collection-breadcrumb__sep" aria-hidden="true">›</span>
   <span class="ger-collection-breadcrumb__current">{{ collection.title }}</span>
 </nav>

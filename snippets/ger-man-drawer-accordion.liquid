@@ -1,0 +1,150 @@
+{%- doc -%}
+  Nested Man accordion for the mobile header drawer:
+  Men → Summer Collection → Wash n Wear → brands → (Kafoor lines)
+  (+ Winter / Waist Coats as siblings of Summer).
+
+  @param {object} link - Top-level Man/Men nav link
+  @param {number} [animation_index] - Drawer animation index
+
+  @example
+  {% render 'ger-man-drawer-accordion', link: link, animation_index: animation_index %}
+{%- enddoc -%}
+
+{% liquid
+  assign man_label = link.title | default: 'Men'
+%}
+
+{% capture ger_man_accordion %}
+  <details
+    id="Details-menu-drawer-ger-man"
+    class="ger-drawer-cat ger-drawer-men"
+  >
+    <summary
+      id="HeaderDrawer-ger-man"
+      class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element ger-drawer-cat__summary"
+    >
+      <span class="menu-drawer__menu-item-text wrap-text">{{ man_label | escape }}</span>
+      <span class="ger-drawer-chevron" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </summary>
+
+    <ul
+      class="menu-drawer__menu menu-drawer__menu--childlist menu-drawer__animated-element details-content ger-drawer-cat__level1"
+      role="list"
+      tabindex="-1"
+    >
+      {%- comment -%} Summer Collection → types → Wash n Wear brands {%- endcomment -%}
+      <li class="menu-drawer__list-item">
+        <details id="Details-menu-drawer-ger-summer">
+          <summary class="menu-drawer__menu-item menu-drawer__menu-item--child ger-drawer-cat__summary">
+            <span class="menu-drawer__menu-item-text wrap-text">Summer Collection</span>
+            <span class="ger-drawer-chevron" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </summary>
+          <ul class="menu-drawer__menu menu-drawer__menu--grandchildlist details-content ger-drawer-cat__level2" role="list">
+            <li class="menu-drawer__list-item">
+              <span class="ger-drawer-cat__link-wrap">
+                {% render 'man-mega-link', handle: 'men-summer-cotton', label: 'Cotton' %}
+              </span>
+            </li>
+            <li class="menu-drawer__list-item">
+              <details id="Details-menu-drawer-ger-summer-wash">
+                <summary class="menu-drawer__menu-item menu-drawer__menu-item--child ger-drawer-cat__summary">
+                  <span class="menu-drawer__menu-item-text wrap-text">Wash n Wear</span>
+                  <span class="ger-drawer-chevron" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                </summary>
+                <ul class="menu-drawer__menu details-content ger-drawer-cat__level3" role="list">
+                  <li class="menu-drawer__list-item">
+                    <span class="ger-drawer-cat__link-wrap">
+                      {% render 'man-mega-link', handle: 'men-wash-n-wear-grace', label: 'Grace' %}
+                    </span>
+                  </li>
+                  <li class="menu-drawer__list-item">
+                    <span class="ger-drawer-cat__link-wrap">
+                      {% render 'man-mega-link', handle: 'men-wash-n-wear-zain-gee', label: 'Zain Gee' %}
+                    </span>
+                  </li>
+                  <li class="menu-drawer__list-item">
+                    <details id="Details-menu-drawer-ger-kafoor">
+                      <summary class="menu-drawer__menu-item menu-drawer__menu-item--child ger-drawer-cat__summary">
+                        <span class="menu-drawer__menu-item-text wrap-text">Kafoor by Taiba</span>
+                        <span class="ger-drawer-chevron" aria-hidden="true">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                        </span>
+                      </summary>
+                      <ul class="menu-drawer__menu details-content ger-drawer-cat__level4" role="list">
+                        <li class="menu-drawer__list-item">
+                          <span class="ger-drawer-cat__link-wrap">
+                            {% render 'man-mega-link', handle: 'men-wash-n-wear-kafoor-by-taiba', label: 'Shop All' %}
+                          </span>
+                        </li>
+                        <li class="menu-drawer__list-item">
+                          <span class="ger-drawer-cat__link-wrap">
+                            {% render 'man-mega-link', handle: 'men-wash-n-wear-kafoor-by-taiba-life-line', label: 'Life Line' %}
+                          </span>
+                        </li>
+                      </ul>
+                    </details>
+                  </li>
+                  <li class="menu-drawer__list-item">
+                    <span class="ger-drawer-cat__link-wrap">
+                      {% render 'man-mega-link', handle: 'men-wash-n-wear-gul-ahmed', label: 'Gul Ahmed' %}
+                    </span>
+                  </li>
+                  <li class="menu-drawer__list-item">
+                    <span class="ger-drawer-cat__link-wrap">
+                      {% render 'man-mega-link', handle: 'men-wash-n-wear-zelburry', label: 'Zelburry' %}
+                    </span>
+                  </li>
+                </ul>
+              </details>
+            </li>
+            <li class="menu-drawer__list-item">
+              <span class="ger-drawer-cat__link-wrap">
+                {% render 'man-mega-link', handle: 'men-summer-lawn', label: 'Lawn' %}
+              </span>
+            </li>
+            <li class="menu-drawer__list-item">
+              <span class="ger-drawer-cat__link-wrap">
+                {% render 'man-mega-link', handle: 'men-summer-imported', label: 'Imported' %}
+              </span>
+            </li>
+            <li class="menu-drawer__list-item">
+              <span class="ger-drawer-cat__link-wrap">
+                {% render 'man-mega-link', handle: 'men-summer-embroidered', label: 'Embroidered Collection' %}
+              </span>
+            </li>
+          </ul>
+        </details>
+      </li>
+
+      <li class="menu-drawer__list-item">
+        <span class="ger-drawer-cat__link-wrap ger-drawer-cat__link-wrap--l1">
+          {% render 'man-mega-link', handle: 'men-winter', label: 'Winter Collection' %}
+        </span>
+      </li>
+      <li class="menu-drawer__list-item">
+        <span class="ger-drawer-cat__link-wrap ger-drawer-cat__link-wrap--l1">
+          {% render 'man-mega-link', handle: 'men-waist-coats', label: 'Waist Coats' %}
+        </span>
+      </li>
+    </ul>
+  </details>
+{% endcapture %}
+
+{% render 'accordion-custom-component',
+  children: ger_man_accordion,
+  open_by_default_on_mobile: false
+%}

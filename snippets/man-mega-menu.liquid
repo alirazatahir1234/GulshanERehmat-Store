@@ -1,6 +1,6 @@
 {%- doc -%}
-  Custom Man mega menu: top collection cards, Summer/Winter/Waist Coats columns,
-  and Men's Essentials promo card.
+  Custom Man mega menu: Summer / Winter / Waist Coats cards.
+  Wash n Wear brands nest under Summer Collection (not a top-level card).
 
   @param {object} [card_image_summer] - Optional theme-editor image for Summer card
   @param {object} [card_image_winter] - Optional theme-editor image for Winter card
@@ -26,9 +26,6 @@
 
   assign col_waistcoat = collections['men-waist-coats']
 
-  assign col_wash_parent = collections['men-wash-n-wear']
-  assign col_wash_grace = collections['men-wash-n-wear-grace']
-
   assign col_essentials = collections['mens-essentials']
   if col_essentials == blank
     assign col_essentials = collections['men-essentials']
@@ -50,15 +47,6 @@
     assign url_waistcoat = col_waistcoat.url
   else
     assign url_waistcoat = collections_root | append: '/men-waist-coats'
-  endif
-
-  # Prefer real parent collection; otherwise Explore falls back to Grace (avoid 404).
-  if col_wash_parent != blank
-    assign url_wash = col_wash_parent.url
-  elsif col_wash_grace != blank
-    assign url_wash = col_wash_grace.url
-  else
-    assign url_wash = collections_root | append: '/men-wash-n-wear-grace'
   endif
 
   if col_essentials != blank
@@ -175,32 +163,6 @@
         {{ img_waistcoat | image_url: width: 600 | image_tag: class: 'man-mega-menu__card-image', loading: 'lazy', alt: 'Waist Coats' }}
       {% endif %}
     </a>
-
-    <a
-      href="{{ url_wash }}"
-      class="man-mega-menu__card man-mega-menu__card--wash"
-      data-mega-category="wash"
-      role="tab"
-      aria-selected="false"
-    >
-      <div class="man-mega-menu__card-content">
-        <h2 class="man-mega-menu__card-title">Wash n Wear</h2>
-        <p class="man-mega-menu__card-text">Easy Care Styles<br>From Top Brands</p>
-        <span class="man-mega-menu__card-cta">Explore →</span>
-      </div>
-      {% if use_summer_asset %}
-        <img
-          src="{{ 'man-mega-card-summer.jpg' | asset_url }}"
-          alt="Wash n Wear"
-          class="man-mega-menu__card-image"
-          loading="lazy"
-          width="600"
-          height="300"
-        >
-      {% elsif img_summer != blank %}
-        {{ img_summer | image_url: width: 600 | image_tag: class: 'man-mega-menu__card-image', loading: 'lazy', alt: 'Wash n Wear' }}
-      {% endif %}
-    </a>
   </div>
 
   <div class="man-mega-menu__body">
@@ -235,9 +197,26 @@
             <div class="man-mega-menu__links" data-man-nested-links>
               {% render 'man-mega-link', handle: 'men-wash-n-wear-grace', label: 'Grace' %}
               {% render 'man-mega-link', handle: 'men-wash-n-wear-zain-gee', label: 'Zain Gee' %}
-              {% render 'man-mega-link', handle: 'men-wash-n-wear-kafoor-by-taiba', label: 'Kafoor by Taiba' %}
+              {% render 'man-mega-nested-trigger',
+                nested_id: 'kafoor-lines',
+                label: 'Kafoor by Taiba',
+                handle: 'men-wash-n-wear-kafoor-by-taiba'
+              %}
               {% render 'man-mega-link', handle: 'men-wash-n-wear-gul-ahmed', label: 'Gul Ahmed' %}
               {% render 'man-mega-link', handle: 'men-wash-n-wear-zelburry', label: 'Zelburry' %}
+            </div>
+          </div>
+          <div
+            class="man-mega-menu__nested man-mega-menu__nested--deep"
+            id="man-nested-kafoor-lines"
+            data-nested-panel="kafoor-lines"
+            data-nested-parent="summer-wash-brands"
+            hidden
+          >
+            <h4 class="man-mega-menu__subheading">KAFOOR BY TAIBA</h4>
+            <div class="man-mega-menu__links" data-man-nested-links>
+              {% render 'man-mega-link', handle: 'men-wash-n-wear-kafoor-by-taiba', label: 'Shop All' %}
+              {% render 'man-mega-link', handle: 'men-wash-n-wear-kafoor-by-taiba-life-line', label: 'Life Line' %}
             </div>
           </div>
         </div>
@@ -267,36 +246,6 @@
             {% render 'man-mega-link', handle: 'men-waist-coats-embroidered', label: 'Embroidered Waist Coats' %}
             {% render 'man-mega-link', handle: 'men-waist-coats-wedding', label: 'Wedding Waist Coats' %}
             {% render 'man-mega-link', handle: 'men-waist-coats-premium', label: 'Premium Collection' %}
-          </div>
-        </div>
-      </div>
-
-      <div class="man-mega-menu__panel" data-mega-panel="wash" role="tabpanel" hidden>
-        <div class="man-mega-menu__panel-layout">
-          <div class="man-mega-menu__column">
-            <h3 class="man-mega-menu__heading">WASH N WEAR</h3>
-            <div class="man-mega-menu__separator" aria-hidden="true"></div>
-            <div class="man-mega-menu__links" data-man-links>
-              {% render 'man-mega-nested-trigger',
-                nested_id: 'wash-brands',
-                label: 'Wash n Wear',
-                handle: 'men-wash-n-wear'
-              %}
-            </div>
-          </div>
-          <div
-            class="man-mega-menu__nested"
-            id="man-nested-wash-brands"
-            data-nested-panel="wash-brands"
-            hidden
-          >
-            <div class="man-mega-menu__links" data-man-nested-links>
-              {% render 'man-mega-link', handle: 'men-wash-n-wear-grace', label: 'Grace' %}
-              {% render 'man-mega-link', handle: 'men-wash-n-wear-zain-gee', label: 'Zain Gee' %}
-              {% render 'man-mega-link', handle: 'men-wash-n-wear-kafoor-by-taiba', label: 'Kafoor by Taiba' %}
-              {% render 'man-mega-link', handle: 'men-wash-n-wear-gul-ahmed', label: 'Gul Ahmed' %}
-              {% render 'man-mega-link', handle: 'men-wash-n-wear-zelburry', label: 'Zelburry' %}
-            </div>
           </div>
         </div>
       </div>

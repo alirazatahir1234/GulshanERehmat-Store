@@ -5,7 +5,7 @@
 >
 
 {%- liquid
-  assign eyebrow = section.settings.eyebrow | default: 'Fresh styles just landed'
+  assign eyebrow = section.settings.eyebrow | default: 'MEN COLLECTION'
   assign heading = section.settings.heading
   if heading == blank
     assign heading = collection.title
@@ -171,7 +171,7 @@
       "type": "text",
       "id": "eyebrow",
       "label": "Small heading",
-      "default": "Fresh styles just landed"
+      "default": "MEN COLLECTION"
     },
     {
       "type": "text",

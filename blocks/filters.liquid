@@ -148,6 +148,20 @@
       {% if block_settings.enable_grid_density %}
         {% render 'grid-density-controls', viewport: 'desktop' %}
       {% endif %}
+
+      {% if block_settings.enable_filtering and template.name == 'collection' %}
+        <button
+          class="ger-collection-filter-btn"
+          on:click="#filters-drawer/open"
+          type="button"
+          aria-haspopup="dialog"
+        >
+          <span class="svg-wrapper" aria-hidden="true">
+            {{ 'icon-filter.svg' | inline_asset_content }}
+          </span>
+          {{ 'actions.show_filters' | t | default: 'Filter' }}
+        </button>
+      {% endif %}
     </div>
   {% endif %}
 
