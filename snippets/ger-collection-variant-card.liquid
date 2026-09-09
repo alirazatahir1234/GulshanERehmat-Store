@@ -1,36 +1,60 @@
 {%- doc -%}
-  Single collection card for one product Color variant.
-  Links to the existing product URL with that variant preselected.
-
+  Collection card for a multi-color product (one card, all color swatches).
   @param {object} product - Parent product
-  @param {object} variant - Color variant to display
-  @param {string} color_name - Display color label
+  @param {number} [color_option_position] - 0-based Color option index
+  @param {object} [variant] - Optional single variant (legacy); ignored when product has colors
+  @param {string} [color_name] - Optional legacy color label
 {%- enddoc -%}
 
 {%- liquid
-  assign card_image = variant.featured_image
-  if card_image == blank
-    assign card_image = variant.image
+  assign color_option = blank
+  if color_option_position != blank
+    assign color_option = product.options_with_values[color_option_position]
+  else
+    for option in product.options_with_values
+      assign on = option.name | downcase | strip
+      if on == 'color' or on == 'colour' or on == 'shade'
+        assign color_option = option
+        assign color_option_position = forloop.index0
+        break
+      endif
+    endfor
   endif
+
+  assign first_variant = product.selected_or_first_available_variant
+  if variant != blank
+    assign first_variant = variant
+  endif
+
+  assign card_image = first_variant.featured_image | default: first_variant.image
   if card_image == blank and product.featured_media != blank
     assign card_image = product.featured_media.preview_image
   endif
 
-  assign variant_url = variant.url
-  if variant_url == blank
-    assign variant_url = product.url | append: '?variant=' | append: variant.id
+  assign product_url = product.url | append: '?variant=' | append: first_variant.id
+  if first_variant.url != blank
+    assign product_url = first_variant.url
   endif
 
-  assign display_title = product.title
-  if product.vendor != blank
-    assign vendor_prefix = product.vendor | append: ' '
-    if display_title contains product.vendor
-      assign display_title = display_title | replace_first: vendor_prefix, '' | strip
+  assign brand_name = product.vendor | default: 'Kafoor by Taiba'
+  assign short_title = 'Life Line'
+  assign short_subtitle = 'Premium Men’s Wash & Wear'
+
+  assign title_down = product.title | downcase
+  if title_down contains 'life line'
+    assign short_title = 'Life Line'
+  else
+    assign short_title = product.title | split: '|' | first | strip
+    if product.vendor != blank and short_title contains product.vendor
+      assign short_title = short_title | replace_first: product.vendor, '' | strip
+      if short_title == blank
+        assign short_title = product.title | truncate: 40
+      endif
     endif
   endif
 
   assign is_on_sale = false
-  if variant.compare_at_price > variant.price
+  if first_variant.compare_at_price > first_variant.price
     assign is_on_sale = true
   endif
 
@@ -45,37 +69,53 @@
   endif
 
   assign badge_label = settings.grand_opening_badge_label | default: 'GRAND OPENING'
-  assign wishlist_key = product.id | append: '-' | append: variant.id
-  assign card_available = variant.available
+  assign discount_pct = 0
+  if is_on_sale and first_variant.compare_at_price > 0
+    assign discount_amount = first_variant.compare_at_price | minus: first_variant.price
+    assign discount_pct = discount_amount | times: 100 | divided_by: first_variant.compare_at_price
+  endif
+
+  assign wishlist_key = product.id
+  assign card_available = product.available
+  assign color_count = 0
+  if color_option != blank
+    assign color_count = color_option.values.size
+  endif
 -%}
 
 <article
-  class="product-card ger-variant-card{% unless card_available %} ger-variant-card--sold-out{% endunless %}"
+  class="product-card ger-color-card{% unless card_available %} ger-color-card--sold-out{% endunless %}"
   data-product-id="{{ product.id }}"
-  data-variant-id="{{ variant.id }}"
+  data-ger-color-card
 >
   <div class="product-card__content product-grid__card layout-panel-flex layout-panel-flex--column">
-    <div class="card-gallery ger-variant-card__gallery">
-      <a href="{{ variant_url }}" class="ger-variant-card__media-link">
+    <div class="card-gallery ger-color-card__gallery">
+      <a href="{{ product_url }}" class="ger-color-card__media-link" data-ger-color-card-link>
         {% if card_image != blank %}
           {{
             card_image
-            | image_url: width: 900
+            | image_url: width: 1000
             | image_tag:
-              class: 'ger-variant-card__img',
+              class: 'ger-color-card__img',
               loading: 'lazy',
-              widths: '280, 400, 560, 720, 900',
-              sizes: '(min-width: 1200px) 30vw, (min-width: 750px) 45vw, 50vw',
-              alt: display_title | append: ' — ' | append: color_name
+              widths: '320, 420, 560, 720, 900, 1000',
+              sizes: '(min-width: 990px) 30vw, (min-width: 750px) 45vw, 46vw',
+              alt: brand_name | append: ' — ' | append: short_title,
+              data-ger-color-card-image: ''
           }}
         {% else %}
-          <div class="ger-variant-card__placeholder" aria-hidden="true"></div>
+          <div class="ger-color-card__placeholder" aria-hidden="true"></div>
         {% endif %}
       </a>
 
       <div class="ger-product-card-overlay">
         {% if show_go_badge %}
-          <span class="ger-product-card-overlay__badge">{{ badge_label }}</span>
+          <span class="ger-product-card-overlay__badge">
+            <span class="ger-product-card-overlay__badge-label">{{ badge_label }}</span>
+            {% if discount_pct > 0 %}
+              <span class="ger-product-card-overlay__badge-pct">{{ discount_pct }}% OFF</span>
+            {% endif %}
+          </span>
         {% elsif card_available == false %}
           <span class="ger-product-card-overlay__badge ger-product-card-overlay__badge--sold-out">Sold out</span>
         {% endif %}
@@ -84,61 +124,124 @@
           class="ger-product-card-overlay__wishlist"
           data-ger-wishlist
           data-wishlist-key="{{ wishlist_key }}"
-          aria-label="Add {{ display_title | escape }} {{ color_name | escape }} to wishlist"
+          aria-label="Add {{ brand_name | escape }} {{ short_title | escape }} to wishlist"
           aria-pressed="false"
         >
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
             <path d="M12 20s-7-4.5-7-10a4 4 0 017-2.5A4 4 0 0119 10c0 5.5-7 10-7 10z"/>
           </svg>
         </button>
       </div>
     </div>
 
-    <div class="ger-variant-card__body">
-      {% if product.vendor != blank %}
-        <p class="ger-product-brand">{{ product.vendor }}</p>
+    <div class="ger-color-card__body">
+      {% if brand_name != blank %}
+        <p class="ger-color-card__brand">{{ brand_name }}</p>
       {% endif %}
 
-      <h3 class="ger-variant-card__title">
-        <a href="{{ variant_url }}">{{ display_title }}</a>
+      <h3 class="ger-color-card__title">
+        <a href="{{ product_url }}" data-ger-color-card-link>{{ short_title }}</a>
       </h3>
+      <p class="ger-color-card__subtitle">{{ short_subtitle }}</p>
 
-      {% if color_name != blank %}
-        <p class="ger-variant-card__color">{{ color_name }}</p>
-      {% endif %}
-
-      <div class="ger-variant-card__price price">
+      <div class="ger-color-card__price price">
         {% if is_on_sale %}
-          <s class="compare-at-price">
-            {% if settings.currency_code_enabled_product_cards %}
-              {{ variant.compare_at_price | money_with_currency }}
-            {% else %}
-              {{ variant.compare_at_price | money }}
-            {% endif %}
-          </s>
-          <span class="price-item price-item--sale">
-            {% if settings.currency_code_enabled_product_cards %}
-              {{ variant.price | money_with_currency }}
-            {% else %}
-              {{ variant.price | money }}
-            {% endif %}
-          </span>
+          <s class="compare-at-price">{{ first_variant.compare_at_price | money }}</s>
+          <span class="price-item price-item--sale">{{ first_variant.price | money }}</span>
         {% else %}
-          <span class="price-item">
-            {% if settings.currency_code_enabled_product_cards %}
-              {{ variant.price | money_with_currency }}
-            {% else %}
-              {{ variant.price | money }}
-            {% endif %}
-          </span>
+          <span class="price-item">{{ first_variant.price | money }}</span>
         {% endif %}
       </div>
 
-      <div class="ger-variant-card__actions">
-        {%- assign atc_form_id = 'ger-atc-' | append: product.id | append: '-' | append: variant.id -%}
+      {% if color_option != blank and color_count > 0 %}
+        <div class="ger-color-card__swatches" role="list" aria-label="{{ color_count }} colors">
+          {%- assign rendered_colors = '|' -%}
+          {%- for variant in product.variants -%}
+            {%- liquid
+              case color_option_position
+                when 0
+                  assign cname = variant.option1
+                when 1
+                  assign cname = variant.option2
+                when 2
+                  assign cname = variant.option3
+                else
+                  assign cname = variant.title
+              endcase
+              assign ckey = cname | handleize
+              assign ctoken = ckey | prepend: '|' | append: '|'
+              assign already = false
+              if rendered_colors contains ctoken
+                assign already = true
+              endif
+            -%}
+            {%- unless already -%}
+              {%- assign rendered_colors = rendered_colors | append: ckey | append: '|' -%}
+              {%- liquid
+                assign swatch_hex = '#1a2744'
+                assign vn = cname | downcase | strip
+                case vn
+                  when 'olive'
+                    assign swatch_hex = '#5c6b3a'
+                  when 'blue'
+                    assign swatch_hex = '#4a6fa5'
+                  when 'powder blue'
+                    assign swatch_hex = '#9bb8d3'
+                  when 'navy', 'navy blue'
+                    assign swatch_hex = '#2f3e6b'
+                  when 'light grey', 'light gray', 'grey', 'gray'
+                    assign swatch_hex = '#9a8f84'
+                  when 'taupe'
+                    assign swatch_hex = '#8b7355'
+                  when 'mustard'
+                    assign swatch_hex = '#c4a035'
+                  when 'stone'
+                    assign swatch_hex = '#b8a99a'
+                  when 'ice blue'
+                    assign swatch_hex = '#a8c5d4'
+                  when 'sage', 'sage green'
+                    assign swatch_hex = '#7a9e8e'
+                  when 'charcoal'
+                    assign swatch_hex = '#4a4a4a'
+                  when 'black'
+                    assign swatch_hex = '#1a1a1a'
+                  when 'white', 'off white', 'ivory'
+                    assign swatch_hex = '#f2ebe3'
+                endcase
+                if variant.swatch.color != blank
+                  assign swatch_hex = variant.swatch.color
+                endif
+                assign vimg = variant.featured_image | default: variant.image
+                assign vurl = variant.url | default: product.url | append: '?variant=' | append: variant.id
+              -%}
+              <button
+                type="button"
+                class="ger-color-card__swatch{% if first_variant.id == variant.id %} is-selected{% endif %}{% unless variant.available %} is-unavailable{% endunless %}"
+                role="listitem"
+                title="{{ cname | escape }}"
+                aria-label="{{ cname | escape }}"
+                data-ger-color-swatch
+                data-variant-id="{{ variant.id }}"
+                data-variant-url="{{ vurl }}"
+                {% if vimg != blank %}
+                  data-image="{{ vimg | image_url: width: 800 }}"
+                {% endif %}
+                style="--swatch-color: {{ swatch_hex }}"
+              >
+                <span class="ger-color-card__swatch-dot"></span>
+              </button>
+            {%- endunless -%}
+          {%- endfor -%}
+        </div>
+        <p class="ger-color-card__colors-label">{{ color_count }} Colors</p>
+      {% endif %}
+
+      <div class="ger-color-card__actions">
+        <a class="ger-color-card__view" href="{{ product_url }}" data-ger-color-card-link>View Product</a>
+        {%- assign atc_form_id = 'ger-atc-' | append: product.id -%}
         <form
           id="{{ atc_form_id }}"
-          class="ger-variant-card__form buy-buttons-block"
+          class="ger-color-card__form buy-buttons-block"
           method="post"
           action="{{ routes.cart_add_url }}"
           accept-charset="UTF-8"
@@ -147,22 +250,19 @@
         >
           <input type="hidden" name="form_type" value="product">
           <input type="hidden" name="utf8" value="✓">
-          <input type="hidden" name="id" value="{{ variant.id }}">
+          <input type="hidden" name="id" value="{{ first_variant.id }}" data-ger-color-card-variant>
           <input type="hidden" name="quantity" value="1">
           <button
             type="submit"
             name="add"
             class="add-to-cart-button"
-            {% unless card_available %}
+            data-ger-color-card-atc
+            {% unless first_variant.available %}
               disabled
               aria-disabled="true"
             {% endunless %}
           >
-            {% if card_available %}
-              Add to cart
-            {% else %}
-              Sold out
-            {% endif %}
+            {% if first_variant.available %}Add to cart{% else %}Sold out{% endif %}
           </button>
         </form>
       </div>

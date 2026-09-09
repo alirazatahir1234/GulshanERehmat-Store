@@ -32,24 +32,42 @@
   assign wa_encoded = wa_plain | url_encode
   assign wa_href = 'https://wa.me/' | append: wa_number | append: '?text=' | append: wa_encoded
 
-  assign collection_label = product.type
-  if product.collections.size > 0
-    assign collection_label = product.collections.first.title
+  assign brand_name = product.vendor
+  if brand_name == blank
+    assign brand_name = 'Kafoor by Taiba'
   endif
 
-  assign short_desc = product.metafields.custom.short_description | default: product.description | strip_html | truncate: 160
+  assign display_title = product.title
+  assign display_subtitle = blank
+  if display_title contains '|'
+    assign title_parts = display_title | split: '|'
+    assign display_title = title_parts[0] | strip
+    if title_parts.size > 1
+      assign display_subtitle = title_parts[1] | strip
+    endif
+  endif
+
+  assign short_desc = product.metafields.custom.short_description | default: blank
+  if short_desc == blank
+    assign short_desc = product.description | strip_html | truncate: 140
+  endif
+
+  assign inventory_qty = current_variant.inventory_quantity
 -%}
 
 <div class="ger-pdp__info" data-ger-info>
-  {%- if product.type != blank or collection_label != blank -%}
-    <p class="ger-pdp__eyebrow">
-      {%- if product.type != blank -%}{{ product.type | upcase }}{%- endif -%}
-      {%- if product.type != blank and collection_label != blank and product.type != collection_label %} | {% endif -%}
-      {%- if collection_label != blank and collection_label != product.type -%}{{ collection_label | upcase }}{%- endif -%}
-    </p>
+  {%- if on_sale -%}
+    <p class="ger-pdp__offer-tag">Grand Opening Offer</p>
   {%- endif -%}
 
-  <h1 class="ger-pdp__title">{{ product.title }}</h1>
+  {%- if brand_name != blank -%}
+    <p class="ger-pdp__eyebrow">{{ brand_name | upcase }}</p>
+  {%- endif -%}
+
+  <h1 class="ger-pdp__title">{{ display_title }}</h1>
+  {%- if display_subtitle != blank -%}
+    <p class="ger-pdp__subtitle">{{ display_subtitle }}</p>
+  {%- endif -%}
 
   {%- liquid
     assign rating_value = product.metafields.reviews.rating.value
@@ -69,11 +87,9 @@
   {%- endif -%}
 
   <div class="ger-pdp__price-row" data-ger-price>
-    {%- if on_sale -%}
-      <span class="ger-pdp__price-compare" data-ger-compare>{{ compare_at | money }}</span>
-    {%- endif -%}
     <span class="ger-pdp__price" data-ger-current-price>{{ price | money }}</span>
     {%- if on_sale -%}
+      <span class="ger-pdp__price-compare" data-ger-compare>{{ compare_at | money }}</span>
       <span class="ger-pdp__save-badge" data-ger-save-badge>{{ save_pct }}% OFF</span>
     {%- endif -%}
   </div>
@@ -96,21 +112,58 @@
       {%- if color_option != blank -%}
         <div class="ger-pdp__option" data-ger-option data-option-name="{{ color_option.name | escape }}">
           <div class="ger-pdp__option-label">
-            <span>COLOR:</span>
+            <span>Color:</span>
             <strong data-ger-option-label>{{ color_option.selected_value | default: color_option.values.first }}</strong>
           </div>
           <div class="ger-pdp__swatches" role="list">
             {%- for value in color_option.values -%}
-              {%- assign swatch_available = value.available -%}
+              {%- liquid
+                assign swatch_available = value.available
+                assign swatch_hex = '#1a2744'
+                if value.swatch.color != blank
+                  assign swatch_hex = value.swatch.color
+                else
+                  assign vn = value | downcase | strip
+                  case vn
+                    when 'olive'
+                      assign swatch_hex = '#5c6b3a'
+                    when 'blue'
+                      assign swatch_hex = '#4a6fa5'
+                    when 'powder blue'
+                      assign swatch_hex = '#9bb8d3'
+                    when 'navy', 'navy blue'
+                      assign swatch_hex = '#2f3e6b'
+                    when 'light grey', 'light gray', 'grey', 'gray'
+                      assign swatch_hex = '#9a8f84'
+                    when 'taupe'
+                      assign swatch_hex = '#8b7355'
+                    when 'mustard'
+                      assign swatch_hex = '#c4a035'
+                    when 'stone'
+                      assign swatch_hex = '#b8a99a'
+                    when 'ice blue'
+                      assign swatch_hex = '#a8c5d4'
+                    when 'sage', 'sage green'
+                      assign swatch_hex = '#7a9e8e'
+                    when 'charcoal'
+                      assign swatch_hex = '#4a4a4a'
+                    when 'black'
+                      assign swatch_hex = '#1a1a1a'
+                    when 'white', 'off white', 'ivory'
+                      assign swatch_hex = '#f2ebe3'
+                  endcase
+                endif
+              -%}
               <button
                 type="button"
                 class="ger-pdp__swatch{% if color_option.selected_value == value or color_option.selected_value == blank and forloop.first %} is-selected{% endif %}{% unless swatch_available %} is-unavailable{% endunless %}"
                 data-ger-swatch
                 data-option-position="{{ color_option.position }}"
                 data-value="{{ value | escape }}"
+                title="{{ value | escape }}"
                 aria-label="{{ value | escape }}"
                 {% unless swatch_available %}aria-disabled="true"{% endunless %}
-                style="--swatch-color: {% if value.swatch.color %}{{ value.swatch.color }}{% else %}#1a2744{% endif %}"
+                style="--swatch-color: {{ swatch_hex }}"
               >
                 <span class="ger-pdp__swatch-dot"></span>
               </button>
@@ -177,11 +230,20 @@
       {%- endfor -%}
     {%- endunless -%}
 
-    {%- if current_variant.inventory_management != blank and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= 10 and current_variant.inventory_policy == 'deny' -%}
-      <p class="ger-pdp__stock" data-ger-stock>Only {{ current_variant.inventory_quantity }} left in stock</p>
-    {%- endif -%}
+    <p class="ger-pdp__stock" data-ger-stock {% unless current_variant.available %}hidden{% endunless %}>
+      {%- if current_variant.available -%}
+        {%- if inventory_qty != blank and inventory_qty > 0 -%}
+          In Stock ({{ inventory_qty }} pieces)
+        {%- else -%}
+          In Stock
+        {%- endif -%}
+      {%- else -%}
+        Sold Out
+      {%- endif -%}
+    </p>
 
     <div class="ger-pdp__qty-row">
+      <span class="ger-pdp__qty-label">Quantity</span>
       <div class="ger-pdp__qty" data-ger-qty>
         <button type="button" class="ger-pdp__qty-btn" data-ger-qty-minus aria-label="Decrease quantity">−</button>
         <input
@@ -205,7 +267,7 @@
       data-ger-add-to-cart
       {% unless current_variant.available %}disabled{% endunless %}
     >
-      <span data-ger-atc-label>{% if current_variant.available %}ADD TO BAG{% else %}SOLD OUT{% endif %}</span>
+      <span data-ger-atc-label>{% if current_variant.available %}ADD TO CART{% else %}SOLD OUT{% endif %}</span>
     </button>
 
     <button
@@ -231,27 +293,22 @@
     ORDER ON WHATSAPP
   </a>
 
-  <div class="ger-pdp__secondary-links">
-    <button type="button" class="ger-pdp__text-link" data-ger-wishlist aria-label="Add to wishlist">♡ Add to Wishlist</button>
-    <button type="button" class="ger-pdp__text-link" data-ger-share aria-label="Share product">Share Product</button>
-  </div>
-
   <div class="ger-pdp__trust-strip" aria-label="Shopping benefits">
     <div class="ger-pdp__trust-item">
-      <span aria-hidden="true">🚚</span>
-      <span>Fast Delivery</span>
+      <span aria-hidden="true">✓</span>
+      <span>Nationwide Pakistan Delivery</span>
     </div>
     <div class="ger-pdp__trust-item">
-      <span aria-hidden="true">↻</span>
-      <span>Easy Returns</span>
+      <span aria-hidden="true">✓</span>
+      <span>Secure Payment</span>
     </div>
     <div class="ger-pdp__trust-item">
-      <span aria-hidden="true">🔒</span>
-      <span>Secure Payments</span>
-    </div>
-    <div class="ger-pdp__trust-item">
-      <span aria-hidden="true">✦</span>
+      <span aria-hidden="true">✓</span>
       <span>Premium Quality</span>
+    </div>
+    <div class="ger-pdp__trust-item">
+      <span aria-hidden="true">✓</span>
+      <span>Easy Returns &amp; Exchange</span>
     </div>
   </div>
 </div>

@@ -1,33 +1,58 @@
 {{ 'ger-collection.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
-  assign heading = section.settings.heading
-  if heading == blank and collection != blank
-    assign heading = collection.title | append: ' Collection'
-  endif
-
-  assign body = section.settings.description
-  if body == blank and collection.description != blank
-    assign body = collection.description
-  endif
-  if body == blank
-    assign body = section.settings.fallback_text
+  assign kafoor_page = false
+  if collection.handle == 'men-wash-n-wear-kafoor-by-taiba' or collection.handle == 'men-wash-n-wear-kafoor-by-taiba-life-line' or collection.handle contains 'kafoor-by-taiba'
+    assign kafoor_page = true
   endif
 -%}
 
-{%- if body != blank or heading != blank -%}
-  <div class="ger-collection-description" {{ section.shopify_attributes }}>
-    <div class="ger-collection-description__inner">
-      {% if heading != blank %}
-        <h2 class="ger-collection-description__heading">{{ heading }}</h2>
-      {% endif %}
-      {% if body != blank %}
-        <div class="ger-collection-description__text">
-          {{ body }}
-        </div>
-      {% endif %}
+{%- if kafoor_page -%}
+  {%- assign story_link = collections['men-wash-n-wear-kafoor-by-taiba-life-line'].url | default: collection.url -%}
+
+  <section class="ger-kafoor-story" aria-label="Life Line by Kafoor by Taiba" {{ section.shopify_attributes }}>
+    <a class="ger-kafoor-story__link" href="{{ story_link }}">
+      <img
+        class="ger-kafoor-story__design"
+        src="{{ 'ger-kafoor-life-line-story.jpg' | asset_url }}"
+        alt="Life Line by Kafoor by Taiba — Premium Men’s Wash &amp; Wear Fabric. Available in 13 elegant colors."
+        width="1024"
+        height="379"
+        loading="lazy"
+        decoding="async"
+      >
+    </a>
+  </section>
+{%- else -%}
+  {%- liquid
+    assign heading = section.settings.heading
+    if heading == blank and collection != blank
+      assign heading = collection.title | append: ' Collection'
+    endif
+
+    assign body = section.settings.description
+    if body == blank and collection.description != blank
+      assign body = collection.description
+    endif
+    if body == blank
+      assign body = section.settings.fallback_text
+    endif
+  -%}
+
+  {%- if body != blank or heading != blank -%}
+    <div class="ger-collection-description" {{ section.shopify_attributes }}>
+      <div class="ger-collection-description__inner">
+        {% if heading != blank %}
+          <h2 class="ger-collection-description__heading">{{ heading }}</h2>
+        {% endif %}
+        {% if body != blank %}
+          <div class="ger-collection-description__text">
+            {{ body }}
+          </div>
+        {% endif %}
+      </div>
     </div>
-  </div>
+  {%- endif -%}
 {%- endif -%}
 
 {% schema %}
@@ -43,7 +68,7 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "info": "Blank uses collection title + Collection."
+      "info": "Blank uses collection title + Collection. Kafoor pages use the Life Line story design."
     },
     {
       "type": "richtext",

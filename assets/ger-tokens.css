@@ -17,7 +17,7 @@
   --ger-font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
   --ger-font-body: 'Poppins', system-ui, sans-serif;
   --ger-font-script: 'Great Vibes', 'Brush Script MT', cursive;
-  --ger-max: 1320px;
+  --ger-max: 1400px;
   --ger-pad: clamp(1rem, 3.5vw, 2rem);
   --ger-radius: 12px;
   --ger-transition: 0.35s cubic-bezier(0.22, 1, 0.36, 1);

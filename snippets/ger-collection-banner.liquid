@@ -1,0 +1,32 @@
+{%- comment -%}
+  Kafoor by Taiba collection banner (Life Line creative).
+  Rendered from ger-collection-hero on matching collection handles.
+{%- endcomment -%}
+
+<section
+  class="ger-collection-banner"
+  data-ger-collection-banner
+  data-autoplay="5500"
+  aria-label="{{ collection.title | default: 'Collection' }} banner"
+>
+  <div class="ger-collection-banner__viewport">
+    <div class="ger-collection-banner__slide is-active" data-ger-collection-banner-slide>
+      <a
+        class="ger-collection-banner__link"
+        href="{{ collections['men-wash-n-wear-kafoor-by-taiba-life-line'].url | default: collection.url }}"
+      >
+        <img
+          class="ger-collection-banner__img"
+          src="{{ 'ger-kafoor-life-line-banner.jpg' | asset_url }}"
+          alt="Life Line by Kafoor by Taiba — Premium Men’s Wash & Wear"
+          width="1024"
+          height="394"
+          loading="eager"
+          fetchpriority="high"
+        >
+      </a>
+    </div>
+  </div>
+</section>
+
+<script src="{{ 'ger-collection-banner.js' | asset_url }}" defer></script>

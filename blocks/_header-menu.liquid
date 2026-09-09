@@ -102,7 +102,14 @@
       {% for link in block_settings.menu.links %}
         {% liquid
           assign has_custom_mega = false
-          if link.handle == 'woman' or link.title == 'Woman' or link.handle == 'man' or link.title == 'Man' or link.handle == 'men' or link.title == 'Men'
+          assign link_title_down = link.title | downcase | strip
+          assign display_title = link.title
+          if link_title_down == 'man' or link.handle == 'man'
+            assign display_title = 'Men'
+          elsif link_title_down == 'woman' or link.handle == 'woman'
+            assign display_title = 'Women'
+          endif
+          if link.handle == 'woman' or link.title == 'Woman' or link.title == 'Women' or link.handle == 'women' or link.handle == 'man' or link.title == 'Man' or link.handle == 'men' or link.title == 'Men'
             assign has_custom_mega = true
           endif
           assign show_submenu = false
@@ -129,7 +136,7 @@
             ref="menuitem"
           >
             <span class="menu-list__link-title">
-              {{- link.title -}}
+              {{- display_title -}}
               {%- if show_submenu -%}
                 <svg
                   class="menu-list__link-chevron"
@@ -154,7 +161,7 @@
               data-skip-node-update
               on:click="/toggle"
             >
-              <span class="visually-hidden">{{ 'accessibility.show_submenu' | t: title: link.title }}</span>
+              <span class="visually-hidden">{{ 'accessibility.show_submenu' | t: title: display_title }}</span>
             </button>
             </span>
             {%- comment -%}
@@ -170,7 +177,7 @@
               >
                 {% assign list_id = 'MegaMenuList-' | append: forloop.index %}
                 <div class="mega-menu section section--full-width-margin section--{{ section.settings.section_width }}">
-                  {% if link.handle == 'woman' or link.title == 'Woman' %}
+                  {% if link.handle == 'woman' or link.handle == 'women' or link.title == 'Woman' or link.title == 'Women' %}
                     {% render 'woman-mega-menu',
                       card_image_unstitched: block_settings.woman_card_unstitched,
                       card_image_ready: block_settings.woman_card_ready,
@@ -357,6 +364,7 @@
     display: flex;
     align-items: center;
     height: 100%;
+    padding-inline: 0.35rem;
   }
 
   .menu-list__list-item[aria-hidden='true'] {

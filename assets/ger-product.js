@@ -210,20 +210,25 @@
       [atc, buy, sticky].forEach((btn) => {
         if (btn) btn.disabled = !available;
       });
-      if (label) label.textContent = available ? 'ADD TO BAG' : 'SOLD OUT';
+      if (label) label.textContent = available ? 'ADD TO CART' : 'SOLD OUT';
 
       if (stock) {
-        if (
-          available &&
+        if (!available) {
+          stock.hidden = false;
+          stock.textContent = 'Sold Out';
+          stock.style.color = '#b42318';
+        } else if (
           variant.inventory_management &&
           typeof variant.inventory_quantity === 'number' &&
-          variant.inventory_quantity > 0 &&
-          variant.inventory_quantity <= 10
+          variant.inventory_quantity > 0
         ) {
           stock.hidden = false;
-          stock.textContent = 'Only ' + variant.inventory_quantity + ' left in stock';
+          stock.textContent = 'In Stock (' + variant.inventory_quantity + ' pieces)';
+          stock.style.color = '';
         } else {
-          stock.hidden = true;
+          stock.hidden = false;
+          stock.textContent = 'In Stock';
+          stock.style.color = '';
         }
       }
     }
@@ -253,8 +258,11 @@
       updateAvailability(variant);
       updateWhatsApp(variant);
 
-      if (variant.featured_media) {
-        const idx = slides.findIndex((s) => String(s.dataset.mediaId) === String(variant.featured_media.id));
+      if (variant.featured_media || variant.featured_image) {
+        const mediaId =
+          (variant.featured_media && (variant.featured_media.id || variant.featured_media)) ||
+          (variant.featured_image && (variant.featured_image.id || variant.featured_image));
+        const idx = slides.findIndex((s) => String(s.dataset.mediaId) === String(mediaId));
         if (idx >= 0) showSlide(idx);
       }
 
@@ -299,6 +307,30 @@
       }
     }
     applyVariant();
+
+    /* ---- Product info tabs ---- */
+    const tabsRoot = root.querySelector('[data-ger-product-tabs]');
+    if (tabsRoot) {
+      const tabButtons = Array.from(tabsRoot.querySelectorAll('[data-ger-tab]'));
+      const tabPanels = Array.from(tabsRoot.querySelectorAll('[data-ger-tab-panel]'));
+
+      function activateTab(id) {
+        tabButtons.forEach((btn) => {
+          const active = btn.getAttribute('data-ger-tab') === id;
+          btn.classList.toggle('is-active', active);
+          btn.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+        tabPanels.forEach((panel) => {
+          const active = panel.getAttribute('data-ger-tab-panel') === id;
+          panel.classList.toggle('is-active', active);
+          panel.hidden = !active;
+        });
+      }
+
+      tabButtons.forEach((btn) => {
+        btn.addEventListener('click', () => activateTab(btn.getAttribute('data-ger-tab')));
+      });
+    }
 
     /* ---- Quantity ---- */
     const qtyInput = root.querySelector('[data-ger-qty-input]');

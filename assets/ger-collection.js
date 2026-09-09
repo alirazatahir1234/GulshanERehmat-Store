@@ -358,13 +358,49 @@
     if (!grid) return;
     var cards = grid.querySelectorAll('.product-grid__item');
     if (!cards.length) return;
-    var hasVariantCards = grid.querySelector('.ger-variant-card-item');
-    if (!hasVariantCards) return;
-
     var count = cards.length;
     var label = count === 1 ? '1 item' : count + ' items';
     document.querySelectorAll('.ger-collection-page .products-count-wrapper [role="status"]').forEach(function (el) {
       el.textContent = label;
+    });
+  }
+
+  function initColorCards(scope) {
+    (scope || document).querySelectorAll('[data-ger-color-card]').forEach(function (card) {
+      if (card.dataset.gerColorReady === 'true') return;
+      card.dataset.gerColorReady = 'true';
+
+      var img = card.querySelector('[data-ger-color-card-image]');
+      var links = card.querySelectorAll('[data-ger-color-card-link]');
+      var variantInput = card.querySelector('[data-ger-color-card-variant]');
+      var atc = card.querySelector('[data-ger-color-card-atc]');
+
+      card.querySelectorAll('[data-ger-color-swatch]').forEach(function (swatch) {
+        swatch.addEventListener('click', function () {
+          card.querySelectorAll('[data-ger-color-swatch]').forEach(function (s) {
+            s.classList.remove('is-selected');
+          });
+          swatch.classList.add('is-selected');
+
+          var url = swatch.getAttribute('data-variant-url');
+          var image = swatch.getAttribute('data-image');
+          var id = swatch.getAttribute('data-variant-id');
+          var unavailable = swatch.classList.contains('is-unavailable');
+
+          if (image && img) img.src = image;
+          if (url) {
+            links.forEach(function (a) {
+              a.setAttribute('href', url);
+            });
+          }
+          if (id && variantInput) variantInput.value = id;
+          if (atc) {
+            atc.disabled = unavailable;
+            atc.setAttribute('aria-disabled', unavailable ? 'true' : 'false');
+            atc.textContent = unavailable ? 'Sold out' : 'Add to cart';
+          }
+        });
+      });
     });
   }
 
@@ -375,6 +411,7 @@
     enhanceBuyButtons(document);
     bindAtcLoadingFeedback();
     updateVariantCardCount();
+    initColorCards(document);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
@@ -388,6 +425,7 @@
         applyWishlistState(document);
         enhanceBuyButtons(document);
         updateVariantCardCount();
+        initColorCards(document);
       }).observe(grid, { childList: true, subtree: true });
     }
   });

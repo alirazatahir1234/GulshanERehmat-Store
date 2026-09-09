@@ -1,33 +1,25 @@
 {%- doc -%}
-  GER PDP accordions: trust rows + product details / fabric / size / shipping.
+  GER PDP: trust accordions + product information tabs (no long duplicated description dump).
   @param {object} product - Product object
 {%- enddoc -%}
 
 {%- liquid
-  assign fabric = product.metafields.custom.fabric.value | default: product.metafields.custom.fabric
-  assign pieces = product.metafields.custom.pieces.value | default: product.metafields.custom.pieces
-  assign season = product.metafields.custom.season.value | default: product.metafields.custom.season
-  assign design = product.metafields.custom.design.value | default: product.metafields.custom.design
-  assign style_val = product.metafields.custom.style.value | default: product.type
-  assign color_val = blank
-  for option in product.options_with_values
-    assign on = option.name | downcase
-    if on contains 'color' or on contains 'colour'
-      assign color_val = option.selected_value | default: option.values.first
-      break
-    endif
-  endfor
-  if color_val == blank
-    for tag in product.tags
-      assign td = tag | downcase
-      if td contains 'navy' or td contains 'blue' or td contains 'white' or td contains 'beige' or td contains 'black' or td contains 'pink' or td contains 'red' or td contains 'green'
-        if color_val == blank
-          assign color_val = tag
-        else
-          assign color_val = color_val | append: ' & ' | append: tag
-        endif
-      endif
-    endfor
+  assign current_variant = product.selected_or_first_available_variant
+  assign price = current_variant.price
+  assign compare_at = current_variant.compare_at_price
+  assign on_sale = false
+  assign save_amount = 0
+  assign save_pct = 0
+  if compare_at != blank and compare_at > price
+    assign on_sale = true
+    assign save_amount = compare_at | minus: price
+    assign save_pct = save_amount | times: 100.0 | divided_by: compare_at | round
+  endif
+
+  assign brand_name = product.vendor | default: 'Kafoor by Taiba'
+  assign collection_name = 'Life Line'
+  if product.collections.size > 0
+    assign collection_name = product.collections.first.title
   endif
 -%}
 
@@ -40,17 +32,17 @@
         <span class="ger-pdp__plus" aria-hidden="true"></span>
       </summary>
       <div class="ger-pdp__mini-body">
-        <p>Free shipping on eligible orders. Delivery across Pakistan.</p>
+        <p>Nationwide Pakistan delivery. Shipping timelines vary by city.</p>
       </div>
     </details>
     <details class="ger-pdp__mini-acc">
       <summary>
         <span class="ger-pdp__mini-icon" aria-hidden="true">↻</span>
-        <span>Easy Returns &amp; Exchange</span>
+        <span>Returns &amp; Exchange</span>
         <span class="ger-pdp__plus" aria-hidden="true"></span>
       </summary>
       <div class="ger-pdp__mini-body">
-        <p>Easy return and exchange policy available. <a href="/policies/refund-policy">View policy</a>.</p>
+        <p>Returns and exchanges follow our <a href="/policies/refund-policy">Refund &amp; Exchange Policy</a>.</p>
       </div>
     </details>
     <details class="ger-pdp__mini-acc">
@@ -60,84 +52,163 @@
         <span class="ger-pdp__plus" aria-hidden="true"></span>
       </summary>
       <div class="ger-pdp__mini-body">
-        <p>Secure checkout experience with trusted payment methods.</p>
+        <p>Secure checkout with trusted payment methods.</p>
       </div>
     </details>
   </div>
 
-  <div class="ger-pdp__detail-accordions">
-    <details class="ger-pdp__detail-acc" open>
-      <summary>PRODUCT DETAILS <span class="ger-pdp__plus" aria-hidden="true"></span></summary>
-      <div class="ger-pdp__detail-body">
-        <dl class="ger-pdp__specs">
-          {%- if color_val != blank -%}
-            <div><dt>COLOR</dt><dd>{{ color_val }}</dd></div>
-          {%- endif -%}
-          {%- if fabric != blank -%}
-            <div><dt>FABRIC</dt><dd>{{ fabric }}</dd></div>
-          {%- endif -%}
-          {%- if design != blank -%}
-            <div><dt>DESIGN</dt><dd>{{ design }}</dd></div>
-          {%- elsif product.tags contains 'Floral' or product.tags contains 'floral' -%}
-            <div><dt>DESIGN</dt><dd>Floral / Botanical Print</dd></div>
-          {%- endif -%}
-          {%- if pieces != blank -%}
-            <div><dt>PIECES</dt><dd>{{ pieces }}</dd></div>
-          {%- endif -%}
-          {%- if style_val != blank -%}
-            <div><dt>STYLE</dt><dd>{{ style_val }}</dd></div>
-          {%- endif -%}
-          {%- if season != blank -%}
-            <div><dt>SEASON</dt><dd>{{ season }}</dd></div>
-          {%- endif -%}
-          <div><dt>BRAND</dt><dd>{{ product.vendor | default: 'Gulshan E Rehmat' }}</dd></div>
+  <div class="ger-pdp__tabs" data-ger-product-tabs>
+    <div class="ger-pdp__tabs-header" role="tablist" aria-label="Product information">
+      <button type="button" class="ger-pdp__tab is-active" role="tab" aria-selected="true" data-ger-tab="highlights" id="GerTab-highlights">Product Highlights</button>
+      <button type="button" class="ger-pdp__tab" role="tab" aria-selected="false" data-ger-tab="details" id="GerTab-details">Product Details</button>
+      <button type="button" class="ger-pdp__tab" role="tab" aria-selected="false" data-ger-tab="ideal" id="GerTab-ideal">Ideal For</button>
+      <button type="button" class="ger-pdp__tab" role="tab" aria-selected="false" data-ger-tab="offer" id="GerTab-offer">Grand Opening</button>
+      <button type="button" class="ger-pdp__tab" role="tab" aria-selected="false" data-ger-tab="why" id="GerTab-why">Why Choose Life Line?</button>
+      <button type="button" class="ger-pdp__tab" role="tab" aria-selected="false" data-ger-tab="delivery" id="GerTab-delivery">Delivery &amp; Care</button>
+    </div>
+
+    <div class="ger-pdp__tabs-panels">
+      <div class="ger-pdp__tab-panel is-active" role="tabpanel" data-ger-tab-panel="highlights" aria-labelledby="GerTab-highlights">
+        <ul class="ger-pdp__highlight-grid">
+          <li>Premium Wash &amp; Wear Fabric</li>
+          <li>Extra Soft &amp; Comfortable Feel</li>
+          <li>Durable &amp; Long-Lasting</li>
+          <li>Elegant Finish</li>
+          <li>Perfect for Daily &amp; Formal Wear</li>
+          <li>Easy Care — Minimal Ironing</li>
+          <li>Available in 13 Stylish Colors</li>
+          <li>Trusted Quality by Kafoor by Taiba</li>
+        </ul>
+      </div>
+
+      <div class="ger-pdp__tab-panel" role="tabpanel" data-ger-tab-panel="details" aria-labelledby="GerTab-details" hidden>
+        <dl class="ger-pdp__specs ger-pdp__specs--table">
+          <div><dt>Brand</dt><dd>{{ brand_name }}</dd></div>
+          <div><dt>Collection</dt><dd>{{ collection_name }}</dd></div>
+          <div><dt>Fabric Type</dt><dd>Premium Men’s Wash &amp; Wear</dd></div>
+          <div><dt>Recommended For</dt><dd>Shalwar Kameez</dd></div>
+          <div><dt>Care</dt><dd>Easy Wash &amp; Wear</dd></div>
+          <div><dt>Colors</dt><dd>13 Elegant Colors</dd></div>
+          <div><dt>Sold By</dt><dd>Gulshan E Rehmat</dd></div>
         </dl>
-        {%- if product.description != blank -%}
-          <div class="ger-pdp__full-desc rte">{{ product.description }}</div>
-        {%- endif -%}
       </div>
-    </details>
 
-    <details class="ger-pdp__detail-acc" id="ger-fabric-care">
-      <summary>FABRIC &amp; CARE <span class="ger-pdp__plus" aria-hidden="true"></span></summary>
-      <div class="ger-pdp__detail-body">
-        {%- if fabric != blank -%}
-          <p><strong>Fabric:</strong> {{ fabric }}</p>
-        {%- else -%}
-          <p><strong>Fabric:</strong> Premium breathable fabric crafted for comfort and elegance.</p>
-        {%- endif -%}
-        {%- if product.metafields.custom.care_instructions != blank -%}
-          <div class="rte">{{ product.metafields.custom.care_instructions | metafield_tag }}</div>
-        {%- else -%}
-          <p><strong>Care Instructions:</strong></p>
-          <ul>
-            <li>Hand wash recommended</li>
-            <li>Use mild detergent</li>
-            <li>Do not bleach</li>
-            <li>Dry in shade</li>
-            <li>Iron at medium temperature</li>
-          </ul>
-        {%- endif -%}
+      <div class="ger-pdp__tab-panel" role="tabpanel" data-ger-tab-panel="ideal" aria-labelledby="GerTab-ideal" hidden>
+        <ul class="ger-pdp__ideal-list">
+          <li>
+            <strong>Jummah &amp; Religious Wear</strong>
+            <span>Comfortable all-day fabric for prayers and gatherings.</span>
+          </li>
+          <li>
+            <strong>Eid &amp; Festive Wear</strong>
+            <span>An elegant finish for celebrations and family events.</span>
+          </li>
+          <li>
+            <strong>Office &amp; Professional Wear</strong>
+            <span>Refined Wash &amp; Wear suitable for everyday work looks.</span>
+          </li>
+          <li>
+            <strong>Weddings &amp; Formal Events</strong>
+            <span>A polished option for formal occasions.</span>
+          </li>
+          <li>
+            <strong>Daily &amp; Casual Wear</strong>
+            <span>Soft, breathable comfort for everyday use.</span>
+          </li>
+          <li>
+            <strong>Family Gatherings &amp; Celebrations</strong>
+            <span>Reliable quality for special moments.</span>
+          </li>
+        </ul>
       </div>
-    </details>
 
-    <details class="ger-pdp__detail-acc" id="ger-size-guide">
-      <summary>SIZE GUIDE <span class="ger-pdp__plus" aria-hidden="true"></span></summary>
-      <div class="ger-pdp__detail-body">
-        {%- if product.metafields.custom.size_guide != blank -%}
-          <div class="rte">{{ product.metafields.custom.size_guide | metafield_tag }}</div>
-        {%- else -%}
-          <p>This is an unstitched fabric product. Stitch according to your preferred measurements. For ready-to-wear sizing guidance, contact us on WhatsApp.</p>
-        {%- endif -%}
+      <div class="ger-pdp__tab-panel" role="tabpanel" data-ger-tab-panel="offer" aria-labelledby="GerTab-offer" hidden>
+        <div class="ger-pdp__offer-panel">
+          <h3 class="ger-pdp__offer-heading">Grand Opening Special</h3>
+          {%- if on_sale -%}
+            <div class="ger-pdp__offer-grid">
+              <div>
+                <span class="ger-pdp__offer-label">Original Price</span>
+                <strong class="ger-pdp__offer-compare">{{ compare_at | money }}</strong>
+              </div>
+              <div>
+                <span class="ger-pdp__offer-label">Grand Opening Price</span>
+                <strong class="ger-pdp__offer-price">{{ price | money }}</strong>
+              </div>
+              <div>
+                <span class="ger-pdp__offer-label">Savings</span>
+                <strong>{{ save_amount | money }}</strong>
+              </div>
+              <div>
+                <span class="ger-pdp__offer-label">Discount</span>
+                <strong>{{ save_pct }}% OFF</strong>
+              </div>
+            </div>
+          {%- else -%}
+            <p class="ger-pdp__offer-note">Current price: <strong>{{ price | money }}</strong></p>
+          {%- endif -%}
+        </div>
       </div>
-    </details>
 
-    <details class="ger-pdp__detail-acc">
-      <summary>SHIPPING &amp; RETURNS <span class="ger-pdp__plus" aria-hidden="true"></span></summary>
-      <div class="ger-pdp__detail-body">
-        <p>We deliver across Pakistan. Shipping timelines vary by city.</p>
-        <p>Returns and exchanges are available as per our <a href="/policies/refund-policy">Refund &amp; Exchange Policy</a>.</p>
+      <div class="ger-pdp__tab-panel" role="tabpanel" data-ger-tab-panel="why" aria-labelledby="GerTab-why" hidden>
+        <ul class="ger-pdp__why-grid">
+          <li>
+            <strong>Comfort for the day</strong>
+            <span>Soft Wash &amp; Wear that stays comfortable from morning to evening.</span>
+          </li>
+          <li>
+            <strong>Elegance for every occasion</strong>
+            <span>A refined finish for both daily and formal looks.</span>
+          </li>
+          <li>
+            <strong>Quality you can rely on</strong>
+            <span>Built for durability with a premium feel.</span>
+          </li>
+          <li>
+            <strong>Easy-care Wash &amp; Wear fabric</strong>
+            <span>Simple care with minimal ironing needed.</span>
+          </li>
+          <li>
+            <strong>Designed for the modern Pakistani man</strong>
+            <span>Style, comfort, and confidence in one fabric.</span>
+          </li>
+          <li>
+            <strong>Premium quality by Kafoor by Taiba</strong>
+            <span>Trusted brand quality, available at Gulshan E Rehmat.</span>
+          </li>
+        </ul>
       </div>
-    </details>
+
+      <div class="ger-pdp__tab-panel" role="tabpanel" data-ger-tab-panel="delivery" aria-labelledby="GerTab-delivery" hidden>
+        <div class="ger-pdp__delivery-grid">
+          <div>
+            <h4>Delivery Information</h4>
+            <ul>
+              <li>Nationwide Pakistan Delivery</li>
+              <li>Estimated delivery follows the store’s configured shipping policy</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Care Instructions</h4>
+            <ul>
+              <li>Easy Wash &amp; Wear</li>
+              <li>Follow the recommended fabric-care instructions on the product</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Returns &amp; Exchange</h4>
+            <ul>
+              <li>Handled under our existing <a href="/policies/refund-policy">Returns &amp; Exchange policy</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Payment</h4>
+            <ul>
+              <li>Secure Payment</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -1,6 +1,6 @@
 {%- doc -%}
   Nested Man accordion for the mobile header drawer:
-  Men → Summer Collection → Wash n Wear → brands → (Kafoor lines)
+  Men → Summer Collection → Cotton / Wash n Wear → brands
   (+ Winter / Waist Coats as siblings of Summer).
 
   @param {object} link - Top-level Man/Men nav link
@@ -11,7 +11,7 @@
 {%- enddoc -%}
 
 {% liquid
-  assign man_label = link.title | default: 'Men'
+  assign man_label = 'Men'
 %}
 
 {% capture ger_man_accordion %}
@@ -49,9 +49,28 @@
           </summary>
           <ul class="menu-drawer__menu menu-drawer__menu--grandchildlist details-content ger-drawer-cat__level2" role="list">
             <li class="menu-drawer__list-item">
-              <span class="ger-drawer-cat__link-wrap">
-                {% render 'man-mega-link', handle: 'men-summer-cotton', label: 'Cotton' %}
-              </span>
+              <details id="Details-menu-drawer-ger-summer-cotton">
+                <summary class="menu-drawer__menu-item menu-drawer__menu-item--child ger-drawer-cat__summary">
+                  <span class="menu-drawer__menu-item-text wrap-text">Cotton</span>
+                  <span class="ger-drawer-chevron" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                </summary>
+                <ul class="menu-drawer__menu details-content ger-drawer-cat__level3" role="list">
+                  <li class="menu-drawer__list-item">
+                    <span class="ger-drawer-cat__link-wrap">
+                      {% render 'man-mega-link', handle: 'men-wash-n-wear-zelburry', label: 'Zelburry' %}
+                    </span>
+                  </li>
+                  <li class="menu-drawer__list-item">
+                    <span class="ger-drawer-cat__link-wrap">
+                      {% render 'man-mega-link', handle: 'clock-tower', label: 'Clock Tower' %}
+                    </span>
+                  </li>
+                </ul>
+              </details>
             </li>
             <li class="menu-drawer__list-item">
               <details id="Details-menu-drawer-ger-summer-wash">
@@ -100,21 +119,40 @@
                   </li>
                   <li class="menu-drawer__list-item">
                     <span class="ger-drawer-cat__link-wrap">
-                      {% render 'man-mega-link', handle: 'men-wash-n-wear-gul-ahmed', label: 'Gul Ahmed' %}
+                      {% render 'man-mega-link', handle: 'chen4', label: 'Chen4' %}
                     </span>
                   </li>
                   <li class="menu-drawer__list-item">
                     <span class="ger-drawer-cat__link-wrap">
-                      {% render 'man-mega-link', handle: 'men-wash-n-wear-zelburry', label: 'Zelburry' %}
+                      {% render 'man-mega-link', handle: 'boski', label: 'Boski' %}
                     </span>
                   </li>
                 </ul>
               </details>
             </li>
             <li class="menu-drawer__list-item">
-              <span class="ger-drawer-cat__link-wrap">
-                {% render 'man-mega-link', handle: 'men-summer-lawn', label: 'Lawn' %}
-              </span>
+              <details id="Details-menu-drawer-ger-summer-lawn">
+                <summary class="menu-drawer__menu-item menu-drawer__menu-item--child ger-drawer-cat__summary">
+                  <span class="menu-drawer__menu-item-text wrap-text">Lawn</span>
+                  <span class="ger-drawer-chevron" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                </summary>
+                <ul class="menu-drawer__menu details-content ger-drawer-cat__level3" role="list">
+                  <li class="menu-drawer__list-item">
+                    <span class="ger-drawer-cat__link-wrap">
+                      {% render 'man-mega-link', handle: 'men-summer-lawn', label: 'Shop All' %}
+                    </span>
+                  </li>
+                  <li class="menu-drawer__list-item">
+                    <span class="ger-drawer-cat__link-wrap">
+                      {% render 'man-mega-link', handle: 'men-wash-n-wear-gul-ahmed', label: 'Gul Ahmed' %}
+                    </span>
+                  </li>
+                </ul>
+              </details>
             </li>
             <li class="menu-drawer__list-item">
               <span class="ger-drawer-cat__link-wrap">

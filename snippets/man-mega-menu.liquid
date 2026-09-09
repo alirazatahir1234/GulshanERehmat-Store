@@ -177,15 +177,34 @@
             <h3 class="man-mega-menu__heading">SUMMER COLLECTION</h3>
             <div class="man-mega-menu__separator" aria-hidden="true"></div>
             <div class="man-mega-menu__links" data-man-links>
-              {% render 'man-mega-link', handle: 'men-summer-cotton', label: 'Cotton' %}
+              {% render 'man-mega-nested-trigger',
+                nested_id: 'summer-cotton-brands',
+                label: 'Cotton',
+                handle: 'men-summer-cotton'
+              %}
               {% render 'man-mega-nested-trigger',
                 nested_id: 'summer-wash-brands',
                 label: 'Wash n Wear',
                 handle: 'men-summer-wash-n-wear'
               %}
-              {% render 'man-mega-link', handle: 'men-summer-lawn', label: 'Lawn' %}
+              {% render 'man-mega-nested-trigger',
+                nested_id: 'summer-lawn-brands',
+                label: 'Lawn',
+                handle: 'men-summer-lawn'
+              %}
               {% render 'man-mega-link', handle: 'men-summer-imported', label: 'Imported' %}
               {% render 'man-mega-link', handle: 'men-summer-embroidered', label: 'Embroidered Collection' %}
+            </div>
+          </div>
+          <div
+            class="man-mega-menu__nested"
+            id="man-nested-summer-cotton-brands"
+            data-nested-panel="summer-cotton-brands"
+            hidden
+          >
+            <div class="man-mega-menu__links" data-man-nested-links>
+              {% render 'man-mega-link', handle: 'men-wash-n-wear-zelburry', label: 'Zelburry' %}
+              {% render 'man-mega-link', handle: 'clock-tower', label: 'Clock Tower' %}
             </div>
           </div>
           <div
@@ -202,8 +221,19 @@
                 label: 'Kafoor by Taiba',
                 handle: 'men-wash-n-wear-kafoor-by-taiba'
               %}
+              {% render 'man-mega-link', handle: 'chen4', label: 'Chen4' %}
+              {% render 'man-mega-link', handle: 'boski', label: 'Boski' %}
+            </div>
+          </div>
+          <div
+            class="man-mega-menu__nested"
+            id="man-nested-summer-lawn-brands"
+            data-nested-panel="summer-lawn-brands"
+            hidden
+          >
+            <div class="man-mega-menu__links" data-man-nested-links>
+              {% render 'man-mega-link', handle: 'men-summer-lawn', label: 'Shop All' %}
               {% render 'man-mega-link', handle: 'men-wash-n-wear-gul-ahmed', label: 'Gul Ahmed' %}
-              {% render 'man-mega-link', handle: 'men-wash-n-wear-zelburry', label: 'Zelburry' %}
             </div>
           </div>
           <div

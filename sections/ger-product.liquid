@@ -35,8 +35,11 @@
       </div>
       <div class="ger-pdp__col-info">
         {% render 'ger-product-form', product: product, section_id: section.id, product_form_id: product_form_id %}
-        {% render 'ger-product-accordions', product: product %}
       </div>
+    </div>
+
+    <div class="ger-pdp__below">
+      {% render 'ger-product-accordions', product: product %}
     </div>
   </div>
 

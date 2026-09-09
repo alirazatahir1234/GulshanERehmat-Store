@@ -12,9 +12,15 @@
   assign show_wish = enable_wishlist | default: true
   assign badge_label = blank
   assign is_on_sale = false
+  assign discount_pct = 0
+  assign show_go_badge = false
 
   if product != blank and product.compare_at_price > product.price
     assign is_on_sale = true
+    if product.compare_at_price > 0
+      assign discount_amount = product.compare_at_price | minus: product.price
+      assign discount_pct = discount_amount | times: 100 | divided_by: product.compare_at_price
+    endif
   endif
 
   assign has_go_tag = false
@@ -27,6 +33,7 @@
   if settings.grand_opening_enabled and product != blank
     if is_on_sale or has_go_tag
       assign badge_label = settings.grand_opening_badge_label | default: 'GRAND OPENING'
+      assign show_go_badge = true
     endif
   endif
 
@@ -48,7 +55,12 @@
   {%- if badge_label != blank or show_wish -%}
   <div class="ger-product-card-overlay">
     {% if badge_label != blank %}
-      <span class="ger-product-card-overlay__badge">{{ badge_label }}</span>
+      <span class="ger-product-card-overlay__badge">
+        <span class="ger-product-card-overlay__badge-label">{{ badge_label }}</span>
+        {% if show_go_badge and discount_pct > 0 %}
+          <span class="ger-product-card-overlay__badge-pct">{{ discount_pct }}% OFF</span>
+        {% endif %}
+      </span>
     {% endif %}
     {% if show_wish %}
       <button

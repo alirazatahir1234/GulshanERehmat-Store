@@ -141,30 +141,5 @@
     </div>
   </div>
 
-  {%- if media_count > 1 -%}
-    <div class="ger-pdp__masonry" data-ger-masonry aria-label="Product gallery">
-      {%- for media in product.media -%}
-        {%- if media.media_type == 'image' -%}
-          <button
-            type="button"
-            class="ger-pdp__masonry-item ger-pdp__masonry-item--{{ forloop.index }}"
-            data-ger-masonry-item
-            data-index="{{ forloop.index0 }}"
-            aria-label="Open image {{ forloop.index }}"
-          >
-            {{
-              media
-              | image_url: width: 1200
-              | image_tag:
-                loading: 'lazy',
-                widths: '400, 600, 800, 1200',
-                sizes: '(min-width: 990px) 40vw, 100vw',
-                class: 'ger-pdp__masonry-img',
-                alt: media.alt | default: product.title | escape
-            }}
-          </button>
-        {%- endif -%}
-      {%- endfor -%}
-    </div>
-  {%- endif -%}
+  {%- comment -%} Main gallery only — no vertical masonry stack of all images {%- endcomment -%}
 </div>

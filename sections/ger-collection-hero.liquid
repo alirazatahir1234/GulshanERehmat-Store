@@ -5,6 +5,16 @@
 >
 
 {%- liquid
+  assign kafoor_page = false
+  if collection.handle == 'men-wash-n-wear-kafoor-by-taiba' or collection.handle == 'men-wash-n-wear-kafoor-by-taiba-life-line' or collection.handle contains 'kafoor-by-taiba'
+    assign kafoor_page = true
+  endif
+-%}
+{%- if kafoor_page -%}
+  {% render 'ger-collection-banner' %}
+{%- else -%}
+
+{%- liquid
   assign eyebrow = section.settings.eyebrow | default: 'MEN COLLECTION'
   assign heading = section.settings.heading
   if heading == blank
@@ -157,6 +167,7 @@
     </div>
   </div>
 </section>
+{%- endif -%}
 
 {% schema %}
 {
