@@ -6,12 +6,182 @@
 
 {%- liquid
   assign kafoor_page = false
-  if collection.handle == 'men-wash-n-wear-kafoor-by-taiba' or collection.handle == 'men-wash-n-wear-kafoor-by-taiba-life-line' or collection.handle contains 'kafoor-by-taiba'
+  assign wash_wear_parent = false
+  assign summer_fabric_page = false
+  assign ger_plp_master = false
+  assign ger_plp_label = collection.title
+  assign ger_plp_subtitle = 'Premium Fabrics for Every Occasion'
+  assign handle = collection.handle | default: ''
+
+  if handle == 'men-wash-n-wear-kafoor-by-taiba' or handle == 'men-wash-n-wear-kafoor-by-taiba-life-line' or handle contains 'kafoor-by-taiba'
     assign kafoor_page = true
   endif
+
+  if handle == 'men-summer-wash-n-wear' or handle == 'men-wash-n-wear' or handle == 'wash-n-wear' or handle == 'wash-and-wear'
+    assign wash_wear_parent = true
+    assign summer_fabric_page = true
+    assign ger_plp_label = 'Wash & Wear'
+    assign ger_plp_subtitle = 'Premium Fabrics for Every Occasion'
+  endif
+
+  if handle == 'men-summer-cotton'
+    assign summer_fabric_page = true
+    assign ger_plp_label = 'Cotton'
+    assign ger_plp_subtitle = 'Soft Everyday Essentials'
+  endif
+
+  if handle == 'men-summer-lawn'
+    assign summer_fabric_page = true
+    assign ger_plp_label = 'Lawn'
+    assign ger_plp_subtitle = 'Light & Breathable Fabrics'
+  endif
+
+  if handle == 'men-summer-imported'
+    assign summer_fabric_page = true
+    assign ger_plp_label = 'Imported'
+    assign ger_plp_subtitle = 'Curated International Fabrics'
+  endif
+
+  if handle == 'men-summer-embroidered'
+    assign summer_fabric_page = true
+    assign ger_plp_label = 'Embroidered Collection'
+    assign ger_plp_subtitle = 'Detailed Craft for Special Occasions'
+  endif
+
+  if wash_wear_parent == false and kafoor_page == false and summer_fabric_page == false
+    assign title_down = collection.title | downcase | default: ''
+    if title_down contains 'wash' and title_down contains 'wear'
+      unless title_down contains 'kafoor' or title_down contains 'life line'
+        assign wash_wear_parent = true
+        assign summer_fabric_page = true
+        assign ger_plp_label = 'Wash & Wear'
+      endunless
+    endif
+  endif
+
+  if summer_fabric_page and kafoor_page == false
+    assign ger_plp_master = true
+  endif
 -%}
+
 {%- if kafoor_page -%}
   {% render 'ger-collection-banner' %}
+{%- elsif ger_plp_master -%}
+
+{%- liquid
+  assign heading = section.settings.heading
+  if heading == blank
+    assign heading = ger_plp_label | append: ' Collection'
+  endif
+  assign subtitle = ger_plp_subtitle
+  if wash_wear_parent and section.settings.wash_subtitle != blank
+    assign subtitle = section.settings.wash_subtitle
+  endif
+  assign intro = section.settings.wash_intro
+  if intro == blank and wash_wear_parent
+    assign intro = 'Discover premium Wash & Wear fabrics from trusted brands, designed for comfort, durability and effortless everyday style.'
+  endif
+  if intro == blank and collection.description != blank
+    assign intro = collection.description | strip_html | truncate: 180
+  endif
+  assign script_text = section.settings.wash_script | default: 'Style in Every Season'
+
+  assign model_image = section.settings.model_image
+  if model_image == blank and collection.image
+    assign model_image = collection.image
+  endif
+-%}
+
+<section
+  class="ger-collection-hero ger-collection-hero--wash ger-collection-hero--plp{% if section.settings.show_gradient %} ger-collection-hero--gradient{% endif %}"
+  {{ section.shopify_attributes }}
+>
+  <div class="ger-collection-hero__inner ger-collection-hero__inner--wash">
+    <div class="ger-collection-hero__copy">
+      {% render 'ger-collection-breadcrumb', collection: collection %}
+
+      <h1 class="ger-collection-hero__heading">{{ heading }}</h1>
+      {% if subtitle != blank %}
+        <p class="ger-collection-hero__subtitle">{{ subtitle }}</p>
+      {% endif %}
+      {% if intro != blank %}
+        <p class="ger-collection-hero__intro">{{ intro }}</p>
+      {% endif %}
+
+      <div class="ger-collection-hero__features ger-collection-hero__features--wash" aria-label="Collection highlights">
+        <div class="ger-collection-hero__feature ger-collection-hero__feature--stack">
+          <span class="ger-collection-hero__feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
+              <path d="M12 3c-2.5 3.5-6 5.2-6 9a6 6 0 0012 0c0-3.8-3.5-5.5-6-9z"/>
+            </svg>
+          </span>
+          <span class="ger-collection-hero__feature-label">Breathable</span>
+          <span class="ger-collection-hero__feature-hint">All Day Comfort</span>
+        </div>
+        <div class="ger-collection-hero__feature ger-collection-hero__feature--stack">
+          <span class="ger-collection-hero__feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
+              <path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3z"/>
+            </svg>
+          </span>
+          <span class="ger-collection-hero__feature-label">Durable</span>
+          <span class="ger-collection-hero__feature-hint">Long Lasting</span>
+        </div>
+        <div class="ger-collection-hero__feature ger-collection-hero__feature--stack">
+          <span class="ger-collection-hero__feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
+              <path d="M12 3l2.2 4.5L19 8.5l-3.5 3.4.8 4.8L12 14.8 7.7 16.7l.8-4.8L5 8.5l4.8-1z"/>
+            </svg>
+          </span>
+          <span class="ger-collection-hero__feature-label">Premium Quality</span>
+          <span class="ger-collection-hero__feature-hint">Fine Finish</span>
+        </div>
+        <div class="ger-collection-hero__feature ger-collection-hero__feature--stack">
+          <span class="ger-collection-hero__feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
+              <path d="M4 7h16M4 12h16M4 17h10"/>
+            </svg>
+          </span>
+          <span class="ger-collection-hero__feature-label">Wide Range</span>
+          <span class="ger-collection-hero__feature-hint">For Every Style</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ger-collection-hero__visual">
+      <div class="ger-collection-hero__media">
+        {% if model_image != blank %}
+          {{
+            model_image
+            | image_url: width: 1200
+            | image_tag:
+              class: 'ger-collection-hero__image',
+              widths: '400, 600, 800, 1000, 1200',
+              sizes: '(min-width: 990px) 42vw, 90vw',
+              loading: 'eager',
+              fetchpriority: 'high',
+              alt: model_image.alt | default: heading
+          }}
+        {% else %}
+          <img
+            class="ger-collection-hero__image"
+            src="{{ 'ger-promo-hero-right-fabrics.png' | asset_url }}"
+            alt="{{ heading | escape }}"
+            width="768"
+            height="512"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          >
+        {% endif %}
+        {% if script_text != blank %}
+          <span class="ger-collection-hero__script">{{ script_text | newline_to_br }}</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
 {%- else -%}
 
 {%- liquid
@@ -188,13 +358,31 @@
       "type": "text",
       "id": "heading",
       "label": "Main heading",
-      "info": "Leave blank to use the collection title."
+      "info": "Leave blank to use the collection title (or Wash & Wear Collection on that page)."
     },
     {
       "type": "textarea",
       "id": "subtitle",
       "label": "Description",
       "default": "Discover the latest fabrics, designs and colors — made for your next signature look."
+    },
+    {
+      "type": "text",
+      "id": "wash_subtitle",
+      "label": "Wash & Wear subtitle",
+      "default": "Premium Fabrics for Every Occasion"
+    },
+    {
+      "type": "textarea",
+      "id": "wash_intro",
+      "label": "Wash & Wear intro",
+      "default": "Discover premium Wash & Wear fabrics from trusted brands, designed for comfort, durability and effortless everyday style."
+    },
+    {
+      "type": "text",
+      "id": "wash_script",
+      "label": "Wash & Wear script overlay",
+      "default": "Style in Every Season"
     },
     {
       "type": "text",
@@ -206,7 +394,7 @@
       "type": "image_picker",
       "id": "model_image",
       "label": "Hero model image",
-      "info": "Falls back to collection image, then first product image."
+      "info": "Falls back to collection image, then fabric asset on Wash & Wear."
     },
     {
       "type": "image_picker",

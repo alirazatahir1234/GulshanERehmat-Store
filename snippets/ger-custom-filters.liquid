@@ -1,0 +1,150 @@
+{%- doc -%}
+  Gulshan E Rehmat custom collection filter rail.
+  Categories (theme links) + ordered Shopify Search & Discovery filters.
+
+  Admin requirement (Search & Discovery → Filters) for live facet groups:
+  - Product vendor → Brands
+  - Price → Price Range
+  - Color (variant option) → Color swatches
+  - Availability → In Stock / Out of Stock
+  - Fabric type / Size / Style → only when metafield or option filters exist
+
+  Categories are theme-owned collection links (not Search & Discovery).
+
+  @param {object} filters - Collection/search filters
+  @param {string} [id_prefix] - Unique id prefix (desktop | drawer)
+  @param {string} [section_id] - Section id for input ids
+  @param {boolean} [show_apply] - Show Apply Filters button
+  @param {string} [results_url] - Clear-all URL
+
+  @example
+  {% render 'ger-custom-filters', filters: filters, id_prefix: 'desktop', section_id: section.id, show_apply: true, results_url: collection.url %}
+{%- enddoc -%}
+
+{%- liquid
+  assign id_prefix = id_prefix | default: 'desktop'
+  assign section_id = section_id | default: section.id
+  assign show_apply = show_apply | default: false
+  assign clear_url = results_url | default: collection.url
+  assign ger_rendered = '|'
+  assign ger_any_active = false
+
+  for filter in filters
+    assign ld = filter.label | downcase
+    if ld == 'category' or ld == 'categories'
+      continue
+    endif
+    if filter.type == 'price_range'
+      if filter.min_value.value != null or filter.max_value.value != null
+        assign ger_any_active = true
+      endif
+    elsif filter.active_values.size > 0
+      assign ger_any_active = true
+    endif
+  endfor
+-%}
+
+<div class="ger-filters" data-ger-filters="{{ id_prefix }}">
+  <div class="ger-filters__intro">
+    <h2 class="ger-filters__title">Filters</h2>
+    <p class="ger-filters__hint">
+      Select your desired options below. Available colors, brands and more are listed from products in this collection.
+    </p>
+  </div>
+
+  {% render 'ger-collection-category-nav' %}
+
+  {%- comment -%} Ordered passes: Brands → Price → Color → Availability → Fabric → Size → Style → rest {%- endcomment -%}
+
+  {%- for filter in filters -%}
+    {%- assign ld = filter.label | downcase -%}
+    {%- if ld == 'vendor' or ld == 'brand' or ld == 'brands' -%}
+      {%- assign ger_rendered = ger_rendered | append: filter.param_name | append: '|' -%}
+      {% render 'ger-filter-section', filter: filter, id_prefix: id_prefix, heading: 'Brand' %}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- for filter in filters -%}
+    {%- if filter.type == 'price_range' -%}
+      {%- assign ger_rendered = ger_rendered | append: filter.param_name | append: '|' -%}
+      {% render 'ger-filter-section', filter: filter, id_prefix: id_prefix, heading: 'Price' %}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- for filter in filters -%}
+    {%- assign ld = filter.label | downcase -%}
+    {%- if ld == 'color' or ld == 'colour' or ld contains 'color' -%}
+      {%- assign ger_rendered = ger_rendered | append: filter.param_name | append: '|' -%}
+      {% render 'ger-filter-section', filter: filter, id_prefix: id_prefix, heading: 'Color', is_swatch: true %}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- for filter in filters -%}
+    {%- assign ld = filter.label | downcase -%}
+    {%- if ld == 'availability' -%}
+      {%- assign ger_rendered = ger_rendered | append: filter.param_name | append: '|' -%}
+      {% render 'ger-filter-section', filter: filter, id_prefix: id_prefix, heading: 'Availability' %}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- for filter in filters -%}
+    {%- assign ld = filter.label | downcase -%}
+    {%- if ld == 'fabric type' or ld == 'fabric' or ld == 'fabric_type' or ld == 'fabric-type' -%}
+      {%- assign ger_rendered = ger_rendered | append: filter.param_name | append: '|' -%}
+      {% render 'ger-filter-section', filter: filter, id_prefix: id_prefix, heading: 'Fabric Type' %}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- for filter in filters -%}
+    {%- assign ld = filter.label | downcase -%}
+    {%- if ld == 'size' or ld == 'sizes' -%}
+      {%- assign ger_rendered = ger_rendered | append: filter.param_name | append: '|' -%}
+      {% render 'ger-filter-section', filter: filter, id_prefix: id_prefix, heading: 'Size' %}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- for filter in filters -%}
+    {%- assign ld = filter.label | downcase -%}
+    {%- if ld == 'style' or ld == 'styles' -%}
+      {%- assign ger_rendered = ger_rendered | append: filter.param_name | append: '|' -%}
+      {% render 'ger-filter-section', filter: filter, id_prefix: id_prefix, heading: 'Style' %}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- for filter in filters -%}
+    {%- assign ld = filter.label | downcase -%}
+    {%- if ld == 'category' or ld == 'categories' -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- assign marker = filter.param_name | prepend: '|' | append: '|' -%}
+    {%- if ger_rendered contains marker -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- liquid
+      assign heading = filter.label
+      if ld == 'colour'
+        assign heading = 'Color'
+      endif
+    -%}
+    {% render 'ger-filter-section', filter: filter, id_prefix: id_prefix, heading: heading %}
+  {%- endfor -%}
+
+  <div class="ger-filters__actions">
+    {%- if ger_any_active -%}
+      <facet-remove-component data-url="{{ clear_url }}">
+        <button
+          type="button"
+          class="ger-filters__clear-all"
+          ref="clearButton"
+          on:click="/removeFilter?form="
+          on:keydown="/removeFilter?form="
+        >
+          Clear All
+        </button>
+      </facet-remove-component>
+    {%- endif -%}
+    {%- if show_apply -%}
+      <button type="submit" class="ger-apply-filters">Apply</button>
+    {%- endif -%}
+  </div>
+</div>

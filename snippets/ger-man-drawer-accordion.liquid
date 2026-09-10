@@ -65,9 +65,23 @@
                     </span>
                   </li>
                   <li class="menu-drawer__list-item">
-                    <span class="ger-drawer-cat__link-wrap">
-                      {% render 'man-mega-link', handle: 'clock-tower', label: 'Clock Tower' %}
-                    </span>
+                    <details id="Details-menu-drawer-ger-cotton-kafoor">
+                      <summary class="menu-drawer__menu-item menu-drawer__menu-item--child ger-drawer-cat__summary">
+                        <span class="menu-drawer__menu-item-text wrap-text">Kafoor by Taiba</span>
+                        <span class="ger-drawer-chevron" aria-hidden="true">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                        </span>
+                      </summary>
+                      <ul class="menu-drawer__menu details-content ger-drawer-cat__level4" role="list">
+                        <li class="menu-drawer__list-item">
+                          <span class="ger-drawer-cat__link-wrap">
+                            {% render 'man-mega-link', handle: 'clock-tower', label: 'Clock Tower' %}
+                          </span>
+                        </li>
+                      </ul>
+                    </details>
                   </li>
                 </ul>
               </details>
@@ -75,7 +89,7 @@
             <li class="menu-drawer__list-item">
               <details id="Details-menu-drawer-ger-summer-wash">
                 <summary class="menu-drawer__menu-item menu-drawer__menu-item--child ger-drawer-cat__summary">
-                  <span class="menu-drawer__menu-item-text wrap-text">Wash n Wear</span>
+                  <span class="menu-drawer__menu-item-text wrap-text">Wash &amp; Wear</span>
                   <span class="ger-drawer-chevron" aria-hidden="true">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -83,6 +97,11 @@
                   </span>
                 </summary>
                 <ul class="menu-drawer__menu details-content ger-drawer-cat__level3" role="list">
+                  <li class="menu-drawer__list-item">
+                    <span class="ger-drawer-cat__link-wrap">
+                      {% render 'man-mega-link', handle: 'men-summer-wash-n-wear', label: 'View all Wash & Wear' %}
+                    </span>
+                  </li>
                   <li class="menu-drawer__list-item">
                     <span class="ger-drawer-cat__link-wrap">
                       {% render 'man-mega-link', handle: 'men-wash-n-wear-grace', label: 'Grace' %}
@@ -104,11 +123,6 @@
                         </span>
                       </summary>
                       <ul class="menu-drawer__menu details-content ger-drawer-cat__level4" role="list">
-                        <li class="menu-drawer__list-item">
-                          <span class="ger-drawer-cat__link-wrap">
-                            {% render 'man-mega-link', handle: 'men-wash-n-wear-kafoor-by-taiba', label: 'Shop All' %}
-                          </span>
-                        </li>
                         <li class="menu-drawer__list-item">
                           <span class="ger-drawer-cat__link-wrap">
                             {% render 'man-mega-link', handle: 'men-wash-n-wear-kafoor-by-taiba-life-line', label: 'Life Line' %}
@@ -141,11 +155,6 @@
                   </span>
                 </summary>
                 <ul class="menu-drawer__menu details-content ger-drawer-cat__level3" role="list">
-                  <li class="menu-drawer__list-item">
-                    <span class="ger-drawer-cat__link-wrap">
-                      {% render 'man-mega-link', handle: 'men-summer-lawn', label: 'Shop All' %}
-                    </span>
-                  </li>
                   <li class="menu-drawer__list-item">
                     <span class="ger-drawer-cat__link-wrap">
                       {% render 'man-mega-link', handle: 'men-wash-n-wear-gul-ahmed', label: 'Gul Ahmed' %}

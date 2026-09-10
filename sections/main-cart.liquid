@@ -8,6 +8,9 @@
   endif
 %}
 
+{{ 'ger-cart.css' | asset_url | stylesheet_tag }}
+{% render 'ger-cart-intro' %}
+
 {% capture cart_page_more_blocks_content %}
   <div class="cart-page__more-blocks">
     {%- content_for 'blocks' -%}

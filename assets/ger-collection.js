@@ -62,9 +62,27 @@
     } catch (e) {}
   }
 
+  function bindBrandSearch(scope) {
+    (scope || document).querySelectorAll('[data-ger-brand-search]').forEach(function (input) {
+      if (input.getAttribute('data-ger-bound') === '1') return;
+      input.setAttribute('data-ger-bound', '1');
+      input.addEventListener('input', function () {
+        var q = (input.value || '').trim().toLowerCase();
+        var section = input.closest('.ger-filters__section--brand') || input.closest('.ger-filters__section');
+        if (!section) return;
+        section.querySelectorAll('[data-ger-brand-label]').forEach(function (item) {
+          var label = item.getAttribute('data-ger-brand-label') || '';
+          item.hidden = q !== '' && label.indexOf(q) === -1;
+        });
+      });
+    });
+  }
+
   function enhanceFilters() {
     document.querySelectorAll('.ger-collection-page .facets-block-wrapper--vertical').forEach(function (wrap) {
       if (wrap.id === 'filters-drawer') return;
+      /* Custom filter rail already provides Categories + facets + Apply */
+      if (wrap.querySelector('.ger-filters')) return;
       var target =
         wrap.querySelector('.facets--vertical') ||
         wrap.querySelector('.facets') ||
@@ -358,6 +376,9 @@
     if (!grid) return;
     var cards = grid.querySelectorAll('.product-grid__item');
     if (!cards.length) return;
+    var hasVariantCards = grid.querySelector('.ger-variant-card-item');
+    if (!hasVariantCards) return;
+
     var count = cards.length;
     var label = count === 1 ? '1 item' : count + ' items';
     document.querySelectorAll('.ger-collection-page .products-count-wrapper [role="status"]').forEach(function (el) {
@@ -365,41 +386,37 @@
     });
   }
 
-  function initColorCards(scope) {
-    (scope || document).querySelectorAll('[data-ger-color-card]').forEach(function (card) {
-      if (card.dataset.gerColorReady === 'true') return;
-      card.dataset.gerColorReady = 'true';
+  function bindPlpSwatches(scope) {
+    (scope || document).querySelectorAll('[data-ger-plp-card]').forEach(function (card) {
+      if (card.dataset.gerPlpReady === 'true') return;
+      card.dataset.gerPlpReady = 'true';
 
-      var img = card.querySelector('[data-ger-color-card-image]');
-      var links = card.querySelectorAll('[data-ger-color-card-link]');
-      var variantInput = card.querySelector('[data-ger-color-card-variant]');
-      var atc = card.querySelector('[data-ger-color-card-atc]');
+      card.addEventListener('click', function (event) {
+        var swatch = event.target.closest('[data-ger-plp-swatch]');
+        if (!swatch || !card.contains(swatch)) return;
+        event.preventDefault();
 
-      card.querySelectorAll('[data-ger-color-swatch]').forEach(function (swatch) {
-        swatch.addEventListener('click', function () {
-          card.querySelectorAll('[data-ger-color-swatch]').forEach(function (s) {
-            s.classList.remove('is-selected');
-          });
-          swatch.classList.add('is-selected');
-
-          var url = swatch.getAttribute('data-variant-url');
-          var image = swatch.getAttribute('data-image');
-          var id = swatch.getAttribute('data-variant-id');
-          var unavailable = swatch.classList.contains('is-unavailable');
-
-          if (image && img) img.src = image;
-          if (url) {
-            links.forEach(function (a) {
-              a.setAttribute('href', url);
-            });
-          }
-          if (id && variantInput) variantInput.value = id;
-          if (atc) {
-            atc.disabled = unavailable;
-            atc.setAttribute('aria-disabled', unavailable ? 'true' : 'false');
-            atc.textContent = unavailable ? 'Sold out' : 'Add to cart';
-          }
+        card.querySelectorAll('[data-ger-plp-swatch]').forEach(function (el) {
+          el.classList.toggle('is-active', el === swatch);
         });
+
+        var imageUrl = swatch.getAttribute('data-image-url');
+        var img = card.querySelector('.ger-variant-card__img');
+        if (imageUrl && img) {
+          img.setAttribute('src', imageUrl);
+          img.removeAttribute('srcset');
+        }
+
+        var variantId = swatch.getAttribute('data-variant-id');
+        var variantInput = card.querySelector('[data-ger-plp-variant-input]');
+        if (variantId && variantInput) variantInput.value = variantId;
+
+        var variantUrl = swatch.getAttribute('data-variant-url');
+        if (variantUrl) {
+          card.querySelectorAll('a.ger-variant-card__media-link, .ger-variant-card__title a').forEach(function (link) {
+            link.setAttribute('href', variantUrl);
+          });
+        }
       });
     });
   }
@@ -408,10 +425,11 @@
     applyWishlistState(document);
     restoreListView();
     enhanceFilters();
+    bindBrandSearch(document);
     enhanceBuyButtons(document);
     bindAtcLoadingFeedback();
     updateVariantCardCount();
-    initColorCards(document);
+    bindPlpSwatches(document);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
@@ -424,8 +442,8 @@
       new MutationObserver(function () {
         applyWishlistState(document);
         enhanceBuyButtons(document);
+        bindPlpSwatches(document);
         updateVariantCardCount();
-        initColorCards(document);
       }).observe(grid, { childList: true, subtree: true });
     }
   });

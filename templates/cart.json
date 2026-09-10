@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "cart-section": {
       "type": "main-cart",
@@ -15,7 +16,7 @@
           "type": "_cart-title",
           "static": true,
           "settings": {
-            "title": "Cart",
+            "title": "Your Cart",
             "show_count": true,
             "type_preset": "h4",
             "alignment": "left",
@@ -30,10 +31,10 @@
           "type": "_cart-products",
           "static": true,
           "settings": {
-            "gap": 24,
-            "image_ratio": "portrait",
+            "gap": 16,
+            "image_ratio": "square",
             "dividers": true,
-            "vendor": false,
+            "vendor": true,
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
@@ -45,12 +46,12 @@
           "type": "_cart-summary",
           "static": true,
           "settings": {
-            "extend_summary": true,
-            "background_color": "{{ settings.color_palette.color2 }}",
-            "border": "none",
+            "extend_summary": false,
+            "background_color": "#ffffff",
+            "border": "solid",
             "border_width": 1,
             "border_opacity": 100,
-            "border_radius": 0
+            "border_radius": 14
           },
           "blocks": {}
         }
@@ -58,8 +59,8 @@
       "settings": {
         "section_width": "page-width",
         "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 24,
-        "padding-block-end": 0
+        "padding-block-start": 0,
+        "padding-block-end": 4
       }
     },
     "product_list_NNFgcy": {
@@ -125,7 +126,7 @@
               "type": "_product-list-button",
               "name": "t:names.product_list_button",
               "settings": {
-                "label": "View all",
+                "label": "View all products →",
                 "open_in_new_tab": false,
                 "style_class": "link",
                 "width": "fit-content",
@@ -146,7 +147,7 @@
           "name": "t:names.product_card",
           "static": true,
           "settings": {
-            "product_card_gap": 4,
+            "product_card_gap": 8,
             "border": "none",
             "border_width": 1,
             "border_opacity": 100,
@@ -161,11 +162,11 @@
               "type": "_product-card-gallery",
               "name": "t:names.product_card_media",
               "settings": {
-                "image_ratio": "adapt",
+                "image_ratio": "square",
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
-                "border_radius": 0,
+                "border_radius": 10,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
@@ -235,21 +236,32 @@
         "columns": 4,
         "mobile_columns": "2",
         "mobile_card_size": "60cqw",
-        "columns_gap": 8,
+        "columns_gap": 20,
         "rows_gap": 24,
         "icons_style": "arrow",
         "icons_shape": "none",
         "section_width": "page-width",
         "horizontal_alignment": "flex-start",
-        "gap": 28,
+        "gap": 20,
         "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "padding-block-start": 12,
+        "padding-block-end": 20
+      }
+    },
+    "ger_newsletter": {
+      "type": "ger-newsletter",
+      "settings": {
+        "heading": "Join the Gulshan-e-Rehmat Family",
+        "text": "Subscribe to get exclusive offers and updates.",
+        "placeholder": "Your email address",
+        "button_label": "Subscribe",
+        "success_message": "Thanks for subscribing!"
       }
     }
   },
   "order": [
     "cart-section",
-    "product_list_NNFgcy"
+    "product_list_NNFgcy",
+    "ger_newsletter"
   ]
 }

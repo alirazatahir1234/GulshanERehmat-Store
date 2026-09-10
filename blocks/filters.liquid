@@ -162,6 +162,16 @@
           {{ 'actions.show_filters' | t | default: 'Filter' }}
         </button>
       {% endif %}
+
+      {% if template.name == 'collection' and block_settings.enable_filtering %}
+        <div class="ger-collection-toolbar__chips">
+          {% render 'ger-active-filters',
+            filters: filters,
+            results_url: results_url,
+            show_filter_label: false
+          %}
+        </div>
+      {% endif %}
     </div>
   {% endif %}
 
@@ -209,18 +219,24 @@
           ref="facetsForm"
         >
           {% if should_show_pane %}
-            {% render 'filter-remove-buttons',
-              filters: filters,
-              results_url: results_url,
-              show_filter_label: block_settings.show_filter_label,
-              should_show_clear_all: true
-            %}
+            {%- unless template.name == 'collection' -%}
+              {% render 'filter-remove-buttons',
+                filters: filters,
+                results_url: results_url,
+                show_filter_label: block_settings.show_filter_label,
+                should_show_clear_all: true
+              %}
+            {%- endunless -%}
 
             {% if block_settings.enable_filtering %}
               {% assign total_active_values = 0 %}
 
               {% capture rendered_filters %}
                 {%- for filter in filters -%}
+                  {%- assign ger_filter_label = filter.label | downcase -%}
+                  {%- if ger_filter_label == 'category' or ger_filter_label == 'categories' -%}
+                    {%- continue -%}
+                  {%- endif -%}
                   {% case filter.type %}
                     {% when 'price_range' %}
                       {%- liquid
@@ -229,11 +245,7 @@
                           assign is_active = true
                         endif
 
-                        if block_settings.filter_style != 'vertical'
-                          assign should_render_clear = true
-                        else
-                          assign should_render_clear = false
-                        endif
+                        assign should_render_clear = true
 
                         render 'price-filter', filter: filter, filter_style: block_settings.filter_style, should_render_clear: should_render_clear, id_prefix: 'horizontal'
                       -%}
@@ -245,11 +257,7 @@
 
                         assign active_value_count = filter.active_values | size
                         assign total_active_values = total_active_values | plus: active_value_count
-                        if block_settings.filter_style != 'vertical'
-                          assign should_render_clear = true
-                        else
-                          assign should_render_clear = false
-                        endif
+                        assign should_render_clear = true
                         render 'list-filter', filter: filter, filter_style: block_settings.filter_style, active_value_count: active_value_count, should_render_clear: should_render_clear, show_swatch_label: block_settings.show_swatch_label, sectionId: section.id
                       %}
                   {% endcase %}
@@ -272,13 +280,16 @@
                     minimum-items: 2,
                     data-testid: 'horizontal-filters-overflow-list'
                   %}
+                {% elsif template.name == 'collection' %}
+                  {% render 'ger-custom-filters',
+                    filters: filters,
+                    id_prefix: 'desktop',
+                    section_id: section.id,
+                    show_apply: true,
+                    results_url: results_url
+                  %}
                 {% else %}
                   {{ rendered_filters }}
-                  {% if template.name == 'collection' %}
-                    <button type="submit" class="ger-apply-filters">
-                      Apply Filters
-                    </button>
-                  {% endif %}
                 {% endif %}
               </div>
 
@@ -484,18 +495,33 @@
             class="facets-drawer__filters"
           >
             {% if block_settings.enable_filtering %}
-              {% render 'filter-remove-buttons',
-                filters: filters,
-                results_url: results_url,
-                show_filter_label: block_settings.show_filter_label,
-                should_show_clear_all: false
-              %}
+              {%- unless template.name == 'collection' -%}
+                {% render 'filter-remove-buttons',
+                  filters: filters,
+                  results_url: results_url,
+                  show_filter_label: block_settings.show_filter_label,
+                  should_show_clear_all: false
+                %}
+              {%- endunless -%}
 
+              {%- if template.name == 'collection' -%}
+                {% render 'ger-custom-filters',
+                  filters: filters,
+                  id_prefix: 'drawer',
+                  section_id: section.id,
+                  show_apply: false,
+                  results_url: results_url
+                %}
+              {%- else -%}
               <div class="facets__filters-wrapper">
                 {% assign total_active_values = 0 %}
                 {% assign is_active = false %}
 
                 {%- for filter in filters -%}
+                  {%- assign ger_filter_label = filter.label | downcase -%}
+                  {%- if ger_filter_label == 'category' or ger_filter_label == 'categories' -%}
+                    {%- continue -%}
+                  {%- endif -%}
                   {% case filter.type %}
                     {% when 'price_range' %}
                       {%- liquid
@@ -519,6 +545,7 @@
                   {% endcase %}
                 {%- endfor -%}
               </div>
+              {%- endif -%}
             {% endif %}
 
             {% if block_settings.enable_sorting %}

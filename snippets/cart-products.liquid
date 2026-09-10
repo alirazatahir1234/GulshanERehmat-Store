@@ -195,6 +195,11 @@
                       endif
                     -%}
                     <div class="cart-items__title-row">
+                      {% if item.product.vendor != blank %}
+                        {% if block_settings.vendor or template.name == 'cart' %}
+                          <p class="ger-cart-vendor">{{ item.product.vendor }}</p>
+                        {% endif %}
+                      {% endif %}
                       <a
                         href="{{ item.url }}"
                         class="cart-items__title"
@@ -210,11 +215,6 @@
                         mode: 'trigger'
                       %}
                     </div>
-                    {% if item.product.vendor and block_settings.vendor %}
-                      <p>
-                        {{ item.product.vendor }}
-                      </p>
-                    {% endif %}
 
                     {%- if item.item_components.size != 0 -%}
                       <ul class="cart-items__bundle list-unstyled">
@@ -238,12 +238,28 @@
                       {%- if item.product.has_only_default_variant == false and item.item_components.size == 0 -%}
                         <dl class="cart-items__variants">
                           {%- for option in item.options_with_values -%}
-                            <div class="cart-items__variant">
-                              <dt class="visually-hidden">{{ option.name }}:</dt>
-                              <dd>
-                                {{- option.value -}}
-                                {%- if forloop.last != true %},&nbsp;{% endif -%}
-                              </dd>
+                            {%- liquid
+                              assign option_name_down = option.name | downcase
+                              assign is_color_option = false
+                              if option_name_down == 'color' or option_name_down == 'colour' or option_name_down == 'shade'
+                                assign is_color_option = true
+                              endif
+                              assign swatch_bg = option.value | handleize | replace: '-', ''
+                              case option_name_down
+                                when 'color', 'colour', 'shade'
+                                  assign swatch_bg = option.value | downcase | strip
+                              endcase
+                            -%}
+                            <div class="cart-items__variant ger-cart-variant{% if is_color_option %} ger-cart-variant--color{% endif %}">
+                              {% if is_color_option %}
+                                <span
+                                  class="ger-cart-swatch"
+                                  style="background-color: {{ swatch_bg }};"
+                                  aria-hidden="true"
+                                ></span>
+                              {% endif %}
+                              <dt>{{ option.name }}:</dt>
+                              <dd>{{ option.value }}</dd>
                             </div>
                           {%- endfor -%}
                         </dl>
@@ -324,6 +340,9 @@
                         {% endif %}
                       {% endif %}
                     </div>
+                    {% if item.variant.available and template.name == 'cart' %}
+                      <p class="ger-cart-stock">In stock</p>
+                    {% endif %}
                   </div>
                 </td>
                 <td
@@ -362,7 +381,11 @@
                       {% endif %}
                     >
                       {{- 'icon-delete.svg' | inline_asset_content -}}
-                      <span class="visually-hidden">{{ 'accessibility.remove' | t }}</span>
+                      {% if template.name == 'cart' %}
+                        <span class="ger-cart-remove-label">Remove</span>
+                      {% else %}
+                        <span class="visually-hidden">{{ 'accessibility.remove' | t }}</span>
+                      {% endif %}
                     </button>
                   </div>
                 </td>

@@ -107,14 +107,30 @@
       {% render 'text-block-styles' %}
       {% render 'price-styles' %}
       {% render 'product-card-gallery-zoom-details-styles' %}
-      <div class="main-collection-grid__empty">
-        <h2 class="main-collection-grid__empty-title h2">
-          {{ 'content.no_products_found' | t }}
-        </h2>
-        <p>
-          {{ 'content.use_fewer_filters_html' | t: link: collection.url, class: 'main-collection-grid__empty-link' }}
-        </p>
-      </div>
+      {%- if template.name == 'collection' -%}
+        <div class="main-collection-grid__empty ger-filters-empty">
+          <h2 class="main-collection-grid__empty-title h2 ger-filters-empty__title">
+            No products found
+          </h2>
+          <p class="ger-filters-empty__text">
+            Try adjusting your filters.
+          </p>
+          <p>
+            <a href="{{ collection.url }}" class="main-collection-grid__empty-link ger-filters-empty__clear">
+              Clear All Filters
+            </a>
+          </p>
+        </div>
+      {%- else -%}
+        <div class="main-collection-grid__empty">
+          <h2 class="main-collection-grid__empty-title h2">
+            {{ 'content.no_products_found' | t }}
+          </h2>
+          <p>
+            {{ 'content.use_fewer_filters_html' | t: link: collection.url, class: 'main-collection-grid__empty-link' }}
+          </p>
+        </div>
+      {%- endif -%}
     {% else %}
       {% if enable_infinite_scroll %}
         <span ref="viewMorePrevious"></span>

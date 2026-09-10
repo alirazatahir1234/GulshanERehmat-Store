@@ -1,0 +1,39 @@
+{%- doc -%}
+  Compact cart page intro — breadcrumb + Shopping Bag title.
+  No large banner.
+
+  @param {string} [heading] - Page heading
+  @param {string} [subtitle] - Supporting text
+  @param {string} [script_text] - Optional decorative script
+{%- enddoc -%}
+
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@400;500;600&family=Great+Vibes&display=swap"
+>
+
+{%- liquid
+  assign intro_heading = heading | default: 'Shopping Bag'
+  assign intro_subtitle = subtitle | default: 'Review your selected pieces before checkout.'
+  assign intro_script = script_text | default: 'Same Trust New Elegance'
+-%}
+
+<section class="ger-cart-intro">
+  <div class="ger-cart-intro__inner">
+    <nav class="ger-cart-intro__breadcrumb" aria-label="Breadcrumb">
+      <a href="{{ routes.root_url }}">Home</a>
+      <span class="ger-cart-intro__breadcrumb-sep" aria-hidden="true">/</span>
+      <span class="ger-cart-intro__breadcrumb-current">Cart</span>
+    </nav>
+
+    <h1 class="ger-cart-intro__heading">{{ intro_heading }}</h1>
+
+    {% if intro_subtitle != blank %}
+      <p class="ger-cart-intro__subtitle">{{ intro_subtitle }}</p>
+    {% endif %}
+
+    {% if intro_script != blank %}
+      <p class="ger-cart-intro__script" aria-hidden="true">{{ intro_script }}</p>
+    {% endif %}
+  </div>
+</section>

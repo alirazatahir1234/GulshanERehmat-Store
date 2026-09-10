@@ -5,6 +5,7 @@
   @param {string} nested_id - Matches data-nested-panel id
   @param {string} label - Visible label
   @param {string} [handle] - Optional collection handle for parent link
+  @param {boolean} [default_open] - Pre-select / expand this nest on load
 
   @example
   {% render 'man-mega-nested-trigger', nested_id: 'wash-brands', label: 'Wash n Wear', handle: 'men-wash-n-wear' %}
@@ -15,13 +16,23 @@
   if handle != blank
     assign col = collections[handle]
   endif
+
+  assign trigger_class = 'man-mega-menu__nested-trigger'
+  if default_open
+    assign trigger_class = trigger_class | append: ' is-active is-nested-open'
+  endif
+
+  assign expanded = 'false'
+  if default_open
+    assign expanded = 'true'
+  endif
 %}
 {% if col != blank %}
   <a
     href="{{ col.url }}"
-    class="man-mega-menu__nested-trigger"
+    class="{{ trigger_class }}"
     data-nested-trigger="{{ nested_id }}"
-    aria-expanded="false"
+    aria-expanded="{{ expanded }}"
     aria-controls="man-nested-{{ nested_id }}"
   >
     {{ label }}
@@ -29,9 +40,9 @@
 {% else %}
   <button
     type="button"
-    class="man-mega-menu__nested-trigger"
+    class="{{ trigger_class }}"
     data-nested-trigger="{{ nested_id }}"
-    aria-expanded="false"
+    aria-expanded="{{ expanded }}"
     aria-controls="man-nested-{{ nested_id }}"
   >
     {{ label }}

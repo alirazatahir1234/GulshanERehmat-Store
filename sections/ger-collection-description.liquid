@@ -2,27 +2,134 @@
 
 {%- liquid
   assign kafoor_page = false
-  if collection.handle == 'men-wash-n-wear-kafoor-by-taiba' or collection.handle == 'men-wash-n-wear-kafoor-by-taiba-life-line' or collection.handle contains 'kafoor-by-taiba'
+  assign wash_wear_parent = false
+  assign summer_fabric_page = false
+  assign ger_plp_master = false
+  assign ger_plp_label = collection.title
+  assign ger_plp_subtitle = 'Premium Fabrics for Every Occasion'
+  assign handle = collection.handle | default: ''
+
+  if handle == 'men-wash-n-wear-kafoor-by-taiba' or handle == 'men-wash-n-wear-kafoor-by-taiba-life-line' or handle contains 'kafoor-by-taiba'
     assign kafoor_page = true
+  endif
+
+  if handle == 'men-summer-wash-n-wear' or handle == 'men-wash-n-wear' or handle == 'wash-n-wear' or handle == 'wash-and-wear'
+    assign wash_wear_parent = true
+    assign summer_fabric_page = true
+    assign ger_plp_label = 'Wash & Wear'
+    assign ger_plp_subtitle = 'Premium Fabrics for Every Occasion'
+  endif
+
+  if handle == 'men-summer-cotton'
+    assign summer_fabric_page = true
+    assign ger_plp_label = 'Cotton'
+    assign ger_plp_subtitle = 'Soft Everyday Essentials'
+  endif
+
+  if handle == 'men-summer-lawn'
+    assign summer_fabric_page = true
+    assign ger_plp_label = 'Lawn'
+    assign ger_plp_subtitle = 'Light & Breathable Fabrics'
+  endif
+
+  if handle == 'men-summer-imported'
+    assign summer_fabric_page = true
+    assign ger_plp_label = 'Imported'
+    assign ger_plp_subtitle = 'Curated International Fabrics'
+  endif
+
+  if handle == 'men-summer-embroidered'
+    assign summer_fabric_page = true
+    assign ger_plp_label = 'Embroidered Collection'
+    assign ger_plp_subtitle = 'Detailed Craft for Special Occasions'
+  endif
+
+  if wash_wear_parent == false and kafoor_page == false and summer_fabric_page == false
+    assign title_down = collection.title | downcase | default: ''
+    if title_down contains 'wash' and title_down contains 'wear'
+      unless title_down contains 'kafoor' or title_down contains 'life line'
+        assign wash_wear_parent = true
+        assign summer_fabric_page = true
+        assign ger_plp_label = 'Wash & Wear'
+      endunless
+    endif
+  endif
+
+  if summer_fabric_page and kafoor_page == false
+    assign ger_plp_master = true
   endif
 -%}
 
 {%- if kafoor_page -%}
-  {%- assign story_link = collections['men-wash-n-wear-kafoor-by-taiba-life-line'].url | default: collection.url -%}
-
   <section class="ger-kafoor-story" aria-label="Life Line by Kafoor by Taiba" {{ section.shopify_attributes }}>
-    <a class="ger-kafoor-story__link" href="{{ story_link }}">
+    <div class="ger-kafoor-story__frame">
       <img
         class="ger-kafoor-story__design"
         src="{{ 'ger-kafoor-life-line-story.jpg' | asset_url }}"
-        alt="Life Line by Kafoor by Taiba — Premium Men’s Wash &amp; Wear Fabric. Available in 13 elegant colors."
+        alt="Life Line by Kafoor by Taiba — Premium Men’s Wash & Wear Fabric"
         width="1024"
-        height="379"
+        height="128"
+        sizes="(min-width: 1400px) 1400px, calc(100vw - 80px)"
         loading="lazy"
         decoding="async"
       >
-    </a>
+    </div>
   </section>
+{%- elsif ger_plp_master -%}
+  <div class="ger-collection-description ger-collection-description--plp" {{ section.shopify_attributes }}>
+    <div class="ger-collection-description__inner">
+      <h2 class="ger-collection-description__heading">
+        {% if wash_wear_parent %}
+          {{ section.settings.wash_lead | default: 'Premium Wash & Wear Fabrics for Modern Men' }}
+        {% else %}
+          {{ section.settings.heading | default: ger_plp_label | append: ' Collection' }}
+        {% endif %}
+      </h2>
+      <div class="ger-collection-description__text">
+        {% if section.settings.description != blank %}
+          {{ section.settings.description }}
+        {% elsif collection.description != blank %}
+          {{ collection.description }}
+        {% elsif wash_wear_parent %}
+          <p>
+            Explore premium Wash &amp; Wear fabrics from trusted brands, selected for comfort, durability and timeless style.
+            Our collection is designed for everyday wear, office occasions, Jummah, Eid, weddings and formal gatherings.
+          </p>
+        {% else %}
+          <p>
+            Discover premium {{ ger_plp_label }} fabrics at Gulshan E Rehmat — curated for comfort, quality and modern Pakistani style.
+          </p>
+        {% endif %}
+      </div>
+
+      <div class="ger-collection-trust" aria-label="Store benefits">
+        <div class="ger-collection-trust__item">
+          <span class="ger-collection-trust__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="22" height="22"><path d="M3 7h11v10H3zM14 10h4l3 3v4h-7V10zM7 20a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM18 20a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/></svg>
+          </span>
+          <span class="ger-collection-trust__label">Fast &amp; Reliable<br>Shipping</span>
+        </div>
+        <div class="ger-collection-trust__item">
+          <span class="ger-collection-trust__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="22" height="22"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
+          </span>
+          <span class="ger-collection-trust__label">Premium<br>Quality</span>
+        </div>
+        <div class="ger-collection-trust__item">
+          <span class="ger-collection-trust__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="22" height="22"><path d="M4 12a8 8 0 0114.5-4.5M20 12a8 8 0 01-14.5 4.5"/><path d="M18 3v5h-5M6 21v-5h5"/></svg>
+          </span>
+          <span class="ger-collection-trust__label">Easy<br>Returns</span>
+        </div>
+        <div class="ger-collection-trust__item">
+          <span class="ger-collection-trust__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="22" height="22"><path d="M4 14v-2a8 8 0 0116 0v2"/><path d="M4 14a2 2 0 002 2h1v-5H6a2 2 0 00-2 2zM20 14a2 2 0 01-2 2h-1v-5h1a2 2 0 012 2z"/><path d="M12 19h2a2 2 0 002-2v-1"/></svg>
+          </span>
+          <span class="ger-collection-trust__label">Customer<br>Support</span>
+        </div>
+      </div>
+    </div>
+  </div>
 {%- else -%}
   {%- liquid
     assign heading = section.settings.heading
@@ -69,6 +176,18 @@
       "id": "heading",
       "label": "Heading",
       "info": "Blank uses collection title + Collection. Kafoor pages use the Life Line story design."
+    },
+    {
+      "type": "text",
+      "id": "wash_heading",
+      "label": "Wash & Wear heading",
+      "default": "Wash & Wear Collection"
+    },
+    {
+      "type": "text",
+      "id": "wash_lead",
+      "label": "Wash & Wear lead",
+      "default": "Premium Wash & Wear Fabrics for Modern Men"
     },
     {
       "type": "richtext",

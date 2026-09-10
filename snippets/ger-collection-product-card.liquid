@@ -1,0 +1,230 @@
+{%- doc -%}
+  One product card for Wash & Wear parent PLP.
+  Shows a single product (not one card per color) with color swatches.
+
+  @param {object} product - Product object
+{%- enddoc -%}
+
+{%- liquid
+  assign card_image = product.featured_media.preview_image | default: product.featured_image
+  assign display_title = product.title
+  if product.vendor != blank
+    assign vendor_prefix = product.vendor | append: ' '
+    if display_title contains product.vendor
+      assign display_title = display_title | replace_first: vendor_prefix, '' | strip
+    endif
+  endif
+
+  assign is_on_sale = false
+  if product.compare_at_price > product.price
+    assign is_on_sale = true
+  endif
+
+  assign show_go_badge = false
+  if settings.grand_opening_enabled
+    if is_on_sale
+      assign show_go_badge = true
+    endif
+    if product.tags contains 'grand-opening' or product.tags contains 'Grand Opening' or product.tags contains 'GRAND OPENING'
+      assign show_go_badge = true
+    endif
+  endif
+
+  assign badge_label = settings.grand_opening_badge_label | default: 'GRAND OPENING'
+  assign discount_pct = 0
+  if is_on_sale and product.compare_at_price > 0
+    assign discount_amount = product.compare_at_price | minus: product.price
+    assign discount_pct = discount_amount | times: 100 | divided_by: product.compare_at_price
+  endif
+
+  assign color_option = blank
+  for option in product.options_with_values
+    assign option_name = option.name | downcase | strip
+    if option_name == 'color' or option_name == 'colour' or option_name == 'shade'
+      assign color_option = option
+      break
+    endif
+  endfor
+
+  assign color_count = 0
+  if color_option != blank
+    assign color_count = color_option.values.size
+  endif
+
+  assign first_available = product.selected_or_first_available_variant
+  assign card_available = product.available
+-%}
+
+<article
+  class="product-card ger-variant-card ger-plp-product-card{% unless card_available %} ger-variant-card--sold-out{% endunless %}"
+  data-product-id="{{ product.id }}"
+  data-ger-plp-card
+>
+  <div class="product-card__content product-grid__card layout-panel-flex layout-panel-flex--column">
+    <div class="card-gallery ger-variant-card__gallery">
+      <a href="{{ product.url }}" class="ger-variant-card__media-link" data-ger-plp-media-link>
+        {% if card_image != blank %}
+          {{
+            card_image
+            | image_url: width: 900
+            | image_tag:
+              class: 'ger-variant-card__img',
+              loading: 'lazy',
+              widths: '280, 400, 560, 720, 900',
+              sizes: '(min-width: 1200px) 22vw, (min-width: 750px) 30vw, 50vw',
+              alt: display_title
+          }}
+        {% else %}
+          <div class="ger-variant-card__placeholder" aria-hidden="true"></div>
+        {% endif %}
+      </a>
+
+      <div class="ger-product-card-overlay">
+        {% if show_go_badge %}
+          <span class="ger-product-card-overlay__badge">
+            <span class="ger-product-card-overlay__badge-label">{{ badge_label }}</span>
+            {% if discount_pct > 0 %}
+              <span class="ger-product-card-overlay__badge-pct">{{ discount_pct }}% OFF</span>
+            {% endif %}
+          </span>
+        {% elsif card_available == false %}
+          <span class="ger-product-card-overlay__badge ger-product-card-overlay__badge--sold-out">Sold out</span>
+        {% endif %}
+        <button
+          type="button"
+          class="ger-product-card-overlay__wishlist"
+          data-ger-wishlist
+          data-wishlist-key="{{ product.id }}"
+          aria-label="Add {{ display_title | escape }} to wishlist"
+          aria-pressed="false"
+        >
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M12 20s-7-4.5-7-10a4 4 0 017-2.5A4 4 0 0119 10c0 5.5-7 10-7 10z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="ger-variant-card__body">
+      {% if product.vendor != blank %}
+        <p class="ger-product-brand">{{ product.vendor }}</p>
+      {% endif %}
+
+      <h3 class="ger-variant-card__title">
+        <a href="{{ product.url }}">{{ display_title }}</a>
+      </h3>
+
+      <div class="ger-variant-card__price price">
+        {% if is_on_sale %}
+          <s class="compare-at-price">
+            {% if settings.currency_code_enabled_product_cards %}
+              {{ product.compare_at_price | money_with_currency }}
+            {% else %}
+              {{ product.compare_at_price | money }}
+            {% endif %}
+          </s>
+          <span class="price-item price-item--sale">
+            {% if settings.currency_code_enabled_product_cards %}
+              {{ product.price | money_with_currency }}
+            {% else %}
+              {{ product.price | money }}
+            {% endif %}
+          </span>
+        {% else %}
+          <span class="price-item">
+            {% if settings.currency_code_enabled_product_cards %}
+              {{ product.price | money_with_currency }}
+            {% else %}
+              {{ product.price | money }}
+            {% endif %}
+          </span>
+        {% endif %}
+      </div>
+
+      {% if color_option != blank and color_count > 0 %}
+        {%- assign swatch_limit = 8 -%}
+        <div class="ger-plp-swatches" role="list" aria-label="Available colors">
+          {% for value in color_option.values limit: swatch_limit %}
+            {%- liquid
+              assign swatch_variant = value.variant
+              if swatch_variant == blank
+                for variant in product.variants
+                  if variant.option1 == value or variant.option2 == value or variant.option3 == value or variant.option1 == value.name or variant.option2 == value.name or variant.option3 == value.name
+                    assign swatch_variant = variant
+                    break
+                  endif
+                endfor
+              endif
+              assign swatch_image = blank
+              if swatch_variant != blank
+                assign swatch_image = swatch_variant.featured_image | default: swatch_variant.image
+              endif
+              assign swatch_style = 'background-color: #d0d0d0'
+              if value.swatch.color != blank
+                assign swatch_style = 'background-color: ' | append: value.swatch.color
+              elsif value.swatch.image != blank
+                assign swatch_img_url = value.swatch.image | image_url: width: 48
+                assign swatch_style = 'background-image: url(' | append: swatch_img_url | append: '); background-size: cover'
+              endif
+              assign value_label = value.name | default: value
+            -%}
+            <button
+              type="button"
+              class="ger-plp-swatch{% if forloop.first %} is-active{% endif %}"
+              role="listitem"
+              aria-label="{{ value_label | escape }}"
+              title="{{ value_label | escape }}"
+              data-ger-plp-swatch
+              {% if swatch_variant != blank %}
+                data-variant-id="{{ swatch_variant.id }}"
+                data-variant-url="{{ swatch_variant.url }}"
+              {% endif %}
+              {% if swatch_image != blank %}
+                data-image-url="{{ swatch_image | image_url: width: 900 }}"
+              {% endif %}
+              style="{{ swatch_style }}"
+            ></button>
+          {% endfor %}
+          {% if color_count > swatch_limit %}
+            <a href="{{ product.url }}" class="ger-plp-swatch-more" aria-label="{{ color_count | minus: swatch_limit }} more colors">
+              +{{ color_count | minus: swatch_limit }}
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      <div class="ger-variant-card__actions">
+        {%- assign atc_form_id = 'ger-atc-plp-' | append: product.id -%}
+        <form
+          id="{{ atc_form_id }}"
+          class="ger-variant-card__form buy-buttons-block"
+          method="post"
+          action="{{ routes.cart_add_url }}"
+          accept-charset="UTF-8"
+          enctype="multipart/form-data"
+          data-ger-variant-atc
+        >
+          <input type="hidden" name="form_type" value="product">
+          <input type="hidden" name="utf8" value="✓">
+          <input type="hidden" name="id" value="{{ first_available.id }}" data-ger-plp-variant-input>
+          <input type="hidden" name="quantity" value="1">
+          <button
+            type="submit"
+            name="add"
+            class="add-to-cart-button"
+            {% unless card_available %}
+              disabled
+              aria-disabled="true"
+            {% endunless %}
+          >
+            {% if card_available %}
+              Add to cart
+            {% else %}
+              Sold out
+            {% endif %}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</article>

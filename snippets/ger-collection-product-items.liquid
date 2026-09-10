@@ -1,6 +1,5 @@
 {%- doc -%}
-  Renders ONE collection grid card for a multi-color product,
-  with color swatches for all unique Color variants.
+  Renders one collection grid item per unique Color variant.
 
   @param {object} product - Product with Color variants
   @param {object} section - Collection section
@@ -9,15 +8,43 @@
   @param {number} color_option_position - 0-based Color option index
 {%- enddoc -%}
 
-<li
-  id="{{ section.id }}-{{ product.id }}"
-  class="product-grid__item product-grid__item--{{ product_index }} ger-color-product-item"
-  data-page="{{ paginate.current_page }}"
-  data-product-id="{{ product.id }}"
-  ref="cards[]"
->
-  {% render 'ger-collection-variant-card',
-    product: product,
-    color_option_position: color_option_position
-  %}
-</li>
+{%- assign rendered_colors = '|' -%}
+{%- for variant in product.variants -%}
+  {%- liquid
+    case color_option_position
+      when 0
+        assign color_name = variant.option1
+      when 1
+        assign color_name = variant.option2
+      when 2
+        assign color_name = variant.option3
+      else
+        assign color_name = variant.title
+    endcase
+
+    assign color_key = color_name | handleize
+    assign color_token = color_key | prepend: '|' | append: '|'
+    assign already_rendered = false
+    if rendered_colors contains color_token
+      assign already_rendered = true
+    endif
+  -%}
+
+  {%- unless already_rendered -%}
+    {%- assign rendered_colors = rendered_colors | append: color_key | append: '|' -%}
+    <li
+      id="{{ section.id }}-{{ product.id }}-{{ variant.id }}"
+      class="product-grid__item product-grid__item--{{ product_index }} ger-variant-card-item"
+      data-page="{{ paginate.current_page }}"
+      data-product-id="{{ product.id }}"
+      data-variant-id="{{ variant.id }}"
+      ref="cards[]"
+    >
+      {% render 'ger-collection-variant-card',
+        product: product,
+        variant: variant,
+        color_name: color_name
+      %}
+    </li>
+  {%- endunless -%}
+{%- endfor -%}

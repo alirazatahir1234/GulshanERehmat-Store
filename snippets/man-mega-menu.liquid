@@ -84,7 +84,7 @@
   endif
 %}
 
-<div class="man-mega-menu" data-man-mega-menu>
+<div class="man-mega-menu" data-man-mega-menu data-default-category="summer" data-default-nested="kafoor-lines">
   <div class="man-mega-menu__cards" role="tablist" aria-label="Men categories">
     <a
       href="{{ url_summer }}"
@@ -184,8 +184,9 @@
               %}
               {% render 'man-mega-nested-trigger',
                 nested_id: 'summer-wash-brands',
-                label: 'Wash n Wear',
-                handle: 'men-summer-wash-n-wear'
+                label: 'Wash & Wear',
+                handle: 'men-summer-wash-n-wear',
+                default_open: true
               %}
               {% render 'man-mega-nested-trigger',
                 nested_id: 'summer-lawn-brands',
@@ -204,14 +205,29 @@
           >
             <div class="man-mega-menu__links" data-man-nested-links>
               {% render 'man-mega-link', handle: 'men-wash-n-wear-zelburry', label: 'Zelburry' %}
+              {% render 'man-mega-nested-trigger',
+                nested_id: 'cotton-kafoor-brands',
+                label: 'Kafoor by Taiba',
+                handle: 'men-wash-n-wear-kafoor-by-taiba'
+              %}
+            </div>
+          </div>
+          <div
+            class="man-mega-menu__nested man-mega-menu__nested--deep"
+            id="man-nested-cotton-kafoor-brands"
+            data-nested-panel="cotton-kafoor-brands"
+            data-nested-parent="summer-cotton-brands"
+            hidden
+          >
+            <h4 class="man-mega-menu__subheading">KAFOOR BY TAIBA</h4>
+            <div class="man-mega-menu__links" data-man-nested-links>
               {% render 'man-mega-link', handle: 'clock-tower', label: 'Clock Tower' %}
             </div>
           </div>
           <div
-            class="man-mega-menu__nested"
+            class="man-mega-menu__nested is-visible"
             id="man-nested-summer-wash-brands"
             data-nested-panel="summer-wash-brands"
-            hidden
           >
             <div class="man-mega-menu__links" data-man-nested-links>
               {% render 'man-mega-link', handle: 'men-wash-n-wear-grace', label: 'Grace' %}
@@ -219,7 +235,8 @@
               {% render 'man-mega-nested-trigger',
                 nested_id: 'kafoor-lines',
                 label: 'Kafoor by Taiba',
-                handle: 'men-wash-n-wear-kafoor-by-taiba'
+                handle: 'men-wash-n-wear-kafoor-by-taiba',
+                default_open: true
               %}
               {% render 'man-mega-link', handle: 'chen4', label: 'Chen4' %}
               {% render 'man-mega-link', handle: 'boski', label: 'Boski' %}
@@ -232,20 +249,17 @@
             hidden
           >
             <div class="man-mega-menu__links" data-man-nested-links>
-              {% render 'man-mega-link', handle: 'men-summer-lawn', label: 'Shop All' %}
               {% render 'man-mega-link', handle: 'men-wash-n-wear-gul-ahmed', label: 'Gul Ahmed' %}
             </div>
           </div>
           <div
-            class="man-mega-menu__nested man-mega-menu__nested--deep"
+            class="man-mega-menu__nested man-mega-menu__nested--deep is-visible"
             id="man-nested-kafoor-lines"
             data-nested-panel="kafoor-lines"
             data-nested-parent="summer-wash-brands"
-            hidden
           >
             <h4 class="man-mega-menu__subheading">KAFOOR BY TAIBA</h4>
             <div class="man-mega-menu__links" data-man-nested-links>
-              {% render 'man-mega-link', handle: 'men-wash-n-wear-kafoor-by-taiba', label: 'Shop All' %}
               {% render 'man-mega-link', handle: 'men-wash-n-wear-kafoor-by-taiba-life-line', label: 'Life Line' %}
             </div>
           </div>

@@ -1,0 +1,101 @@
+{%- doc -%}
+  Active filter chips above the product grid (GER custom filter).
+  Uses Shopify native remove URLs — refresh/back/share safe.
+
+  @param {object} filters - Collection/search filters
+  @param {string} results_url - Clear-all URL
+  @param {boolean} [show_filter_label] - Prefix chip with filter label
+
+  @example
+  {% render 'ger-active-filters', filters: filters, results_url: collection.url %}
+{%- enddoc -%}
+
+{%- liquid
+  assign is_active = false
+  for filter in filters
+    if filter.type == 'price_range'
+      if filter.min_value.value != null or filter.max_value.value != null
+        assign is_active = true
+        break
+      endif
+    elsif filter.active_values.size > 0
+      assign is_active = true
+      break
+    endif
+  endfor
+-%}
+
+{%- if is_active -%}
+  <div class="ger-active-filters" aria-label="Active filters">
+    <span class="ger-active-filters__label">Active Filters:</span>
+    <div class="ger-active-filters__chips">
+      {%- for filter in filters -%}
+        {%- assign label_down = filter.label | downcase -%}
+        {%- if label_down == 'category' or label_down == 'categories' -%}
+          {%- continue -%}
+        {%- endif -%}
+
+        {%- if filter.type == 'price_range' -%}
+          {%- if filter.min_value.value != null or filter.max_value.value != null -%}
+            <facet-remove-component
+              class="ger-active-filters__chip"
+              data-url="{{ filter.url_to_remove }}"
+              tabindex="0"
+              role="button"
+              on:click="/removeFilter?form="
+              on:keydown="/removeFilter?form="
+            >
+              <span class="ger-active-filters__chip-text">
+                {%- if filter.min_value.value != null and filter.max_value.value != null -%}
+                  {{ filter.min_value.value | money }} – {{ filter.max_value.value | money }}
+                {%- elsif filter.min_value.value != null -%}
+                  {{ filter.min_value.value | money }}+
+                {%- else -%}
+                  Up to {{ filter.max_value.value | money }}
+                {%- endif -%}
+              </span>
+              <span class="ger-active-filters__chip-x" aria-hidden="true">×</span>
+              <span class="visually-hidden">{{ 'actions.remove' | t }}</span>
+            </facet-remove-component>
+          {%- endif -%}
+        {%- else -%}
+          {%- for value in filter.active_values -%}
+            <facet-remove-component
+              class="ger-active-filters__chip{% if value.swatch %} ger-active-filters__chip--swatch{% endif %}"
+              data-url="{{ value.url_to_remove }}"
+              tabindex="0"
+              role="button"
+              on:click="/removeFilter?form="
+              on:keydown="/removeFilter?form="
+            >
+              {%- if value.swatch -%}
+                {% render 'swatch', swatch: value.swatch, mode: 'pill' %}
+              {%- endif -%}
+              <span class="ger-active-filters__chip-text">
+                {%- if show_filter_label -%}
+                  {{ filter.label | escape }}: {{ value.label | escape }}
+                {%- else -%}
+                  {{ value.label | escape }}
+                {%- endif -%}
+              </span>
+              <span class="ger-active-filters__chip-x" aria-hidden="true">×</span>
+              <span class="visually-hidden">{{ 'actions.remove' | t }}</span>
+            </facet-remove-component>
+          {%- endfor -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      <facet-remove-component data-url="{{ results_url }}">
+        <button
+          type="button"
+          class="ger-active-filters__clear"
+          ref="clearButton"
+          on:click="/removeFilter?form="
+          on:keydown="/removeFilter?form="
+        >
+          Clear All
+        </button>
+      </facet-remove-component>
+    </div>
+  </div>
+{%- endif -%}

@@ -1,5 +1,7 @@
 /**
  * Man mega menu: category filtering, nested Wash n Wear brands, link hover.
+ * Default whenever Men opens: Summer → Wash n Wear → Kafoor by Taiba.
+ * Visual selection only — no auto navigation / URL change.
  */
 function canHover() {
   return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -13,9 +15,12 @@ function initManMegaMenu(root) {
   const linkGroups = root.querySelectorAll('[data-man-links]');
   const nestedTriggers = Array.from(root.querySelectorAll('[data-nested-trigger]'));
   const nestedPanels = Array.from(root.querySelectorAll('[data-nested-panel]'));
+  const defaultCategory = root.getAttribute('data-default-category') || 'summer';
+  const defaultNestedId = root.getAttribute('data-default-nested') || 'kafoor-lines';
 
   let activeCategory = '';
   let activeNestedId = '';
+  let wasOpen = false;
 
   const getNestedChain = (nestedId) => {
     if (!nestedId) return [];
@@ -63,10 +68,17 @@ function initManMegaMenu(root) {
 
   const clearNested = () => setNested('', { force: true });
 
-  const setCategory = (category, { force = false } = {}) => {
+  const applyDefaultNested = (category) => {
+    if (category === defaultCategory && defaultNestedId) {
+      setNested(defaultNestedId, { force: true });
+      return;
+    }
+    clearNested();
+  };
+
+  const setCategory = (category, { force = false, restoreDefaultNested = true } = {}) => {
     if (!category || (!force && category === activeCategory)) return;
     activeCategory = category;
-    clearNested();
 
     cards.forEach((card) => {
       const isActive = card.getAttribute('data-mega-category') === category;
@@ -88,21 +100,41 @@ function initManMegaMenu(root) {
         panel.classList.remove('is-animating');
       }
     });
+
+    if (restoreDefaultNested) {
+      applyDefaultNested(category);
+    } else {
+      clearNested();
+    }
+  };
+
+  /**
+   * Visual-only default state used every time Men opens.
+   * Does not navigate or change the URL.
+   */
+  const resetDefaults = () => {
+    setCategory(defaultCategory, { force: true, restoreDefaultNested: true });
   };
 
   cards.forEach((card) => {
     const category = card.getAttribute('data-mega-category');
 
     if (canHover()) {
-      card.addEventListener('pointerenter', () => setCategory(category));
+      card.addEventListener('pointerenter', () => {
+        // Switching top cards restores that card's default nest (Summer → Wash → Kafoor)
+        setCategory(category, { restoreDefaultNested: true });
+      });
     }
 
-    card.addEventListener('focus', () => setCategory(category));
+    card.addEventListener('focus', () => {
+      setCategory(category, { restoreDefaultNested: true });
+    });
 
     card.addEventListener('click', (event) => {
+      // First click only activates the panel — do not navigate away from Men
       if (category !== activeCategory) {
         event.preventDefault();
-        setCategory(category);
+        setCategory(category, { restoreDefaultNested: true });
       }
     });
   });
@@ -138,15 +170,17 @@ function initManMegaMenu(root) {
     trigger.addEventListener('focus', openNested);
 
     trigger.addEventListener('click', (event) => {
-      const isOpen = activeNestedId === nestedId;
+      const isOpen = activeNestedId === nestedId || getNestedChain(activeNestedId).includes(nestedId);
       const isAnchor = trigger.tagName === 'A';
 
+      // Expand cascade first; only follow the link on a second intentional click
+      if (!isOpen) {
+        event.preventDefault();
+        setNested(nestedId);
+        return;
+      }
+
       if (!canHover()) {
-        if (!isOpen) {
-          event.preventDefault();
-          setNested(nestedId);
-          return;
-        }
         if (!isAnchor) {
           event.preventDefault();
           clearNested();
@@ -164,7 +198,11 @@ function initManMegaMenu(root) {
   nestedPanels.forEach((panel) => {
     panel.addEventListener('pointerenter', () => {
       const id = panel.getAttribute('data-nested-panel');
-      if (id) setNested(id);
+      if (!id) return;
+      // Keep deeper nests open when hovering an already-active parent column
+      const chain = getNestedChain(activeNestedId);
+      if (chain.includes(id) && activeNestedId !== id) return;
+      setNested(id);
     });
 
     const links = panel.querySelectorAll('a, button');
@@ -183,12 +221,65 @@ function initManMegaMenu(root) {
     });
   });
 
-  const initial =
-    root.querySelector('.man-mega-menu__card[data-mega-category].is-active')?.getAttribute('data-mega-category') ||
-    'summer';
-  setCategory(initial, { force: true });
+  const isSubmenuOpen = (submenu) => {
+    if (!(submenu instanceof HTMLElement)) return false;
+    if (submenu.hasAttribute('data-active')) return true;
+    if (submenu.inert === false) return true;
+    return false;
+  };
 
+  const syncOpenState = (submenu) => {
+    const open = isSubmenuOpen(submenu);
+    if (open && !wasOpen) {
+      resetDefaults();
+    }
+    if (!open && wasOpen) {
+      // Reset while closed so the next open always starts from defaults
+      resetDefaults();
+    }
+    wasOpen = open;
+  };
+
+  // Re-apply defaults whenever the Men header submenu opens/closes
+  const submenu =
+    root.closest('[ref="submenu[]"]') ||
+    root.closest('.menu-list__submenu');
+
+  if (submenu instanceof HTMLElement) {
+    wasOpen = isSubmenuOpen(submenu);
+    const observer = new MutationObserver(() => syncOpenState(submenu));
+    observer.observe(submenu, {
+      attributes: true,
+      attributeFilter: ['data-active', 'inert'],
+    });
+  }
+
+  const listItem = root.closest('.menu-list__list-item');
+  const disclosure = listItem?.querySelector('[ref="disclosure[]"], .menu-list__disclosure');
+  if (disclosure instanceof HTMLElement) {
+    const disclosureObserver = new MutationObserver(() => {
+      if (disclosure.getAttribute('aria-expanded') === 'true') {
+        resetDefaults();
+      }
+    });
+    disclosureObserver.observe(disclosure, {
+      attributes: true,
+      attributeFilter: ['aria-expanded'],
+    });
+  }
+
+  // Also catch hover activation via MegaMenuHoverEvent / pointer on the Men item
+  const menItem = listItem?.querySelector('[ref="menuitem"], .menu-list__link');
+  if (menItem instanceof HTMLElement && canHover()) {
+    menItem.addEventListener('pointerenter', () => {
+      // Defer until header-menu marks the submenu active
+      requestAnimationFrame(() => resetDefaults());
+    });
+  }
+
+  resetDefaults();
   root.dataset.manMegaReady = 'true';
+  root.__manMegaResetDefaults = resetDefaults;
 }
 
 function initAllManMegaMenus(scope = document) {

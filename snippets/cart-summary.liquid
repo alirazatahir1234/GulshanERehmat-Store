@@ -11,7 +11,25 @@
 <div class="cart-totals">
   {% # We need to keep this node in place to allow morphing to work properly # %}
   <div class="cart-totals__original-container cart-primary-typography">
-    {%- if cart.cart_level_discount_applications.size > 0 -%}
+    {%- if template.name == 'cart' and cart.cart_level_discount_applications.size == 0 -%}
+      <span class="cart-totals__item cart-totals__original ger-cart-subtotal-row">
+        <span class="cart-totals__original-label">{{ 'content.cart_subtotal' | t }} ({{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %})</span>
+        <span
+          class="cart-totals__original-value cart-secondary-typography"
+          data-testid="cart-subtotal-value"
+        >
+          {{- cart.items_subtotal_price | money -}}
+        </span>
+      </span>
+      <span class="cart-totals__item ger-cart-meta-row">
+        <span>Shipping</span>
+        <span>Calculated at checkout</span>
+      </span>
+      <span class="cart-totals__item ger-cart-meta-row">
+        <span>Taxes</span>
+        <span>Calculated at checkout</span>
+      </span>
+    {%- elsif cart.cart_level_discount_applications.size > 0 -%}
       <span class="cart-totals__item cart-totals__original">
         <span class="cart-totals__original-label">{{ 'content.cart_subtotal' | t }}</span>
         <span
@@ -269,9 +287,22 @@
     form="cart-form"
   >
     <span class="button-text">
-      {{ 'content.checkout' | t }}
+      {{ 'content.checkout' | t }} →
     </span>
   </button>
+  {% if template.name == 'cart' %}
+    <p class="ger-cart-secure">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+        <rect x="5" y="11" width="14" height="10" rx="2"/>
+        <path d="M8 11V8a4 4 0 018 0v3"/>
+      </svg>
+      <span>Secure &amp; Encrypted Checkout</span>
+    </p>
+    <div class="ger-cart-promo">
+      <p class="ger-cart-promo__title">Grand Opening Offer</p>
+      <p class="ger-cart-promo__text">You're enjoying our special opening price on selected products.</p>
+    </div>
+  {% endif %}
 
   {% if additional_checkout_buttons and settings.show_accelerated_checkout_buttons %}
     <div

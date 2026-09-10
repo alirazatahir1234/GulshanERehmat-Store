@@ -1,0 +1,257 @@
+{%- doc -%}
+  Single custom filter section (list, swatch, or price).
+
+  @param {object} filter - Shopify filter
+  @param {string} id_prefix - desktop | drawer
+  @param {string} heading - Display heading
+  @param {boolean} [is_swatch] - Force swatch UI
+{%- enddoc -%}
+
+{%- liquid
+  assign label_down = filter.label | downcase
+  assign heading_down = heading | downcase
+  assign use_swatch = is_swatch | default: false
+  if use_swatch == false
+    assign swatch_index = filter.values | find_index: 'swatch'
+    if swatch_index != null
+      assign use_swatch = true
+    endif
+    if label_down == 'color' or label_down == 'colour' or label_down contains 'color'
+      assign use_swatch = true
+    endif
+  endif
+  assign is_brand = false
+  if heading_down == 'brand' or heading_down == 'brands' or label_down == 'vendor' or label_down == 'brand' or label_down == 'brands'
+    assign is_brand = true
+  endif
+-%}
+
+{%- if filter.type == 'price_range' -%}
+  {%- liquid
+    assign currency_prefix = 'Rs.'
+    assign range_max_major = filter.range_max | divided_by: 100.0 | round
+    assign min_selected_major = 0
+    if filter.min_value.value != null
+      assign min_selected_major = filter.min_value.value | divided_by: 100.0 | round
+    endif
+    assign max_selected_major = range_max_major
+    if filter.max_value.value != null
+      assign max_selected_major = filter.max_value.value | divided_by: 100.0 | round
+    endif
+    assign min_input_max_value = filter.max_value.value | default: filter.range_max
+    assign max_input_min_value = filter.min_value.value | default: 0
+  -%}
+  <details class="ger-filters__section ger-filters__section--price" open>
+    <summary class="ger-filters__heading">
+      <span>{{ heading }}</span>
+      <span class="ger-filters__caret" aria-hidden="true">
+        {{- 'icon-caret.svg' | inline_asset_content -}}
+      </span>
+    </summary>
+    <div class="ger-filters__body">
+      <price-facet-component
+        class="ger-filters__price price-facet price-facet--vertical"
+        id="ger-price-{{ id_prefix }}-{{ filter.param_name | escape | replace: '.', '-' }}"
+        data-money-format="{{ shop.money_format | strip_html }}"
+        data-currency="{{ localization.country.currency.iso_code }}"
+        data-range-max-major="{{ range_max_major }}"
+        on:change="/updatePriceFilterAndResults"
+      >
+        <div class="ger-filters__price-fields">
+          <label class="ger-filters__price-field" for="ger-price-min-{{ id_prefix }}">
+            <span class="ger-filters__price-field-label">From Rs.</span>
+            <input
+              class="field__input price-facet__input ger-filters__price-input"
+              name="{{ filter.min_value.param_name }}"
+              id="ger-price-min-{{ id_prefix }}"
+              {%- if filter.min_value.value -%}
+                value="{{ filter.min_value.value | money_without_currency }}"
+              {%- else -%}
+                value="0"
+              {%- endif -%}
+              type="text"
+              inputmode="decimal"
+              data-min="0"
+              data-max="{{ min_input_max_value | money_without_currency }}"
+              ref="minInput"
+              autocomplete="off"
+              aria-label="{{ 'accessibility.price_filter_low' | t }}"
+            >
+          </label>
+          <label class="ger-filters__price-field" for="ger-price-max-{{ id_prefix }}">
+            <span class="ger-filters__price-field-label">To Rs.</span>
+            <input
+              class="field__input price-facet__input ger-filters__price-input"
+              name="{{ filter.max_value.param_name }}"
+              id="ger-price-max-{{ id_prefix }}"
+              {%- if filter.max_value.value -%}
+                value="{{ filter.max_value.value | money_without_currency }}"
+              {%- else -%}
+                value="{{ filter.range_max | money_without_currency }}"
+              {%- endif -%}
+              type="text"
+              inputmode="decimal"
+              data-min="{{ max_input_min_value | money_without_currency }}"
+              data-max="{{ filter.range_max | money_without_currency }}"
+              ref="maxInput"
+              autocomplete="off"
+              aria-label="{{ 'accessibility.price_filter_high' | t }}"
+            >
+          </label>
+        </div>
+
+        <div
+          class="price-facet__slider ger-filters__price-slider"
+          data-price-slider
+          style="--price-min: {{ min_selected_major }}; --price-max: {{ max_selected_major }}; --price-limit: {{ range_max_major }};"
+        >
+          <div class="price-facet__slider-track" aria-hidden="true"></div>
+          <div class="price-facet__slider-range" aria-hidden="true"></div>
+          <input
+            id="ger-price-min-range-{{ id_prefix }}"
+            class="price-facet__range price-facet__range--min"
+            type="range"
+            min="0"
+            max="{{ range_max_major }}"
+            step="1"
+            value="{{ min_selected_major }}"
+            ref="minRange"
+            aria-label="{{ 'accessibility.price_filter_low' | t }}"
+            data-price-role="min"
+          >
+          <input
+            id="ger-price-max-range-{{ id_prefix }}"
+            class="price-facet__range price-facet__range--max"
+            type="range"
+            min="0"
+            max="{{ range_max_major }}"
+            step="1"
+            value="{{ max_selected_major }}"
+            ref="maxRange"
+            aria-label="{{ 'accessibility.price_filter_high' | t }}"
+            data-price-role="max"
+          >
+        </div>
+      </price-facet-component>
+    </div>
+  </details>
+
+{%- elsif filter.values.size > 0 -%}
+  <details class="ger-filters__section{% if is_brand %} ger-filters__section--brand{% endif %}" open>
+    <summary class="ger-filters__heading">
+      <span>{{ heading }}</span>
+      <span class="ger-filters__caret" aria-hidden="true">
+        {{- 'icon-caret.svg' | inline_asset_content -}}
+      </span>
+    </summary>
+    <div class="ger-filters__body">
+      {%- if is_brand -%}
+        <p class="ger-filters__section-hint">Search or select a brand available in this collection.</p>
+        <label class="ger-filters__brand-search" for="ger-brand-search-{{ id_prefix }}">
+          <span class="visually-hidden">Search brands</span>
+          <input
+            type="search"
+            id="ger-brand-search-{{ id_prefix }}"
+            class="ger-filters__brand-search-input"
+            placeholder="Search for your brand"
+            autocomplete="off"
+            data-ger-brand-search
+          >
+        </label>
+      {%- endif -%}
+
+      <facet-inputs-component
+        class="ger-filters__inputs"
+        on:change="/updateFilters"
+        id="ger-facet-{{ id_prefix }}-{{ filter.param_name | escape | replace: '.', '-' }}"
+      >
+        {%- if use_swatch -%}
+          <ul class="ger-filters__color-list" role="list">
+            {%- for value in filter.values -%}
+              {%- liquid
+                assign input_id = 'ger-Filter-' | append: id_prefix | append: '-' | append: filter.param_name | escape | append: '-' | append: forloop.index | replace: '.', '-'
+                assign is_disabled = false
+                if value.count == 0 and value.active == false
+                  assign is_disabled = true
+                endif
+              -%}
+              <li class="ger-filters__color-item{% if is_disabled %} is-disabled{% endif %}{% if value.active %} is-active{% endif %}">
+                <label class="ger-filters__color-row" for="{{ input_id }}">
+                  <input
+                    type="checkbox"
+                    class="visually-hidden"
+                    name="{{ value.param_name }}"
+                    value="{{ value.value }}"
+                    id="{{ input_id }}"
+                    {% if value.active %}checked{% endif %}
+                    {% if is_disabled %}disabled{% endif %}
+                    ref="facetInputs[]"
+                  >
+                  <span class="ger-filters__color-swatch" aria-hidden="true">
+                    {% if value.swatch %}
+                      {% render 'swatch', swatch: value.swatch, mode: 'filter', label: value.label %}
+                    {% else %}
+                      <span
+                        class="ger-filters__swatch-fallback"
+                        style="background: {{ value.label | handleize }};"
+                      ></span>
+                    {% endif %}
+                  </span>
+                  <span class="ger-filters__color-label">
+                    {{ value.label }}
+                    {%- if value.count != blank -%}
+                      <span class="ger-filters__count">({{ value.count }})</span>
+                    {%- endif -%}
+                  </span>
+                </label>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- else -%}
+          <ul class="ger-filters__checks{% if is_brand %} ger-filters__checks--brand{% endif %}" role="list">
+            {%- for value in filter.values -%}
+              {%- liquid
+                assign input_id = 'ger-Filter-' | append: id_prefix | append: '-' | append: filter.param_name | escape | append: '-' | append: forloop.index | replace: '.', '-'
+                assign is_disabled = false
+                if value.count == 0 and value.active == false
+                  assign is_disabled = true
+                endif
+                assign row_label = value.label
+                if label_down == 'availability'
+                  if value.value == '1' or value.label == 'In stock' or value.label == 'In Stock'
+                    assign row_label = 'In Stock'
+                  elsif value.value == '0' or value.label == 'Out of stock' or value.label == 'Out of Stock'
+                    assign row_label = 'Out of Stock'
+                  endif
+                endif
+              -%}
+              <li
+                class="ger-filters__check-item{% if is_disabled %} is-disabled{% endif %}"
+                {% if is_brand %}data-ger-brand-label="{{ value.label | escape | downcase }}"{% endif %}
+              >
+                <label class="ger-filters__check" for="{{ input_id }}">
+                  <input
+                    type="checkbox"
+                    name="{{ value.param_name }}"
+                    value="{{ value.value }}"
+                    id="{{ input_id }}"
+                    {% if value.active %}checked{% endif %}
+                    {% if is_disabled %}disabled{% endif %}
+                    ref="facetInputs[]"
+                  >
+                  <span class="ger-filters__check-box" aria-hidden="true"></span>
+                  <span class="ger-filters__check-label">
+                    {{ row_label }}
+                    {%- if value.count != blank -%}
+                      <span class="ger-filters__count">({{ value.count }})</span>
+                    {%- endif -%}
+                  </span>
+                </label>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </facet-inputs-component>
+    </div>
+  </details>
+{%- endif -%}

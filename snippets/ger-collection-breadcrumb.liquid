@@ -1,20 +1,86 @@
 {%- doc -%}
-  Collection breadcrumb with optional parent chain via metafield.
-
-  Metafield: custom.breadcrumb_parents (list of collection references)
-  Fallback: Home › {collection.title}
+  Collection breadcrumb.
+  Summer fabric PLPs use Men › Summer Collection › {Current}.
+  Optional metafield: custom.breadcrumb_parents
 
   @param {object} [collection] - Collection object
 {%- enddoc -%}
 
 {%- liquid
+  assign kafoor_page = false
+  assign wash_wear_parent = false
+  assign summer_fabric_page = false
+  assign ger_plp_master = false
+  assign ger_plp_label = collection.title
+  assign ger_plp_subtitle = 'Premium Fabrics for Every Occasion'
+  assign handle = collection.handle | default: ''
+
+  if handle == 'men-wash-n-wear-kafoor-by-taiba' or handle == 'men-wash-n-wear-kafoor-by-taiba-life-line' or handle contains 'kafoor-by-taiba'
+    assign kafoor_page = true
+  endif
+
+  if handle == 'men-summer-wash-n-wear' or handle == 'men-wash-n-wear' or handle == 'wash-n-wear' or handle == 'wash-and-wear'
+    assign wash_wear_parent = true
+    assign summer_fabric_page = true
+    assign ger_plp_label = 'Wash & Wear'
+    assign ger_plp_subtitle = 'Premium Fabrics for Every Occasion'
+  endif
+
+  if handle == 'men-summer-cotton'
+    assign summer_fabric_page = true
+    assign ger_plp_label = 'Cotton'
+    assign ger_plp_subtitle = 'Soft Everyday Essentials'
+  endif
+
+  if handle == 'men-summer-lawn'
+    assign summer_fabric_page = true
+    assign ger_plp_label = 'Lawn'
+    assign ger_plp_subtitle = 'Light & Breathable Fabrics'
+  endif
+
+  if handle == 'men-summer-imported'
+    assign summer_fabric_page = true
+    assign ger_plp_label = 'Imported'
+    assign ger_plp_subtitle = 'Curated International Fabrics'
+  endif
+
+  if handle == 'men-summer-embroidered'
+    assign summer_fabric_page = true
+    assign ger_plp_label = 'Embroidered Collection'
+    assign ger_plp_subtitle = 'Detailed Craft for Special Occasions'
+  endif
+
+  if wash_wear_parent == false and kafoor_page == false and summer_fabric_page == false
+    assign title_down = collection.title | downcase | default: ''
+    if title_down contains 'wash' and title_down contains 'wear'
+      unless title_down contains 'kafoor' or title_down contains 'life line'
+        assign wash_wear_parent = true
+        assign summer_fabric_page = true
+        assign ger_plp_label = 'Wash & Wear'
+      endunless
+    endif
+  endif
+
+  if summer_fabric_page and kafoor_page == false
+    assign ger_plp_master = true
+  endif
+
   assign crumbs = collection.metafields.custom.breadcrumb_parents.value
+  assign url_men = collections['men'].url | default: '/collections/men'
+  assign url_summer = collections['men-summer'].url | default: collections['men-summer-collection'].url | default: '/collections/men-summer'
 -%}
 
 <nav class="ger-collection-breadcrumb" aria-label="Breadcrumb">
   <a href="{{ routes.root_url }}">Home</a>
 
-  {%- if crumbs != blank -%}
+  {%- if summer_fabric_page -%}
+    <span class="ger-collection-breadcrumb__sep" aria-hidden="true">›</span>
+    <a href="{{ url_men }}">Men</a>
+    <span class="ger-collection-breadcrumb__sep" aria-hidden="true">›</span>
+    <a href="{{ url_summer }}">Summer Collection</a>
+    <span class="ger-collection-breadcrumb__sep" aria-hidden="true">›</span>
+    <span class="ger-collection-breadcrumb__current">{{ ger_plp_label }}</span>
+  {%- elsif crumbs != blank -%}
     {%- for parent in crumbs -%}
       <span class="ger-collection-breadcrumb__sep" aria-hidden="true">›</span>
       {%- if parent.url != blank -%}
@@ -23,8 +89,10 @@
         <span>{{ parent.title }}</span>
       {%- endif -%}
     {%- endfor -%}
+    <span class="ger-collection-breadcrumb__sep" aria-hidden="true">›</span>
+    <span class="ger-collection-breadcrumb__current">{{ collection.title }}</span>
+  {%- else -%}
+    <span class="ger-collection-breadcrumb__sep" aria-hidden="true">›</span>
+    <span class="ger-collection-breadcrumb__current">{{ collection.title }}</span>
   {%- endif -%}
-
-  <span class="ger-collection-breadcrumb__sep" aria-hidden="true">›</span>
-  <span class="ger-collection-breadcrumb__current">{{ collection.title }}</span>
 </nav>

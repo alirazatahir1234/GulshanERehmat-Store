@@ -1,0 +1,84 @@
+{%- doc -%}
+  Collection-aware Categories accordion for the custom filter rail.
+  Only renders when the current collection belongs to a known family
+  and at least one child collection exists in the shop.
+
+  @example
+  {% render 'ger-collection-category-nav' %}
+{%- enddoc -%}
+
+{%- liquid
+  assign current = collection.handle | default: ''
+  assign ger_cat_family = ''
+  assign ger_cat_group_label = ''
+  assign ger_cat_children = ''
+  assign ger_cat_has_links = false
+
+  if current == 'men-summer' or current == 'men-summer-collection' or current == 'men-summer-cotton' or current == 'men-summer-wash-n-wear' or current == 'men-wash-n-wear' or current == 'men-summer-lawn' or current == 'men-summer-imported' or current == 'men-summer-embroidered' or current contains 'men-summer-'
+    assign ger_cat_family = 'summer'
+    assign ger_cat_group_label = 'Summer Collection'
+    assign ger_cat_children = 'men-summer-cotton::Cotton||men-summer-wash-n-wear::Wash & Wear||men-summer-lawn::Lawn||men-summer-imported::Imported||men-summer-embroidered::Embroidered Collection'
+  elsif current == 'men-winter' or current == 'men-winter-collection' or current contains 'men-winter-'
+    assign ger_cat_family = 'winter'
+    assign ger_cat_group_label = 'Winter Collection'
+    assign ger_cat_children = 'men-winter-khaddar::Khaddar||men-winter-wash-n-wear::Wash & Wear||men-winter-wool::Wool||men-winter-imported-suiting::Imported Suiting||men-winter-embroidered::Embroidered Collection'
+  elsif current == 'men-waist-coats' or current contains 'men-waist-coats' or current contains 'waist-coat'
+    assign ger_cat_family = 'waist'
+    assign ger_cat_group_label = 'Waist Coats'
+    assign ger_cat_children = 'men-waist-coats-formal::Formal||men-waist-coats-casual::Casual||men-waist-coats-embroidered::Designer||men-waist-coats-wedding::Wedding||men-waist-coats-premium::Premium'
+  endif
+
+  if ger_cat_family != blank and ger_cat_children != blank
+    assign ger_cat_items = ger_cat_children | split: '||'
+    for item in ger_cat_items
+      assign parts = item | split: '::'
+      assign child_handle = parts[0] | strip
+      if collections[child_handle] != blank
+        assign ger_cat_has_links = true
+        break
+      endif
+    endfor
+  endif
+-%}
+
+{%- if ger_cat_has_links -%}
+  <nav class="ger-collection-category-nav" aria-label="Categories">
+    <details class="ger-collection-category-nav__root" open>
+      <summary class="ger-collection-category-nav__heading">
+        <span>Categories</span>
+        <span class="ger-collection-category-nav__caret" aria-hidden="true">
+          {{- 'icon-caret.svg' | inline_asset_content -}}
+        </span>
+      </summary>
+
+      <details class="ger-collection-category-nav__group" open>
+        <summary class="ger-collection-category-nav__summary">
+          <span>{{ ger_cat_group_label }}</span>
+          <span class="ger-collection-category-nav__caret" aria-hidden="true">
+            {{- 'icon-caret.svg' | inline_asset_content -}}
+          </span>
+        </summary>
+        <ul class="ger-collection-category-nav__list" role="list">
+          {%- for item in ger_cat_items -%}
+            {%- liquid
+              assign parts = item | split: '::'
+              assign child_handle = parts[0] | strip
+              assign child_label = parts[1] | strip
+              assign child_col = collections[child_handle]
+            -%}
+            {%- if child_col != blank -%}
+              <li>
+                <a
+                  href="{{ child_col.url }}"
+                  class="ger-collection-category-nav__link{% if current == child_handle %} is-active{% endif %}"
+                >
+                  {{ child_label }}
+                </a>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </details>
+    </details>
+  </nav>
+{%- endif -%}
