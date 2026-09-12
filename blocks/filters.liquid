@@ -5,6 +5,8 @@
   @param {object} results - The search results object
   @param {number} results_size - The number of products in the search results
   @param {object} [filters] - The filters object
+  @param {number} [ger_color_count] - Exploded color-card count for GER collections
+  @param {boolean} [ger_has_exploded_colors] - Whether the collection shows one card per color
 {%- enddoc -%}
 
 {% render 'theme-drawer-styles' %}
@@ -29,6 +31,12 @@
   assign sort_by = results.sort_by | default: results.default_sort_by
   assign filters = filters | default: results.filters
   assign total_active_values = 0
+  assign ger_color_count = ger_color_count | default: 0
+  assign ger_has_exploded_colors = ger_has_exploded_colors | default: false
+  assign ger_is_collection = false
+  if template.name == 'collection'
+    assign ger_is_collection = true
+  endif
 
   # Calculate facets margin style
   capture facets_margin_style
@@ -124,13 +132,21 @@
         class="products-count-wrapper"
         data-testid="products-count"
       >
-        <span role="status">
-          {% if products_count > 25000 %}
-            {{- 'content.item_count_cutoff' | t: count: 25000 -}}
-          {% else %}
-            {{- 'content.item_count' | t: count: products_count -}}
-          {% endif %}
-        </span>
+        {%- if ger_is_collection -%}
+          {% render 'ger-products-count',
+            products_count: products_count,
+            ger_color_count: ger_color_count,
+            ger_has_exploded_colors: ger_has_exploded_colors
+          %}
+        {%- else -%}
+          <span role="status">
+            {% if products_count > 25000 %}
+              {{- 'content.item_count_cutoff' | t: count: 25000 -}}
+            {% else %}
+              {{- 'content.item_count' | t: count: products_count -}}
+            {% endif %}
+          </span>
+        {%- endif -%}
       </div>
 
       {% if block_settings.enable_sorting %}
@@ -316,13 +332,21 @@
                 class="products-count-wrapper"
                 data-testid="products-count"
               >
-                <span role="status">
-                  {% if products_count > 25000 %}
-                    {{- 'content.item_count_cutoff' | t: count: 25000 -}}
-                  {% else %}
-                    {{- 'content.item_count' | t: count: products_count -}}
-                  {% endif %}
-                </span>
+                {%- if ger_is_collection -%}
+                  {% render 'ger-products-count',
+                    products_count: products_count,
+                    ger_color_count: ger_color_count,
+                    ger_has_exploded_colors: ger_has_exploded_colors
+                  %}
+                {%- else -%}
+                  <span role="status">
+                    {% if products_count > 25000 %}
+                      {{- 'content.item_count_cutoff' | t: count: 25000 -}}
+                    {% else %}
+                      {{- 'content.item_count' | t: count: products_count -}}
+                    {% endif %}
+                  </span>
+                {%- endif -%}
               </div>
 
               {% if block_settings.enable_sorting %}
@@ -352,11 +376,13 @@
       facets-toggle
       {%- if block_settings.enable_filtering == false %} facets-toggle--no-filters{% endif %}
       {%- if has_custom_color %} color-custom-{{ block.id }}{% endif %}
+      {%- if ger_is_collection %} hidden{% endif %}
     "
     style="
       --facets-inner-padding-block: {{ block_settings.padding-block-start }}px {{ block_settings.padding-block-end }}px; --facets-inner-padding-inline: var(--padding-lg);
       {{ facets_margin_style }}
     "
+    {% if ger_is_collection %}hidden aria-hidden="true"{% endif %}
   >
     {% if block_settings.enable_filtering %}
       <div class="facets-toggle__wrapper">

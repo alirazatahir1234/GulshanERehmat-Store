@@ -371,19 +371,55 @@
     });
   }
 
+  function formatGerCountLabel(productsCount, colorsCount) {
+    var productsLabel = productsCount === 1 ? '1 Product' : productsCount + ' Products';
+    var colorsLabel = colorsCount === 1 ? '1 Color' : colorsCount + ' Colors';
+    return productsLabel + ' · ' + colorsLabel;
+  }
+
   function updateVariantCardCount() {
-    var grid = document.querySelector('.ger-collection-page .product-grid');
+    var page = document.querySelector('.ger-collection-page');
+    if (!page) return;
+
+    var grid = page.querySelector('.product-grid');
+    var wrappers = page.querySelectorAll('.products-count-wrapper [data-ger-count-label], .products-count-wrapper [role="status"]');
+    if (!wrappers.length) return;
+
+    var wrapMeta = page.querySelector('.collection-wrapper[data-ger-products-count]');
+    var shopifyProducts = wrapMeta
+      ? parseInt(wrapMeta.getAttribute('data-ger-products-count') || '0', 10)
+      : 0;
+    var hasExplodedAttr = wrapMeta && wrapMeta.getAttribute('data-ger-has-exploded-colors') === 'true';
+
     if (!grid) return;
+
     var cards = grid.querySelectorAll('.product-grid__item');
-    if (!cards.length) return;
-    var hasVariantCards = grid.querySelector('.ger-variant-card-item');
+    var variantCards = grid.querySelectorAll('.ger-variant-card-item');
+    var hasVariantCards = variantCards.length > 0 || hasExplodedAttr;
+
     if (!hasVariantCards) return;
 
-    var count = cards.length;
-    var label = count === 1 ? '1 item' : count + ' items';
-    document.querySelectorAll('.ger-collection-page .products-count-wrapper [role="status"]').forEach(function (el) {
-      el.textContent = label;
+    var productIds = {};
+    cards.forEach(function (card) {
+      var id = card.getAttribute('data-product-id');
+      if (id) productIds[id] = true;
     });
+    var uniqueProducts = Object.keys(productIds).length;
+    var productsCount = shopifyProducts > 0 ? shopifyProducts : uniqueProducts;
+    var colorsCount = variantCards.length > 0 ? variantCards.length : cards.length;
+    var label = formatGerCountLabel(productsCount, colorsCount);
+
+    wrappers.forEach(function (el) {
+      el.textContent = label;
+      el.setAttribute('data-ger-products-count', String(productsCount));
+      el.setAttribute('data-ger-color-count', String(colorsCount));
+      el.setAttribute('data-ger-has-exploded-colors', 'true');
+    });
+
+    if (wrapMeta) {
+      wrapMeta.setAttribute('data-ger-color-count', String(colorsCount));
+      wrapMeta.setAttribute('data-ger-has-exploded-colors', 'true');
+    }
   }
 
   function bindPlpSwatches(scope) {

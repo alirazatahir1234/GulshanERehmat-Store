@@ -12,13 +12,17 @@
   assign heading_down = heading | downcase
   assign use_swatch = is_swatch | default: false
   if use_swatch == false
-    assign swatch_index = filter.values | find_index: 'swatch'
-    if swatch_index != null
+    if label_down == 'color' or label_down == 'colour' or label_down contains 'color' or filter.param_name contains 'color'
       assign use_swatch = true
     endif
-    if label_down == 'color' or label_down == 'colour' or label_down contains 'color'
-      assign use_swatch = true
-    endif
+    unless use_swatch
+      for value in filter.values
+        if value.swatch != blank
+          assign use_swatch = true
+          break
+        endif
+      endfor
+    endunless
   endif
   assign is_brand = false
   if heading_down == 'brand' or heading_down == 'brands' or label_down == 'vendor' or label_down == 'brand' or label_down == 'brands'
@@ -191,9 +195,16 @@
                     {% if value.swatch %}
                       {% render 'swatch', swatch: value.swatch, mode: 'filter', label: value.label %}
                     {% else %}
+                      {%- capture ger_swatch_hex -%}
+                        {%- render 'ger-color-swatch-hex', label: value.label -%}
+                      {%- endcapture -%}
+                      {%- assign ger_swatch_hex = ger_swatch_hex | strip -%}
                       <span
-                        class="ger-filters__swatch-fallback"
-                        style="background: {{ value.label | handleize }};"
+                        class="ger-filters__swatch-fallback{% if ger_swatch_hex == blank %} ger-filters__swatch-fallback--unknown{% endif %}"
+                        {% if ger_swatch_hex != blank %}
+                          style="background: {{ ger_swatch_hex }};"
+                        {% endif %}
+                        title="{{ value.label | escape }}"
                       ></span>
                     {% endif %}
                   </span>

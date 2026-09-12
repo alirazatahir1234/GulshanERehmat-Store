@@ -1,6 +1,11 @@
 {%- doc -%}
   Renders one collection grid item per unique Color variant.
 
+  When storefront filters are active (especially Color), only matching variants
+  are rendered so exploded color cards respect the facet. Prefers Shopify's
+  `variant.matched`; falls back to normalized exact / alias matching when every
+  variant is still marked matched (product-level filter hit).
+
   @param {object} product - Product with Color variants
   @param {object} section - Collection section
   @param {object} paginate - Paginate object
@@ -8,9 +13,48 @@
   @param {number} color_option_position - 0-based Color option index
 {%- enddoc -%}
 
-{%- assign rendered_colors = '|' -%}
+{%- liquid
+  assign rendered_colors = '|'
+  assign ger_color_filter_active = false
+  assign ger_active_color_keys = '|'
+  assign ger_use_label_fallback = false
+
+  if collection != blank and collection.filters != blank
+    for filter in collection.filters
+      assign ld = filter.label | downcase
+      if ld == 'color' or ld == 'colour' or ld contains 'color' or filter.param_name contains 'color'
+        if filter.active_values.size > 0
+          assign ger_color_filter_active = true
+          for value in filter.active_values
+            assign active_key = value.label | downcase | strip | handleize
+            assign ger_active_color_keys = ger_active_color_keys | append: active_key | append: '|'
+          endfor
+        endif
+      endif
+    endfor
+  endif
+
+  if ger_color_filter_active
+    assign ger_unmatched_seen = false
+    for variant in product.variants
+      if variant.matched == false
+        assign ger_unmatched_seen = true
+        break
+      endif
+    endfor
+    unless ger_unmatched_seen
+      assign ger_use_label_fallback = true
+    endunless
+  endif
+-%}
+
 {%- for variant in product.variants -%}
   {%- liquid
+    assign show_variant = true
+    if variant.matched == false
+      assign show_variant = false
+    endif
+
     case color_option_position
       when 0
         assign color_name = variant.option1
@@ -23,6 +67,50 @@
     endcase
 
     assign color_key = color_name | handleize
+
+    if show_variant and ger_use_label_fallback
+      assign color_matched_label = false
+      assign label_parts = ger_active_color_keys | split: '|'
+      for active_key in label_parts
+        if active_key == blank
+          continue
+        endif
+
+        comment
+          Exact normalized match only — never two-way contains.
+          Expand taxonomy labels to known GER variant handles when needed.
+        endcomment
+        assign alias_keys = '|' | append: active_key | append: '|'
+        case active_key
+          when 'blue'
+            assign alias_keys = '|blue|powder-blue|ice-blue|'
+          when 'navy'
+            assign alias_keys = '|navy|navy-blue|'
+          when 'green'
+            assign alias_keys = '|green|sage-green|olive|'
+          when 'yellow'
+            assign alias_keys = '|yellow|mustard|'
+          when 'brown'
+            assign alias_keys = '|brown|taupe|stone|'
+          when 'gray', 'grey'
+            assign alias_keys = '|gray|grey|light-grey|light-gray|charcoal|'
+          when 'black'
+            assign alias_keys = '|black|'
+          when 'white'
+            assign alias_keys = '|white|'
+        endcase
+
+        assign color_token = color_key | prepend: '|' | append: '|'
+        if alias_keys contains color_token
+          assign color_matched_label = true
+          break
+        endif
+      endfor
+      unless color_matched_label
+        assign show_variant = false
+      endunless
+    endif
+
     assign color_token = color_key | prepend: '|' | append: '|'
     assign already_rendered = false
     if rendered_colors contains color_token
@@ -30,7 +118,7 @@
     endif
   -%}
 
-  {%- unless already_rendered -%}
+  {%- if show_variant and already_rendered == false -%}
     {%- assign rendered_colors = rendered_colors | append: color_key | append: '|' -%}
     <li
       id="{{ section.id }}-{{ product.id }}-{{ variant.id }}"
@@ -46,5 +134,5 @@
         color_name: color_name
       %}
     </li>
-  {%- endunless -%}
+  {%- endif -%}
 {%- endfor -%}

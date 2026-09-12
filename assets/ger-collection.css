@@ -703,7 +703,8 @@ body:has(.ger-collection-page) results-list.product-grid-container {
 }
 
 /* Always show filter toggle (opens single drawer) — prefer toolbar button on collection */
-.ger-collection-page .collection-wrapper > .facets-toggle {
+.ger-collection-page .collection-wrapper > .facets-toggle,
+.ger-collection-page .collection-wrapper > .facets-toggle.hidden {
   display: none !important;
 }
 
@@ -740,33 +741,13 @@ body:has(.ger-collection-page) results-list.product-grid-container {
 
 @media screen and (max-width: 749px) {
   .ger-collection-page .collection-wrapper > .facets-toggle {
-    display: inline-flex !important;
-    order: 0;
-    margin: 0;
-    width: auto;
-    flex: 1 1 0;
-    justify-content: stretch;
-  }
-  .ger-collection-page .facets-toggle__button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.4rem;
-    width: 100%;
-    min-height: 44px;
-    padding: 0.55rem 1rem;
-    border: 2px solid var(--ger-pink);
-    border-radius: 6px;
-    background: #fff;
-    color: var(--ger-pink);
-    font-family: var(--ger-font-body);
-    font-size: 0.8125rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    display: none !important;
   }
   .ger-collection-filter-btn {
-    display: none;
+    display: inline-flex !important;
+    width: 100%;
+    margin: 0;
+    justify-content: center;
   }
   .ger-collection-page .ger-collection-toolbar {
     width: calc(100% - 32px);
@@ -2182,6 +2163,9 @@ body:has(.ger-collection-page) .ger-benefits__floral--right { right: 0; bottom: 
   min-height: 18px !important;
   border-radius: 50% !important;
   border: 1px solid rgb(0 0 0 / 0.18) !important;
+}
+.ger-filters__swatch-fallback--unknown {
+  background: repeating-conic-gradient(#ddd 0% 25%, #f4f4f4 0% 50%) 50% / 8px 8px !important;
 }
 .ger-filters__color-row:has(input:checked) .ger-filters__color-swatch .swatch,
 .ger-filters__color-row:has(input:checked) .ger-filters__color-swatch .ger-filters__swatch-fallback {

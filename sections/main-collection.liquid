@@ -109,16 +109,69 @@
     section-id="{{ section.id }}"
     infinite-scroll="{{ section.settings.enable_infinite_scroll }}"
   >
+    {% liquid
+      comment
+        Estimate exploded color-card count for toolbar (1 Product · N Colors).
+        Skips unmatched variants so active Color filters keep the count honest.
+        JS refreshes from the live grid after AJAX facet updates.
+      endcomment
+      assign ger_color_card_count = 0
+      assign ger_has_exploded_colors = false
+      for product in collection.products
+        assign color_option_position = blank
+        for option in product.options_with_values
+          assign option_name = option.name | downcase | strip
+          if option_name == 'color' or option_name == 'colour' or option_name == 'shade'
+            assign color_option_position = forloop.index0
+            break
+          endif
+        endfor
+
+        if color_option_position != blank and product.variants.size > 1
+          assign ger_has_exploded_colors = true
+          assign seen_colors = '|'
+          for variant in product.variants
+            if variant.matched == false
+              continue
+            endif
+            case color_option_position
+              when 0
+                assign color_name = variant.option1
+              when 1
+                assign color_name = variant.option2
+              when 2
+                assign color_name = variant.option3
+              else
+                assign color_name = variant.title
+            endcase
+            assign color_key = color_name | handleize
+            assign color_token = color_key | prepend: '|' | append: '|'
+            unless seen_colors contains color_token
+              assign seen_colors = seen_colors | append: color_key | append: '|'
+              assign ger_color_card_count = ger_color_card_count | plus: 1
+            endunless
+          endfor
+        else
+          assign ger_color_card_count = ger_color_card_count | plus: 1
+        endif
+      endfor
+    %}
+
     {% render 'skip-to-content-link', href: '#ResultsList', text: 'accessibility.skip_to_results_list' %}
 
     <div
       class="collection-wrapper grid gap-style{% if section.settings.product_grid_width == 'full-width' %} collection-wrapper--grid-full-width{% endif %}"
+      data-ger-products-count="{{ collection.products_count }}"
+      data-ger-color-count="{{ ger_color_card_count }}"
+      data-ger-has-exploded-colors="{% if ger_has_exploded_colors %}true{% else %}false{% endif %}"
     >
       {% content_for 'block',
         type: 'filters',
         id: 'filters',
         results: collection,
-        results_size: collection.products_count
+        results_size: collection.products_count,
+        ger_color_count: ger_color_card_count,
+        ger_has_exploded_colors: ger_has_exploded_colors
       %}
 
       {% liquid

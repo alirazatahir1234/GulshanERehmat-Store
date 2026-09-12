@@ -1,0 +1,29 @@
+{%- doc -%}
+  GER collection products/colors count label.
+
+  @param {number} products_count - Shopify product count
+  @param {number} [ger_color_count] - Exploded color-card count
+  @param {boolean} [ger_has_exploded_colors] - Whether colors are exploded into cards
+{%- enddoc -%}
+{%- liquid
+  assign products_count = products_count | default: 0
+  assign ger_color_count = ger_color_count | default: 0
+  assign ger_has_exploded_colors = ger_has_exploded_colors | default: false
+-%}
+<span
+  role="status"
+  data-ger-count-label
+  data-ger-products-count="{{ products_count }}"
+  data-ger-color-count="{{ ger_color_count }}"
+  data-ger-has-exploded-colors="{% if ger_has_exploded_colors %}true{% else %}false{% endif %}"
+>
+  {%- if ger_has_exploded_colors and ger_color_count > 0 -%}
+    {%- if products_count == 1 -%}1 Product{%- else -%}{{ products_count }} Products{%- endif -%}
+    <span aria-hidden="true"> · </span>
+    {%- if ger_color_count == 1 -%}1 Color{%- else -%}{{ ger_color_count }} Colors{%- endif -%}
+  {%- elsif products_count > 25000 -%}
+    {{- 'content.item_count_cutoff' | t: count: 25000 -}}
+  {%- else -%}
+    {{- 'content.item_count' | t: count: products_count -}}
+  {%- endif -%}
+</span>
